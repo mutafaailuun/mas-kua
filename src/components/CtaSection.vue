@@ -5,7 +5,7 @@ import { Icon } from "@iconify/vue";
 <template>
   <section
     id="kontak"
-    class="py-20 bg-gradient-to-r from-green-700 to-green-500"
+    class="py-20 bg-gradient-to-r from-green-700 to-green-500 raleway"
   >
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl font-bold text-white mb-4">

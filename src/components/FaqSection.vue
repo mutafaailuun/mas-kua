@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-  <section id="faq" class="py-20 bg-gray-50">
+  <section id="faq" class="py-20 bg-gray-50 raleway">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-gray-900">

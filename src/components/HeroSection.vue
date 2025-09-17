@@ -8,7 +8,7 @@ const onButtonClick = (sectionId) => {
 </script>
 
 <template>
-  <section class="pt-32 pb-20 bg-gray-50">
+  <section class="pt-32 pb-20 bg-gray-50 raleway">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <div class="text-center md:text-left">
@@ -36,9 +36,10 @@ const onButtonClick = (sectionId) => {
             <a
               href="#layanan"
               @click.prevent="onButtonClick('layanan')"
-              class="bg-white text-green-600 border-2 border-green-600 font-semibold py-3 px-6 rounded-lg hover:bg-green-600 hover:text-white transition-colors"
+              class="bg-white text-green-600 border-2 border-green-600 font-semibold py-3 px-6 rounded-lg hover:bg-green-600 hover:text-white transition-colors flex align-center justify-center gap-3"
             >
-              👇 Lihat Semua Layanan
+              <Icon icon="ic:baseline-format-list-numbered" class="w-5 h-5" />
+              Lihat Semua Layanan
             </a>
           </div>
         </div>

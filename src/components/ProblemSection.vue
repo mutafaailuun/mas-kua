@@ -3,7 +3,7 @@ import { Icon } from "@iconify/vue";
 </script>
 
 <template>
-  <section class="bg-white py-20">
+  <section class="bg-white py-20 raleway">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl font-bold text-gray-900 mb-4">
         Pernah Mengalami Hal Ini?
@@ -13,31 +13,46 @@ import { Icon } from "@iconify/vue";
         berinovasi.
       </p>
       <div class="grid md:grid-cols-3 gap-8 text-left">
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+        <div
+          class="group bg-gray-50 p-6 rounded-lg shadow-sm hover:bg-red-600 hover:-translate-y-2 transition-all duration-300 cursor-pointer hover:text-white"
+        >
           <Icon
             icon="material-symbols:help-center-outline"
-            class="text-4xl text-yellow-500 mb-4"
+            class="text-4xl text-yellow-500 mb-4 group-hover:text-white transition-all duration-300"
           />
-          <h3 class="font-semibold text-lg mb-2">Informasi Tidak Jelas</h3>
-          <p class="text-gray-600">
+          <h3 class="font-semibold text-lg mb-2">Minim Informasi</h3>
+          <p
+            class="text-gray-600 group-hover:text-white transition-all duration-300"
+          >
             Bingung dengan alur, persyaratan, dan dokumen yang harus disiapkan?
           </p>
         </div>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-          <Icon icon="ph:files-duotone" class="text-4xl text-red-500 mb-4" />
+        <div
+          class="group bg-gray-50 p-6 rounded-lg shadow-sm hover:bg-red-600 hover:-translate-y-2 transition-all duration-300 cursor-pointer hover:text-white"
+        >
+          <Icon
+            icon="ph:files-duotone"
+            class="text-4xl text-red-500 mb-4 group-hover:text-white transition-all duration-300"
+          />
           <h3 class="font-semibold text-lg mb-2">Berkas Tidak Lengkap</h3>
-          <p class="text-gray-600">
+          <p
+            class="text-gray-600 group-hover:text-white transition-all duration-300"
+          >
             Harus bolak-balik ke kantor karena ada berkas yang kurang atau
             salah?
           </p>
         </div>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+        <div
+          class="group bg-gray-50 p-6 rounded-lg shadow-sm hover:bg-red-600 hover:-translate-y-2 transition-all duration-300 cursor-pointer hover:text-white"
+        >
           <Icon
             icon="pepicons-pop:countdown-circle-filled"
-            class="text-4xl text-blue-500 mb-4"
+            class="text-4xl text-blue-500 mb-4 group-hover:text-white transition-all duration-300"
           />
           <h3 class="font-semibold text-lg mb-2">Waktu Terbuang</h3>
-          <p class="text-gray-600">
+          <p
+            class="text-gray-600 group-hover:text-white transition-all duration-300"
+          >
             Kehabisan waktu produktif hanya untuk bertanya hal-hal mendasar?
           </p>
         </div>

@@ -20,7 +20,7 @@ defineProps({
       </div>
       <div class="max-w-3xl mx-auto space-y-4">
         <AccordionItem
-          v-for="(faq, index) in faqs"
+          v-for="(faq, index) in faqs.slice(0, 4)"
           :key="index"
           :title="faq.question"
         >

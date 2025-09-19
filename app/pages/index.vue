@@ -1,5 +1,6 @@
 <script setup>
-import { services, faqs } from "/data/content.js";
+import { services } from "/data/services.js";
+import { faqs } from "/data/faqs.js";
 import HeroSection from "/components/HeroSection.vue";
 import ProblemSection from "/components/ProblemSection.vue";
 import SolutionSection from "/components/SolutionSection.vue";

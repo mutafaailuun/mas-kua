@@ -26,10 +26,12 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
   >
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center py-4">
-        <div class="flex items-center gap-3">
-          <img src="/logo.png" alt="Logo KUA" class="h-12 w-auto" />
-          <h2 class="text-2xl font-bold text-green-700">MAS KUA</h2>
-        </div>
+        <a href="/">
+          <div class="flex items-center gap-3">
+            <img src="/logo.png" alt="Logo KUA" class="h-12 w-auto" />
+            <h2 class="text-2xl font-bold text-green-700">MAS KUA</h2>
+          </div>
+        </a>
 
         <nav
           class="hidden md:flex items-center gap-8 font-medium text-gray-600"

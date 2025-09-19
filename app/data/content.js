@@ -31,7 +31,7 @@ export const services = ref([
       <h4 class="text-lg font-bold text-gray-800 mb-2 bg-gray-100 -m-5 p-5 mt-10">PENDAFTARAN ONLINE/DARING</h4>
         <h5 class="text-lg font-semibold text-gray-800 mb-2 underline">Langkah Pertama</h5>
             <ul class="list-disc list-outside space-y-2 mb-4 px-5">
-                <li>Kunjungi Website SIMKAH: <a href="https://simkah4.kemenag.go.id" class="text-blue-600">https://simkah4.kemenag.go.id</a></li>
+                <li>Kunjungi Website SIMKAH: <a href="https://simkah4.kemenag.go.id" target="_blank" class="text-blue-600">https://simkah4.kemenag.go.id</a></li>
                 <li>Pilih Menu Masuk/Daftar.</li>
                 <li>Apabila kamu sudah mendaftar dan sudah mempunyai akun maka tidak perlu , kamu bisa langsung masuk.</li>
                 <li>Kamu akan di arahkan ke menu dashboard area, silahkan lengkapi data diri kamu.</li>

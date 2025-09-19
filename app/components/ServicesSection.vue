@@ -23,7 +23,7 @@ defineProps({
       </div>
       <div class="max-w-3xl mx-auto space-y-4">
         <AccordionItem
-          v-for="(service, index) in services"
+          v-for="(service, index) in services.slice(0, 4)"
           :key="index"
           :title="service.title"
           :is-html="true"

@@ -21,7 +21,7 @@ const toggleAccordion = () => {
   <div class="border border-gray-200 rounded-lg overflow-hidden">
     <button
       @click="toggleAccordion"
-      class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 transition-colors duration-300"
+      class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 transition-colors duration-300 cursor-pointer"
       :class="isOpen ? 'bg-green-600 text-white' : 'bg-white hover:bg-gray-50'"
     >
       <span>{{ title }}</span>

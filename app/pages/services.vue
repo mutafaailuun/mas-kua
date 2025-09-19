@@ -1,13 +1,14 @@
 <script setup>
-import AccordionItem from "./AccordionItem.vue";
-
-defineProps({
-  services: Array,
-});
+import AccordionItem from "/components/AccordionItem.vue";
+import { Icon } from "@iconify/vue";
+import { services } from "../data/services.js";
 </script>
 
 <template>
-  <section id="layanan" class="py-20 bg-white raleway">
+  <section
+    id="layanan"
+    class="py-20 bg-white raleway overflow-x-hidden flex justify-center flex-col"
+  >
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-gray-900">

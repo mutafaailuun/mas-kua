@@ -82,46 +82,43 @@ export const services = ref([
     `,
   },
   {
-    title: "Legalisasi & Duplikat Buku Nikah",
+    title: "Duplikat Buku Nikah",
+    content: `
+    
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Prosedur Permohonan:*</h4>
+      <ol class="list-decimal list-inside space-y-2 mb-4">
+        <li>Pergi ke Kantor KUA untuk memalidasi pernikahan</li>
+        <li>Setelah tervalidasi, KUA akan mengeluarkan Surat Keterangan Tercatat</li>
+        <li>Pergi ke Kantor Polisi untuk pembuatan Surat Keterangan Kehilangan</li>
+        <li>Datang kembali ke KUA untuk proses pembuatan buku nikah baru</li>
+      </ol>
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
+      <ul class="list-disc list-inside space-y-2 mb-4">
+        <li>Fotokopi KTP pemohon</li>
+        <li>Fotokopi Kartu keluarga</li>
+        <li>Pass foto 2X3 suami istri (masing-masing 3 lembar)</li>
+        <li>Surat kehilangan dari kepolisian (untuk duplikat)</li>
+      </ul>
+      <p>*Terlebih dahulu petugas akan memvalidasi keaslian kutipan akta nikah</p>
+    `,
+  },
+  {
+    title: "Legalisasi Buku Nikah",
     content: `
       <h4 class="text-lg font-semibold text-gray-800 mb-2">Prosedur Permohonan:</h4>
       <ol class="list-decimal list-inside space-y-2 mb-4">
-        <li>Mengajukan surat permohonan</li>
+        <li>Datang ke KUA</li>
         <li>Melampirkan dokumen pendukung</li>
         <li>Verifikasi data oleh petugas</li>
-        <li>Proses legalisasi/pembuatan duplikat</li>
+        <li>Proses legalisasi</li>
       </ol>
       <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
         <li>Surat permohonan</li>
-        <li>KTP pemohon</li>
+        <li>Fotokopi Buku Nikah pemohon</li>
         <li>Buku nikah asli (untuk legalisasi)</li>
-        <li>Surat kehilangan dari kepolisian (untuk duplikat)</li>
+        
       </ul>
     `,
-  },
-]);
-
-export const faqs = ref([
-  {
-    question: "Berapa lama proses pendaftaran nikah hingga selesai?",
-    answer:
-      "Proses pendaftaran nikah memerlukan waktu minimal 10 hari kerja sejak berkas lengkap diterima. Ini sesuai dengan peraturan yang berlaku untuk memberikan waktu pengumuman dan persiapan administrasi.",
-  },
-  {
-    question: "Apakah bisa mendaftar nikah secara online?",
-    answer:
-      "Saat ini pendaftaran nikah masih harus dilakukan secara langsung di KUA. Namun, Anda bisa mendapatkan informasi lengkap dan mengunduh formulir melalui platform MAS KUA ini.",
-  },
-  {
-    question:
-      "Bagaimana jika salah satu calon pengantin berasal dari luar kota?",
-    answer:
-      "Calon pengantin dari luar kota harus membawa surat rekomendasi nikah (N1-N4) dari KUA setempat. Pastikan semua dokumen sudah dilegalisir oleh pejabat berwenang.",
-  },
-  {
-    question: "Kapan jam operasional pelayanan KUA Kecamatan Pebayuran?",
-    answer:
-      "KUA Kecamatan Pebayuran melayani masyarakat pada hari Senin - Jumat, pukul 07:30 - 16:00 WIB. Khusus hari Jumat, istirahat pukul 11:30 - 13:00 WIB.",
   },
 ]);

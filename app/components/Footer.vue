@@ -1,5 +1,7 @@
+((
 <script setup>
 import { Icon } from "@iconify/vue";
+const currentYear = new Date().getFullYear();
 </script>
 
 <template>
@@ -72,8 +74,8 @@ import { Icon } from "@iconify/vue";
         class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500"
       >
         <p>
-          © 2025 KUA Kecamatan Pebayuran | Inisiasi oleh Jalaludin, Peserta
-          Latsar CPNS.
+          © {{ currentYear }} KUA Kecamatan Pebayuran | Inisiasi oleh Jalaludin,
+          Peserta Latsar CPNS
         </p>
       </div>
     </div>

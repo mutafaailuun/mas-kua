@@ -23,6 +23,7 @@ defineProps({
           v-for="(faq, index) in faqs.slice(0, 4)"
           :key="index"
           :title="faq.question"
+          :is-html="true"
         >
           {{ faq.answer }}
         </AccordionItem>

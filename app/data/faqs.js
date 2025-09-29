@@ -7,9 +7,8 @@ export const faqs = ref([
   {
     question: "Apakah bisa mendaftar nikah secara online?",
     answer: `
-    <h4 class="text-lg font-semibold text-gray-800 mb-2">Jadwal:</h4>
-    Pendaftaran online bisa dilakukan melalui website Simkah V4:
-      <a href="https://simkah4.kemenag.go.id" class="text-blue-600">https://simkah4.kemenag.go.id</a>
+    Bisa. Pendaftaran online bisa dilakukan melalui website Simkah V4:
+      <a href="https://simkah4.kemenag.go.id" target="_blank" class="text-blue-600">https://simkah4.kemenag.go.id</a>
       
       `,
   },

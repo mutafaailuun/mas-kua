@@ -8,5 +8,4 @@ import Header from "./components/Header.vue";
 </template>
 <style>
 @import "tailwindcss";
-@plugin "daisyui";
 </style>

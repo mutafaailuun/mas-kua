@@ -60,7 +60,13 @@ export const services = ref([
         <li>Akta kelahiran/Ijazah terakhir</li>
         <li>Surat keterangan untuk nikah (N1-N4)</li>
         <li>Surat keterangan sehat</li>
-        <li>Pas foto 2x3 (5 lembar)</li>
+        <li>Pas foto 2x3 (4 lembar)</li>
+        <li>Pas foto 4x6 (2 lembar)</li>
+        <li>Surat Dispensasi Pengadilan Agama (Bagi Catin Berusia dibawah 19 tahun) </li>
+        <li>Surat Akta Cerai (Bagi Catin duda/janda cerai hidup)</li>
+        <li>Surat Izin Komandan (Bagi calon pengantin TNI atau POLRI</li>
+        <li>Surat Izin Kedutaan Bagi WNA</li>
+        <li>Surat Rekomendasi Nikah dari KUA Setempat (Jika pernikahan di luar wilayah KUA)</li>
       </ul>
       
     `,
@@ -118,6 +124,67 @@ export const services = ref([
         <li>Fotokopi Buku Nikah pemohon</li>
         <li>Buku nikah asli (untuk legalisasi)</li>
         
+      </ul>
+    `,
+  },
+  {
+    title: "Isbat Nikah",
+    content: `
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Prosedur Permohonan:</h4>
+      <ol class="list-decimal list-inside space-y-2 mb-4">
+        <li>Datang ke KUA</li>
+        <li>Melampirkan surat keterangan Nikah Siri dari Kantor Kel/Desa</li>
+        <li>Verifikasi data dan pembuatan surat keterangan tidak tercatat untuk isbat oleh petugas</li>
+        <li>Pergi ke Pengadilan Agama untuk melakukan sidang isbat nikah<em> (Info lebih lanjut bisa kunjungi link berikut <a class='text-blue-600 font-bold' target='_blank' href='https://linktr.ee/pacikarang?fbclid=PAZnRzaANHNzNleHRuA2FlbQIxMQABpxDInk-zO1jHpJb4C-Xz9oRRjpKVVzl_DcaKzjaFjGhO2DTocdLs4RtnE9qe_aem_WqI2pJL37-xC0J1Xrr3Zzw'> Pengadilan Agama Cikarang</em></a>)</li>
+        <li>Setelah sidang selesai, datang kembali ke KUA untuk dilakukan pencatatan dan penerbitan buku nikah</li>
+        <li>Biaya layanan Rp.0-,</li>
+      </ol>
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
+      <ul class="list-disc list-inside space-y-2 mb-4">
+        <li>Surat keterangan nikah siri dari kantor kel/desa</li>
+        <li>Fotokopi KK dan KTP</li>
+        <li>Surat Keterangan tidak tercatat (untuk diajukan ke PA)</li>
+        <li>Putusan PA (jika permohonan dikabulkan)</li>
+        
+      </ul>
+    `,
+  },
+  {
+    title: "Surat Rekomendasi Nikah (Numpang Nikah)",
+    content: `
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Prosedur Permohonan:</h4>
+      <ol class="list-decimal list-inside space-y-2 mb-4">
+        <li>Datang ke KUA</li>
+        <li>Melampirkan dokumen pendukung</li>
+        <li>Verifikasi data oleh petugas</li>
+        <li>Proses pembuatan surat rekomendasi</li>
+      </ol>
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
+      <ul class="list-disc list-inside space-y-2 mb-4">
+      <li>Surat pengantar rekomendasi nikah dari Kantor Kel/Desa</li>
+        <li>Fotokopi KTP</li>
+        <li>Fotokopi Kartu Keluarga</li>
+        
+      </ul>
+    `,
+  },
+  {
+    title: "Surat Keterangan Ralat",
+    content: `
+    <p>Surat keterangan untuk mengoreksi/meralat kesalahan data (baik nama, tempat dan tanggal lahir dll.) di kutipan akta nikah untuk digunakan mengurus dokumen lainnya</p>
+    <p>Surat keterangan ini hanya berlaku 3 bulan setelah surat dibuat.</p>
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Prosedur Permohonan:</h4>
+      <ol class="list-decimal list-inside space-y-2 mb-4">
+        <li>Datang ke KUA</li>
+        <li>Melampirkan dokumen pendukung</li>
+        <li>Verifikasi data oleh petugas</li>
+        <li>Proses pembuatan surat keterangan ralat</li>
+      </ol>
+      <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
+      <ul class="list-disc list-inside space-y-2 mb-4">
+        <li>Surat permohonan ralat dari kantor desa/kel</li>
+        <li>Fotokopi KTP</li>
+        <li>Fotokopi Kartu Keluarga</li>  
       </ul>
     `,
   },

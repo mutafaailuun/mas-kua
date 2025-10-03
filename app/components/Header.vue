@@ -36,21 +36,11 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
         <nav
           class="hidden md:flex items-center gap-8 font-medium text-gray-600"
         >
+          <a href="/services" class="hover:text-green-600">Layanan</a>
+          <a href="/faq" class="hover:text-green-600">FAQ</a>
           <a
-            @click.prevent="onNavLinkClick('layanan')"
-            href="#layanan"
-            class="hover:text-green-600"
-            >Layanan</a
-          >
-          <a
-            @click.prevent="onNavLinkClick('faq')"
-            href="#faq"
-            class="hover:text-green-600"
-            >FAQ</a
-          >
-          <a
-            @click.prevent="onNavLinkClick('kontak')"
-            href="#kontak"
+            href="https://wa.me/6287785587322"
+            target="_blank"
             class="hover:text-green-600"
             >Hubungi Kami</a
           >

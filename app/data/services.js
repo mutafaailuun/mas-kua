@@ -6,14 +6,16 @@ export const services = ref([
     content: `
     <h4 class="text-lg font-bold text-gray-800 mb-2 bg-gray-100 -m-5 p-5 mb-5">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
-        <li>KTP calon pengantin</li>
-        <li>KK calon pengantin</li>
-        <li>Akta kelahiran/Ijazah terakhir</li>
+        <li>FC KTP calon pengantin</li>
+        <li>FC KK calon pengantin</li>
+        <li>FC Akta kelahiran/Ijazah terakhir</li>
         <li>Surat keterangan untuk nikah (N1-N4)</li>
         <li>Surat keterangan sehat</li>
         <li>Pas foto 2x3 (4 lembar)</li>
         <li>Pas foto 4x6 (2 lembar)</li>
         <li>Surat Dispensasi Pengadilan Agama (Bagi Catin Berusia dibawah 19 tahun) </li>
+        <li>Surat Pernyataan Belum Menikah bagi Jejaka/Perawan</li>
+        <li>Surat Pernyataan Wali Nikah</li>
         <li>Surat Akta Cerai (Bagi Catin duda/janda cerai hidup)</li>
         <li>Surat Izin Komandan (Bagi calon pengantin TNI atau POLRI</li>
         <li>Surat Izin Kedutaan Bagi WNA</li>

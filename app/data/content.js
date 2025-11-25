@@ -35,18 +35,7 @@ export const services = ref([
                 <li>Pilih Menu Masuk/Daftar.</li>
                 <li>Apabila kamu sudah mendaftar dan sudah mempunyai akun maka tidak perlu , kamu bisa langsung masuk.</li>
                 <li>Kamu akan di arahkan ke menu dashboard area, silahkan lengkapi data diri kamu.</li>
-            </ul>
-
-        <h5 class="text-lg font-semibold text-gray-800 mb-2 underline">Langkah Kedua</h5>
-            <ul class="list-disc list-outside space-y-2 mb-4 px-5">
-                <li>Pilih menu Daftar Nikah pada dashboard area.</li>
-                <li>Siapkan dokumen-dokumen yang diperlukan.</li>
-                <li>Isi dan lengkapi semua form-form yang disediakan.</li>
-                <li>Bayar tagihan sesuai dengan informasi yang tertera dalam Invoice pembayaran</li>
-            </ul>
-
-        <h5 class="text-lg font-semibold text-gray-800 mb-2 underline">Langkah Ketiga</h5>
-            <ul class="list-disc list-outside space-y-2 mb-4 px-5">
+            </ul> <h5 class="text-lg font-semibold text-gray-800 mb-2 underline">Langkah Kedua</h5> <ul class="list-disc list-outside space-y-2 mb-4 px-5"> <li>Pilih menu Daftar Nikah pada dashboard area.</li> <li>Siapkan dokumen-dokumen yang diperlukan.</li> <li>Isi dan lengkapi semua form-form yang disediakan.</li> <li>Bayar tagihan sesuai dengan informasi yang tertera dalam Invoice pembayaran</li> </ul> <h5 class="text-lg font-semibold text-gray-800 mb-2 underline">Langkah Ketiga</h5> <ul class="list-disc list-outside space-y-2 mb-4 px-5">
                 <li>Pemeriksaan data nikah calon pengantin dan wali nikah di KUA tempat akad nikah oleh petugas KUA.</li>
                 <li>Calon pengantin yang telah melakukan pendaftaran kehendak nikah wajib mengikuti bimbingan perkawinan dan diberikan sertifikat.</li>
                 <li>Pelaksanaan akad nikah dan penyerahan buku nikah di lokasi nikah apabila pernikahan dilaksanakan diluar kantor KUA.</li>
@@ -100,7 +89,6 @@ export const services = ref([
     `,
   },
 ]);
-
 export const faqs = ref([
   {
     question: "Berapa lama proses pendaftaran nikah hingga selesai?",

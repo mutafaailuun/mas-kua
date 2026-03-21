@@ -40,8 +40,15 @@ export default defineNuxtConfig({
     },
   },
   css: ["/assets/style.css", "/assets/font.css"],
-  modules: ["@nuxt/icon"],
+  modules: ["@nuxt/icon",    "@nuxtjs/supabase"
+  ],
+  supabase: {
+    redirect: false,
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_KEY
+  },
   vite: {
     plugins: [tailwindcss()],
   },
-});
+})
+// trigger dev server reload;

@@ -61,17 +61,16 @@
 </template>
 
 <script setup>
-import { services } from "/data/services.js";
-import { faqs } from "/data/faqs.js";
-import HeroSection from "/components/HeroSection.vue";
-import ProblemSection from "/components/ProblemSection.vue";
-import SolutionSection from "/components/SolutionSection.vue";
-import ServicesSection from "/components/ServicesSection.vue";
-import FaqSection from "/components/FaqSection.vue";
-import CtaSection from "/components/CtaSection.vue";
-import ArticleCard from "/components/ArticleCard.vue";
+import { services } from "~/data/services.js";
+import { faqs } from "~/data/faqs.js";
+import HeroSection from "~/components/HeroSection.vue";
+import ProblemSection from "~/components/ProblemSection.vue";
+import SolutionSection from "~/components/SolutionSection.vue";
+import ServicesSection from "~/components/ServicesSection.vue";
+import FaqSection from "~/components/FaqSection.vue";
+import CtaSection from "~/components/CtaSection.vue";
+import ArticleCard from "~/components/ArticleCard.vue";
 
-const supabase = useSupabaseClient()
 const latestArticles = ref([])
 const popularArticles = ref([])
 const loadingLatest = ref(true)
@@ -86,28 +85,48 @@ const scrollToSection = (sectionId) => {
 
 // Fetch data
 onMounted(async () => {
+  let supabase
+  try {
+    supabase = useSupabaseClient()
+  } catch (error) {
+    console.error("Supabase client unavailable on homepage:", error)
+    loadingLatest.value = false
+    loadingPopular.value = false
+    return
+  }
+
   // Fetch Latest
   try {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('articles')
       .select('*')
       .eq('published', true)
       .order('created_at', { ascending: false })
       .limit(3)
+    if (error) {
+      console.error("Failed to fetch latest articles:", error)
+    }
     latestArticles.value = data || []
+  } catch (error) {
+    console.error("Unexpected error fetching latest articles:", error)
   } finally {
     loadingLatest.value = false
   }
 
   // Fetch Popular (Assuming 'views' column exists and is populated)
   try {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('articles')
       .select('*')
       .eq('published', true)
       .order('views', { ascending: false })
       .limit(3)
+    if (error) {
+      console.error("Failed to fetch popular articles:", error)
+    }
     popularArticles.value = data || []
+  } catch (error) {
+    console.error("Unexpected error fetching popular articles:", error)
   } finally {
     loadingPopular.value = false
   }

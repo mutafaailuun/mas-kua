@@ -1,3 +1,5 @@
+import { ref } from "vue";
+
 export const faqs = ref([
   {
     question: "Berapa lama proses pendaftaran nikah hingga selesai?",

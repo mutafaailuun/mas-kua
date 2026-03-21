@@ -36,7 +36,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
         <nav
           class="hidden md:flex items-center gap-8 font-medium text-gray-600"
         >
-          <a href="/services" class="hover:text-green-600">Layanan</a>
+          <a href="/layanan" class="hover:text-green-600">Layanan</a>
           <a href="/faq" class="hover:text-green-600">FAQ</a>
           <a
             href="https://wa.me/6287785587322"

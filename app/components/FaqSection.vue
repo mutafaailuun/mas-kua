@@ -1,6 +1,7 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import AccordionItem from "./AccordionItem.vue";
+import { slugify } from "~/utils/slugify";
 
 defineProps({
   faqs: Array,
@@ -19,14 +20,20 @@ defineProps({
         </p>
       </div>
       <div class="max-w-3xl mx-auto space-y-4">
-        <AccordionItem
-          v-for="(faq, index) in faqs.slice(0, 4)"
-          :key="index"
-          :title="faq.question"
-          :is-html="true"
-        >
-          {{ faq.answer }}
-        </AccordionItem>
+        <div v-for="(faq, index) in faqs.slice(0, 4)" :key="index" class="space-y-2">
+          <AccordionItem :title="faq.question" :is-html="true">
+            {{ faq.answer }}
+          </AccordionItem>
+          <div class="text-right">
+            <NuxtLink
+              :to="`/faq/${slugify(faq.question)}`"
+              class="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700"
+            >
+              Baca selengkapnya
+              <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1" />
+            </NuxtLink>
+          </div>
+        </div>
       </div>
     </div>
     <a

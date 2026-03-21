@@ -2,6 +2,7 @@
 import { Icon } from "@iconify/vue";
 import AccordionItem from "../components/AccordionItem.vue";
 import { faqs } from "../data/faqs.js";
+import { slugify } from "~/utils/slugify";
 </script>
 
 <template>
@@ -16,14 +17,20 @@ import { faqs } from "../data/faqs.js";
         </p>
       </div>
       <div class="max-w-3xl mx-auto space-y-4">
-        <AccordionItem
-          v-for="(faq, index) in faqs"
-          :key="index"
-          :title="faq.question"
-          :is-html="true"
-        >
-          {{ faq.answer }}
-        </AccordionItem>
+        <div v-for="(faq, index) in faqs" :key="index" class="space-y-2">
+          <AccordionItem :title="faq.question" :is-html="true">
+            {{ faq.answer }}
+          </AccordionItem>
+          <div class="text-right">
+            <NuxtLink
+              :to="`/faq/${slugify(faq.question)}`"
+              class="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700"
+            >
+              Baca selengkapnya
+              <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1" />
+            </NuxtLink>
+          </div>
+        </div>
       </div>
     </div>
   </section>

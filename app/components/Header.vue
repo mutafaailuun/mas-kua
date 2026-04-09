@@ -37,6 +37,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
           class="hidden md:flex items-center gap-8 font-medium text-gray-600"
         >
           <a href="/layanan" class="hover:text-green-600">Layanan</a>
+          <a href="/jadwal" class="hover:text-green-600">Jadwal Nikah</a>
           <a href="/faq" class="hover:text-green-600">FAQ</a>
           <a
             href="https://wa.me/6287785587322"
@@ -73,10 +74,14 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
     >
       <div class="flex flex-col p-4">
         <a
-          @click.prevent="onNavLinkClick('layanan')"
-          href="#layanan"
+          href="/layanan"
           class="block py-2 px-4 text-gray-600 hover:bg-gray-100 rounded"
           >Layanan</a
+        >
+        <a
+          href="/jadwal"
+          class="block py-2 px-4 text-gray-600 hover:bg-gray-100 rounded"
+          >Jadwal Nikah</a
         >
         <a
           @click.prevent="onNavLinkClick('faq')"

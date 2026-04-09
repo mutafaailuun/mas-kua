@@ -3,6 +3,7 @@
     <!-- <Header @scrollToSection="scrollToSection" /> -->
     <main>
       <HeroSection @scrollToSection="scrollToSection" />
+      <WeddingSchedule />
       <ProblemSection />
       <SolutionSection />
       <ServicesSection :services="services" />
@@ -64,6 +65,7 @@
 import { services } from "~/data/services.js";
 import { faqs } from "~/data/faqs.js";
 import HeroSection from "~/components/HeroSection.vue";
+import WeddingSchedule from "~/components/WeddingSchedule.vue";
 import ProblemSection from "~/components/ProblemSection.vue";
 import SolutionSection from "~/components/SolutionSection.vue";
 import ServicesSection from "~/components/ServicesSection.vue";

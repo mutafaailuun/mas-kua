@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
     head: {
+      title: "KUA Pebayuran Bekasi",
       link: [
         {
           rel: "stylesheet",

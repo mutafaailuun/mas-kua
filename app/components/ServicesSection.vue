@@ -31,11 +31,11 @@ defineProps({
           class="bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 p-6 flex flex-col items-center text-center transition-all duration-300 group hover:-translate-y-1"
         >
           <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-            <Icon name="lucide:file-text" class="w-6 h-6" />
+            <Icon :icon="service.icon || 'lucide:file-text'" class="w-6 h-6" />
           </div>
           <h3 class="text-lg font-bold text-gray-900 mb-2">{{ service.title }}</h3>
           <p class="text-sm text-gray-500 mt-auto pt-4 flex items-center text-emerald-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-            Lihat Persyaratan <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1" />
+            Lihat Persyaratan <Icon icon="lucide:arrow-right" class="w-4 h-4 ml-1" />
           </p>
         </NuxtLink>
       </div>

@@ -19,8 +19,8 @@ const onButtonClick = (sectionId) => {
           </h1>
           <p class="text-lg text-gray-600 mb-8">
             Selamat datang di MAS KUA, pusat informasi digital resmi KUA
-            Kecamatan Pebayuran. Semua yang Anda butuhkan, dari syarat nikah
-            hingga FAQ, kini ada di ujung jari.
+            Kecamatan Pebayuran. Dari panduan syarat nikah, pantauan jadwal nikah real-time,
+            hingga kumpulan artikel keluarga, semuanya kini ada di ujung jari Anda.
           </p>
           <div
             class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"

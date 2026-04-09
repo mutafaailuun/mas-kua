@@ -3,6 +3,7 @@ import { ref } from "vue";
 export const services = ref([
   {
     title: "Pendaftaran Nikah",
+    icon: "lucide:clipboard-edit",
     content: `
     <h4 class="text-lg font-bold text-gray-800 mb-2 bg-gray-100 -m-5 p-5 mb-5">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
@@ -75,6 +76,7 @@ export const services = ref([
   },
   {
     title: "Bimbingan Perkawinan (Bimwin)",
+    icon: "lucide:users",
     content: `
       <h4 class="text-lg font-semibold text-gray-800 mb-2">Definisi:</h4>
       <p class="mb-4">Bimbingan Perkawinan adalah kegiatan pembinaan kepada calon pengantin yang bertujuan untuk memberikan bekal pengetahuan, sikap, dan keterampilan dalam membina rumah tangga yang sakinah, mawaddah, warahmah.</p>
@@ -93,6 +95,7 @@ export const services = ref([
   },
   {
     title: "Duplikat Buku Nikah",
+    icon: "lucide:copy",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
@@ -113,6 +116,7 @@ export const services = ref([
   },
   {
     title: "Buku Nikah Rusak/Hilang",
+    icon: "lucide:book-x",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Buku Nikah Rusak/Hilang</h4>
     <h4 class="text-lg font-medium text-gray-800 mb-2">Buku Nikah Rusak</h4>
@@ -133,6 +137,7 @@ export const services = ref([
   },
   {
     title: "Legalisasi Buku Nikah",
+    icon: "lucide:stamp",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
@@ -151,6 +156,7 @@ export const services = ref([
   },
   {
     title: "Isbat Nikah",
+    icon: "lucide:scale",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
@@ -172,6 +178,7 @@ export const services = ref([
   },
   {
     title: "Surat Rekomendasi Nikah (Numpang Nikah)",
+    icon: "lucide:file-symlink",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen:</h4>
       <ul class="list-disc list-inside space-y-2 mb-4">
@@ -190,6 +197,7 @@ export const services = ref([
   },
   {
     title: "Surat Keterangan Ralat",
+    icon: "lucide:file-edit",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Definisi:</h4>
     <p>Surat keterangan untuk mengoreksi/meralat kesalahan data (baik nama, tempat dan tanggal lahir dll.) di kutipan akta nikah untuk digunakan mengurus dokumen lainnya</p>
@@ -212,6 +220,7 @@ export const services = ref([
   },
   {
     title: "Pernikahan Campuran (WNA)",
+    icon: "lucide:globe",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Definisi:</h4>
       <p class="mb-4">Pernikahan campuran adalah pernikahan yang dilaksanakan antara warga negara Indonesia (WNI) dengan warga negara asing (WNA) yang diatur dalam Undang-Undang Nomor 1 Tahun 1974 tentang Perkawinan dan Peraturan Menteri Agama Nomor 30 Tahun 2024 tentang Tata Cara Pelaksanaan Pernikahan Bagi Warga Negara Indonesia Dengan Warga Negara Asing.</p>
@@ -240,6 +249,7 @@ export const services = ref([
   },
   {
     title: "Surat Keterangan Tercatat/Tidak Tercatat",
+    icon: "lucide:file-search",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Dokumen SK Tercatat:</h4>
       <ol class="list-decimal list-inside space-y-2 mb-4">
@@ -258,6 +268,7 @@ export const services = ref([
   },
   {
     title: "Persyaratan Akta Ikrar Wakaf",
+    icon: "lucide:landmark",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Persyaratan Dokumen Tanah:</h4>
     <ol class="list-decimal list-inside space-y-2 mb-4">
@@ -290,6 +301,7 @@ export const services = ref([
   },
   {
     title: "Persyaratan Tanda Daftar Majelis Taklim (TDMT)",
+    icon: "lucide:book-open",
     content: `
     <h4 class="text-lg font-semibold text-gray-800 mb-2">Syarat Pendaftaran:</h4>
       <ol class="list-decimal list-inside space-y-2 mb-4">

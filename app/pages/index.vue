@@ -3,9 +3,8 @@
     <!-- <Header @scrollToSection="scrollToSection" /> -->
     <main>
       <HeroSection @scrollToSection="scrollToSection" />
+      <FeaturesHighlight @scrollToSection="scrollToSection" />
       <WeddingSchedule />
-      <ProblemSection />
-      <SolutionSection />
       <ServicesSection :services="services" />
       
       <!-- LATEST ARTICLES -->
@@ -65,9 +64,8 @@
 import { services } from "~/data/services.js";
 import { faqs } from "~/data/faqs.js";
 import HeroSection from "~/components/HeroSection.vue";
+import FeaturesHighlight from "~/components/FeaturesHighlight.vue";
 import WeddingSchedule from "~/components/WeddingSchedule.vue";
-import ProblemSection from "~/components/ProblemSection.vue";
-import SolutionSection from "~/components/SolutionSection.vue";
 import ServicesSection from "~/components/ServicesSection.vue";
 import FaqSection from "~/components/FaqSection.vue";
 import CtaSection from "~/components/CtaSection.vue";

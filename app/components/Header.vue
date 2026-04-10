@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 
+const user = useSupabaseUser();
 const emit = defineEmits(["scrollToSection"]);
 
 const isScrolled = ref(false);
@@ -45,6 +46,14 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
             class="hover:text-green-600"
             >Hubungi Kami</a
           >
+          <NuxtLink 
+            v-if="user" 
+            to="/admin" 
+            class="flex items-center justify-center p-2 bg-emerald-50 text-emerald-600 rounded-full hover:bg-emerald-100 transition-colors"
+            title="Ke Dashboard Admin"
+          >
+            <Icon name="lucide:layout-dashboard" class="w-5 h-5" />
+          </NuxtLink>
         </nav>
 
         <button
@@ -73,6 +82,14 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
       class="md:hidden bg-white shadow-lg absolute top-full left-0 w-full"
     >
       <div class="flex flex-col p-4">
+        <NuxtLink
+          v-if="user"
+          to="/admin"
+          class="flex items-center gap-2 py-2 px-4 text-emerald-600 bg-emerald-50 rounded mb-2 font-semibold"
+        >
+          <Icon name="lucide:layout-dashboard" class="w-5 h-5" />
+          Dashboard Admin
+        </NuxtLink>
         <a
           href="/layanan"
           class="block py-2 px-4 text-gray-600 hover:bg-gray-100 rounded"

@@ -28,6 +28,15 @@
           <Icon name="lucide:file-text" class="w-5 h-5 mr-3 shrink-0" />
           Articles
         </NuxtLink>
+        <NuxtLink 
+          to="/admin/weddings" 
+          class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+          active-class="bg-emerald-50 text-emerald-700"
+          inactive-class="text-gray-700 hover:bg-gray-100"
+        >
+          <Icon name="lucide:heart" class="w-5 h-5 mr-3 shrink-0" />
+          Weddings
+        </NuxtLink>
       </nav>
 
       <div class="p-4 border-t border-gray-200">
@@ -46,6 +55,7 @@
       <!-- Top header (optional, empty for now but good for spacing/breadcrumbs) -->
       <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shadow-sm z-10">
         <div class="flex items-center text-sm font-medium text-gray-500">
+          <Icon name="lucide:layout-dashboard" class="w-5 h-5 mr-2 text-emerald-600" />
           Admin Area
         </div>
       </header>
@@ -63,6 +73,13 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient()
 const router = useRouter()
+
+// Security: Listen for session expiration or sign out
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_OUT') {
+    router.push('/admin/login')
+  }
+})
 
 const handleLogout = async () => {
   await supabase.auth.signOut()

@@ -89,12 +89,15 @@
         <!-- Officiant -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Penghulu</label>
-          <input 
+          <select 
             v-model="form.officiant_name"
-            type="text"
-            placeholder="Masukkan nama penghulu"
             class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-          />
+          >
+            <option value="">-- Pilih Penghulu --</option>
+            <option value="Drs. H. Ma'mun Nawawi">Drs. H. Ma'mun Nawawi</option>
+            <option value="Nunu Husnul Hitam, SH.I">Nunu Husnul Hitam, SH.I</option>
+            <option value="Jalaludin, S.H">Jalaludin, S.H</option>
+          </select>
         </div>
 
         <!-- Status -->

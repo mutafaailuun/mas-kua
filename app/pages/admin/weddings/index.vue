@@ -18,9 +18,9 @@
 
     <!-- Filters & Search -->
     <div class="mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-7 gap-4">
         <!-- Search -->
-        <div class="md:col-span-1">
+        <div>
           <label class="block text-xs font-medium text-gray-700 mb-1">Cari Nama Catin</label>
           <div class="relative rounded-md shadow-sm">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -35,9 +35,19 @@
           </div>
         </div>
 
+        <!-- Filter Reg Date -->
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Tgl Daftar</label>
+          <input 
+            v-model="filterRegDate"
+            type="date" 
+            class="block w-full sm:text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+          >
+        </div>
+
         <!-- Filter From Date -->
         <div>
-          <label class="block text-xs font-medium text-gray-700 mb-1">Dari Tanggal</label>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Dari Tgl Akad</label>
           <input 
             v-model="filterFromDate"
             type="date" 
@@ -47,7 +57,7 @@
 
         <!-- Filter Specific Date -->
         <div>
-          <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Spesifik</label>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Tgl Akad</label>
           <input 
             v-model="filterDate"
             type="date" 
@@ -85,13 +95,13 @@
 
         <!-- Sort Order -->
         <div>
-          <label class="block text-xs font-medium text-gray-700 mb-1">Urutan Tanggal</label>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Urutan</label>
           <select 
             v-model="sortOrder"
             class="block w-full sm:text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
           >
-            <option value="desc">Terbaru (Desc)</option>
-            <option value="asc">Terlama (Asc)</option>
+            <option value="desc">Terbaru</option>
+            <option value="asc">Terlama</option>
           </select>
         </div>
       </div>
@@ -124,7 +134,8 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal & Jam</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tgl Daftar</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal & Jam Akad</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catin</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penghulu</th>
@@ -134,6 +145,9 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-for="wedding in paginatedWeddings" :key="wedding.id" class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ wedding.registration_date ? formatDate(wedding.registration_date) : '-' }}
+              </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm font-medium text-gray-900">{{ formatDate(wedding.wedding_date) }}</div>
                 <div class="text-sm text-gray-500">{{ wedding.wedding_time.substring(0, 5) }} WIB</div>
@@ -244,6 +258,7 @@ const loading = ref(true)
 const searchQuery = ref('')
 const filterFromDate = ref('')
 const filterDate = ref('')
+const filterRegDate = ref('')
 const filterOfficiant = ref('')
 const filterStatus = ref('')
 const sortOrder = ref('desc') // Default to newest first
@@ -292,6 +307,9 @@ const filteredWeddings = computed(() => {
     // Filter Date
     const matchesDate = !filterDate.value || wedding.wedding_date === filterDate.value
 
+    // Filter Registration Date
+    const matchesRegDate = !filterRegDate.value || wedding.registration_date === filterRegDate.value
+
     // Filter Officiant
     let matchesOfficiant = true
     if (filterOfficiant.value !== '') {
@@ -305,7 +323,7 @@ const filteredWeddings = computed(() => {
     // Filter Status
     const matchesStatus = !filterStatus.value || wedding.status === filterStatus.value
 
-    return matchesSearch && matchesFromDate && matchesDate && matchesOfficiant && matchesStatus
+    return matchesSearch && matchesFromDate && matchesDate && matchesRegDate && matchesOfficiant && matchesStatus
   })
 
   // Apply Sorting
@@ -332,20 +350,21 @@ const paginatedWeddings = computed(() => {
 
 // Check if any filter is active
 const hasActiveFilters = computed(() => {
-  return searchQuery.value !== '' || filterFromDate.value !== '' || filterDate.value !== '' || filterOfficiant.value !== '' || filterStatus.value !== ''
+  return searchQuery.value !== '' || filterFromDate.value !== '' || filterDate.value !== '' || filterRegDate.value !== '' || filterOfficiant.value !== '' || filterStatus.value !== ''
 })
 
 const clearFilters = () => {
   searchQuery.value = ''
   filterFromDate.value = ''
   filterDate.value = ''
+  filterRegDate.value = ''
   filterOfficiant.value = ''
   filterStatus.value = ''
-  sortOrder.value = 'desc'
+  sortOrder.value = 'asc'
 }
 
 // Reset pagination when filters or sort change
-watch([searchQuery, filterFromDate, filterDate, filterOfficiant, filterStatus, sortOrder, itemsPerPage], () => {
+watch([searchQuery, filterFromDate, filterDate, filterRegDate, filterOfficiant, filterStatus, sortOrder, itemsPerPage], () => {
   currentPage.value = 1
 })
 

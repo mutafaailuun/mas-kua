@@ -6,10 +6,10 @@ Deno.serve(async (req) => {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const fonnteToken = Deno.env.get("FONNTE_TOKEN");
-  const fonnteGroupId = Deno.env.get("FONNTE_GROUP_ID");
+  const fonnteGroupId = Deno.env.get("FONNTE_GROUP_ID") || "120363405630101894@g.us,120363346263611261@g.us";
 
-  if (!fonnteToken || !fonnteGroupId) {
-    return new Response(JSON.stringify({ error: "Missing FONNTE_TOKEN or FONNTE_GROUP_ID" }), { status: 500 });
+  if (!fonnteToken) {
+    return new Response(JSON.stringify({ error: "Missing FONNTE_TOKEN" }), { status: 500 });
   }
 
   // Get report type and optional date from query param or body
@@ -28,6 +28,11 @@ Deno.serve(async (req) => {
   // Default to auto if not specified
   reportType = reportType || "auto";
   const now = targetDateStr ? new Date(targetDateStr) : new Date();
+  
+  // Adjust to WIB (UTC+7) for automatic trigger
+  if (!targetDateStr) {
+    now.setHours(now.getHours() + 7);
+  }
 
   const reportsToSend = [];
   if (reportType === "auto") {
@@ -88,13 +93,16 @@ Deno.serve(async (req) => {
         } else { message += "_Tidak ada jadwal besok._\n\n"; }
 
       } else if (type === "weekly") {
-        // Current week: Monday to Sunday
+        // Previous week: Monday to Sunday of last week
         const day = now.getDay(); // 0 (Sun) to 6 (Sat)
         const diffToMon = day === 0 ? -6 : 1 - day;
-        const startOfWeek = new Date(now);
-        startOfWeek.setDate(now.getDate() + diffToMon);
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        const currentMonday = new Date(now);
+        currentMonday.setDate(now.getDate() + diffToMon);
+        
+        const startOfWeek = new Date(currentMonday);
+        startOfWeek.setDate(currentMonday.getDate() - 7);
+        const endOfWeek = new Date(currentMonday);
+        endOfWeek.setDate(currentMonday.getDate() - 1);
 
         const { data: weeklyWeddings } = await supabase.from("weddings")
           .select("*")
@@ -121,8 +129,9 @@ Deno.serve(async (req) => {
         });
 
       } else if (type === "monthly") {
-        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-        const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        // Previous month
+        const firstDay = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const lastDay = new Date(now.getFullYear(), now.getMonth(), 0);
 
         const { data: monthlyWeddings } = await supabase.from("weddings")
           .select("*")
@@ -143,13 +152,23 @@ Deno.serve(async (req) => {
 
       message += `\n---\nPesan ini dikirim oleh sistem`;
 
-      const fonnteResponse = await fetch("https://api.fonnte.com/send", {
-        method: "POST",
-        headers: { "Authorization": fonnteToken },
-        body: new URLSearchParams({ target: fonnteGroupId, message: message }),
-      });
+      const targets = fonnteGroupId.split(",").map(t => t.trim());
+      const fonnteResults = [];
 
-      results.push({ type, fonnte: await fonnteResponse.json() });
+      for (const target of targets) {
+        try {
+          const fonnteResponse = await fetch("https://api.fonnte.com/send", {
+            method: "POST",
+            headers: { "Authorization": fonnteToken },
+            body: new URLSearchParams({ target: target, message: message }),
+          });
+          fonnteResults.push({ target, status: fonnteResponse.status, data: await fonnteResponse.json() });
+        } catch (err) {
+          fonnteResults.push({ target, error: err.message });
+        }
+      }
+
+      results.push({ type, fonnte: fonnteResults });
     } catch (error) {
       results.push({ type, error: error.message });
     }

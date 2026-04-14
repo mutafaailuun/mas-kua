@@ -14,6 +14,18 @@
 
     <form @submit.prevent="saveWedding" class="space-y-6 bg-white p-8 rounded-xl shadow-sm border border-gray-200">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Registration Date -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Pendaftaran</label>
+          <input 
+            v-model="form.registration_date"
+            type="date"
+            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+          />
+        </div>
+        
+        <div class="hidden md:block"></div>
+
         <!-- Date -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Akad</label>
@@ -142,6 +154,7 @@ const router = useRouter()
 const submitting = ref(false)
 
 const form = reactive({
+  registration_date: '',
   wedding_date: '',
   wedding_time: '',
   groom_name: '',

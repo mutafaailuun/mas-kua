@@ -512,8 +512,12 @@ const parseNoAkta = (notes?: string | null) => {
   return m ? m[1] : ''
 }
 
-const formatTanggalUpper = (raw: string) =>
-  new Date(raw + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
+const formatTanggalUpper = (raw: string) => {
+  const d = new Date(raw + 'T00:00:00')
+  const dd = String(d.getDate()).padStart(2, '0')
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  return `${dd}-${mm}-${d.getFullYear()}`
+}
 
 // ── Upload ───────────────────────────────────────────────────────
 const triggerUpload = (wedding: any) => {
@@ -688,10 +692,12 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
   const noAkta = parseNoAkta(wedding.notes) || '___________________________'
 
   const photoHtml = photos.length > 0
-    ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;">
-        ${photos.map(p => `<img src="${p.photo_url}" crossorigin="anonymous" style="width:100%;height:260px;object-fit:cover;border:1px solid #ddd;" />`).join('')}
+    ? `<div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px;">
+        ${photos.map(p => `<div style="width:100%;display:flex;justify-content:center;">
+          <img src="${p.photo_url}" crossorigin="anonymous" style="max-width:80%;height:auto;display:block;object-fit:contain;" />
+        </div>`).join('')}
        </div>`
-    : `<div style="height:260px;border:1.5px dashed #bbb;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:12px;margin-top:8px;">[ Foto Dokumentasi ]</div>`
+    : `<div style="min-height:260px;border:1.5px solid black;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:12px;margin-top:8px;">[ Foto Dokumentasi ]</div>`
 
   return `
     <div class="page">
@@ -700,7 +706,7 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
           LAMPIRAN DOKUMENTASI PERISTIWA NIKAH ${isKantor ? 'KANTOR' : 'LUAR KANTOR'}
         </div>
         <div style="font-size:14px;font-weight:bold;">KANTOR URUSAN AGAMA KECAMATAN PEBAYURAN</div>
-        <div style="font-size:13px;margin-top:2px;">BULAN ${bulan} TAHUN ${tahun}</div>
+        <div style="font-size:13px;font-weight:bold;margin-top:2px;">BULAN ${bulan} TAHUN ${tahun}</div>
       </div>
       <div style="border-top:2.5px solid black;margin-bottom:18px;"></div>
       <table style="border-collapse:collapse;font-size:13px;line-height:1.9;margin-bottom:16px;">
@@ -742,7 +748,7 @@ const openPrintWindow = (pages: Array<{ wedding: any; photos: any[] }>) => {
   <title>Dokumentasi Akad</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: white; }
+    body { font-family: 'Liberation Serif', 'Times New Roman', serif; background: white; }
     .page {
       width: 21cm;
       min-height: 29.7cm;

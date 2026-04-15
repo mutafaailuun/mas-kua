@@ -1,15 +1,15 @@
 <template>
   <div
-    class="dok-preview font-['Arial',_sans-serif] text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 56px 70px 56px 70px; box-sizing: border-box; font-size: 13px; line-height: 1.5;"
+    class="dok-preview text-black bg-white"
+    style="width: 794px; min-height: 1123px; padding: 56px 70px; box-sizing: border-box; font-family: 'Liberation Serif', 'Times New Roman', serif; font-size: 13px; line-height: 1.5;"
   >
     <!-- ══ JUDUL ══ -->
     <div style="text-align: center; margin-bottom: 10px;">
-      <div style="font-size: 14px; font-weight: bold; letter-spacing: 0.4px; text-transform: uppercase;">
+      <div style="font-size: 14px; font-weight: bold; letter-spacing: 0.4px;">
         LAMPIRAN DOKUMENTASI PERISTIWA NIKAH {{ isKantor ? 'KANTOR' : 'LUAR KANTOR' }}
       </div>
       <div style="font-size: 14px; font-weight: bold;">KANTOR URUSAN AGAMA KECAMATAN PEBAYURAN</div>
-      <div style="font-size: 13px; margin-top: 2px;">BULAN {{ bulanNama }} TAHUN {{ tahun }}</div>
+      <div style="font-size: 13px; font-weight: bold; margin-top: 2px;">BULAN {{ bulanNama }} TAHUN {{ tahun }}</div>
     </div>
 
     <!-- ══ GARIS ══ -->
@@ -47,26 +47,24 @@
     </table>
 
     <!-- ══ FOTO DOKUMENTASI ══ -->
-    <div v-if="photos.length > 0">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-        <div
-          v-for="(photo, i) in photos"
-          :key="photo.id ?? i"
-          style="break-inside: avoid;"
-        >
-          <img
-            :src="photo.photo_url"
-            :alt="`Dokumentasi ${i + 1}`"
-            crossorigin="anonymous"
-            style="width: 100%; height: 260px; object-fit: cover; display: block; border: 1px solid #ddd;"
-          />
-        </div>
+    <div v-if="photos.length > 0" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+      <div
+        v-for="(photo, i) in photos"
+        :key="photo.id ?? i"
+        style="width: 100%; display: flex; justify-content: center; break-inside: avoid;"
+      >
+        <img
+          :src="photo.photo_url"
+          :alt="`Dokumentasi ${i + 1}`"
+          crossorigin="anonymous"
+          style="max-width: 80%; height: auto; display: block; object-fit: contain;"
+        />
       </div>
     </div>
 
-    <!-- ══ PLACEHOLDER FOTO (belum ada) ══ -->
+    <!-- ══ PLACEHOLDER (belum ada foto) ══ -->
     <div v-else
-      style="height: 280px; border: 1.5px dashed #bbb; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; gap: 8px; margin-top: 4px;"
+      style="min-height: 280px; border: 1.5px solid black; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; gap: 8px;"
     >
       <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
         <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
@@ -120,6 +118,9 @@ const noAkta = computed(() => {
 
 const formatTanggal = (raw: string) => {
   const d = new Date(raw + 'T00:00:00')
-  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
+  const dd = String(d.getDate()).padStart(2, '0')
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const yyyy = d.getFullYear()
+  return `${dd}-${mm}-${yyyy}`
 }
 </script>

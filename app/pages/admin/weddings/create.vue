@@ -20,7 +20,7 @@
           <input 
             v-model="form.registration_date"
             type="date"
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
         
@@ -33,7 +33,7 @@
             v-model="form.wedding_date"
             type="date"
             required
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
 
@@ -44,7 +44,7 @@
             v-model="form.wedding_time"
             type="time"
             required
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
 
@@ -56,7 +56,7 @@
             type="text"
             required
             placeholder="Contoh: Ahmad Subagja"
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
 
@@ -68,7 +68,7 @@
             type="text"
             required
             placeholder="Contoh: Siti Aminah"
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
       </div>
@@ -81,7 +81,7 @@
           type="text"
           required
           placeholder="Contoh: KUA Pebayuran atau Alamat Rumah"
-          class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+          class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         />
       </div>
 
@@ -91,7 +91,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Penghulu</label>
           <select 
             v-model="form.officiant_name"
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             <option value="">-- Pilih Penghulu --</option>
             <option value="Drs. H. Ma'mun Nawawi">Drs. H. Ma'mun Nawawi</option>
@@ -105,7 +105,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Status Lokasi</label>
           <select 
             v-model="form.status"
-            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             <option value="Kantor">Kantor (KUA)</option>
             <option value="Luar Kantor">Luar Kantor (Bedol)</option>
@@ -120,7 +120,7 @@
           v-model="form.notes"
           rows="3"
           placeholder="Contoh: Wali Hakim, Persyaratan kurang, dll"
-          class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+          class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         ></textarea>
       </div>
 

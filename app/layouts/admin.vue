@@ -28,14 +28,23 @@
           <Icon name="lucide:file-text" class="w-5 h-5 mr-3 shrink-0" />
           Articles
         </NuxtLink>
-        <NuxtLink 
-          to="/admin/weddings" 
+        <NuxtLink
+          to="/admin/weddings"
           class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
           active-class="bg-emerald-50 text-emerald-700"
           inactive-class="text-gray-700 hover:bg-gray-100"
         >
           <Icon name="lucide:heart" class="w-5 h-5 mr-3 shrink-0" />
           Weddings
+        </NuxtLink>
+        <NuxtLink
+          to="/admin/surat"
+          class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+          active-class="bg-emerald-50 text-emerald-700"
+          inactive-class="text-gray-700 hover:bg-gray-100"
+        >
+          <Icon name="lucide:file-pen" class="w-5 h-5 mr-3 shrink-0" />
+          Surat Menyurat
         </NuxtLink>
       </nav>
 

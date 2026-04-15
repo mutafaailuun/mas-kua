@@ -39,12 +39,23 @@
             </div>
           </div>
 
+          <!-- Remember me -->
+          <div class="flex items-center">
+            <input
+              id="remember"
+              v-model="rememberMe"
+              type="checkbox"
+              class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+            />
+            <label for="remember" class="ml-2 block text-sm text-gray-700">Ingat saya</label>
+          </div>
+
           <div v-if="errorMsg" class="text-sm text-red-600 bg-red-50 p-3 rounded-md">
             {{ errorMsg }}
           </div>
 
           <div>
-            <button 
+            <button
               type="submit" 
               :disabled="loading"
               class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 transition-colors"
@@ -72,26 +83,41 @@ const email = ref('')
 const password = ref('')
 const loading = ref(false)
 const errorMsg = ref('')
+const rememberMe = ref(false)
 
-// Redirect if already logged in
+const STORAGE_KEY = 'kua_admin_remembered_email'
+
+// Redirect if already logged in; restore saved email if any
 onMounted(() => {
   if (user.value) {
     router.push('/admin')
+    return
+  }
+  const saved = localStorage.getItem(STORAGE_KEY)
+  if (saved) {
+    email.value = saved
+    rememberMe.value = true
   }
 })
 
 const handleLogin = async () => {
   loading.value = true
   errorMsg.value = ''
-  
+
   try {
     const { error } = await supabase.auth.signInWithPassword({
       email: email.value,
       password: password.value,
     })
-    
+
     if (error) throw error
-    
+
+    if (rememberMe.value) {
+      localStorage.setItem(STORAGE_KEY, email.value)
+    } else {
+      localStorage.removeItem(STORAGE_KEY)
+    }
+
     router.push('/admin')
   } catch (error: any) {
     errorMsg.value = error.message

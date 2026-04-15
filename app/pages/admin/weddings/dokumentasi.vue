@@ -532,27 +532,17 @@ const handleFileChange = async (e: Event) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
 
-      // 1. Request presigned URL from server route
-      const { signedUrl, publicUrl } = await $fetch<{ signedUrl: string; key: string; publicUrl: string }>(
-        '/api/upload/presign',
-        {
-          method: 'POST',
-          body: {
-            filename: file.name,
-            contentType: file.type,
-            folder: `wedding-docs/${wedding.id}`,
-          },
-        }
+      // Kirim file ke server API → server upload ke R2
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('folder', `wedding-docs/${wedding.id}`)
+
+      const { publicUrl } = await $fetch<{ publicUrl: string; key: string }>(
+        '/api/upload/photo',
+        { method: 'POST', body: formData }
       )
 
-      // 2. Upload directly to Cloudflare R2
-      await $fetch(signedUrl, {
-        method: 'PUT',
-        body: file,
-        headers: { 'Content-Type': file.type },
-      })
-
-      // 3. Save public URL to Supabase wedding_photos table
+      // Simpan URL ke Supabase wedding_photos
       const { error: dbError } = await supabase.from('wedding_photos').insert({
         wedding_id: wedding.id,
         photo_url: publicUrl,
@@ -561,16 +551,14 @@ const handleFileChange = async (e: Event) => {
       if (dbError) throw dbError
     }
 
-    // Update local count
     photoCounts.value[wedding.id] = (photoCounts.value[wedding.id] ?? 0) + files.length
 
-    // Refresh preview photos if this wedding is open
     if (previewWedding.value?.id === wedding.id) {
       previewPhotos.value = await fetchPhotosForWedding(wedding.id)
     }
   } catch (err: any) {
     console.error('Upload error:', err)
-    alert(`Gagal mengupload foto: ${err?.message ?? 'Periksa konfigurasi R2 di .env'}`)
+    alert(`Gagal mengupload foto: ${err?.data?.message ?? err?.message ?? 'Periksa konfigurasi R2 di .env'}`)
   } finally {
     uploadingId.value = null
     if (fileInputRef.value) fileInputRef.value.value = ''

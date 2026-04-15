@@ -33,9 +33,19 @@
           class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
           active-class="bg-emerald-50 text-emerald-700"
           inactive-class="text-gray-700 hover:bg-gray-100"
+          :exact="true"
         >
           <Icon name="lucide:heart" class="w-5 h-5 mr-3 shrink-0" />
-          Weddings
+          Jadwal Nikah
+        </NuxtLink>
+        <NuxtLink
+          to="/admin/weddings/dokumentasi"
+          class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+          active-class="bg-emerald-50 text-emerald-700"
+          inactive-class="text-gray-700 hover:bg-gray-100"
+        >
+          <Icon name="lucide:camera" class="w-5 h-5 mr-3 shrink-0" />
+          Dokumentasi Akad
         </NuxtLink>
         <NuxtLink
           to="/admin/surat"

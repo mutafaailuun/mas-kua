@@ -531,18 +531,28 @@ const handleFileChange = async (e: Event) => {
     const existingCount = photoCounts.value[wedding.id] ?? 0
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
-      const ext = file.name.split('.').pop()
-      const path = `${wedding.id}/${Date.now()}_${i}.${ext}`
 
-      const { error: uploadError } = await supabase.storage
-        .from('wedding-photos')
-        .upload(path, file, { upsert: false })
-      if (uploadError) throw uploadError
+      // 1. Request presigned URL from server route
+      const { signedUrl, publicUrl } = await $fetch<{ signedUrl: string; key: string; publicUrl: string }>(
+        '/api/upload/presign',
+        {
+          method: 'POST',
+          body: {
+            filename: file.name,
+            contentType: file.type,
+            folder: `wedding-docs/${wedding.id}`,
+          },
+        }
+      )
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('wedding-photos')
-        .getPublicUrl(path)
+      // 2. Upload directly to Cloudflare R2
+      await $fetch(signedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type },
+      })
 
+      // 3. Save public URL to Supabase wedding_photos table
       const { error: dbError } = await supabase.from('wedding_photos').insert({
         wedding_id: wedding.id,
         photo_url: publicUrl,
@@ -558,9 +568,9 @@ const handleFileChange = async (e: Event) => {
     if (previewWedding.value?.id === wedding.id) {
       previewPhotos.value = await fetchPhotosForWedding(wedding.id)
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error('Upload error:', err)
-    alert('Gagal mengupload foto. Pastikan bucket "wedding-photos" sudah dibuat di Supabase Storage.')
+    alert(`Gagal mengupload foto: ${err?.message ?? 'Periksa konfigurasi R2 di .env'}`)
   } finally {
     uploadingId.value = null
     if (fileInputRef.value) fileInputRef.value.value = ''

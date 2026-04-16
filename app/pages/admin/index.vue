@@ -204,7 +204,7 @@ const pieData = computed(() => {
   })
   const map: Record<string, number> = {}
   filtered.forEach(w => {
-    const desa = extractDesa(w.location ?? '')
+    const desa = w.status === 'Kantor' ? 'KUA Pebayuran' : extractDesa(w.location ?? '')
     map[desa] = (map[desa] ?? 0) + 1
   })
   return Object.entries(map).sort((a, b) => b[1] - a[1])
@@ -302,7 +302,7 @@ onMounted(async () => {
   try {
     const [articlesRes, weddingsRes] = await Promise.all([
       supabase.from('articles').select('id, published'),
-      supabase.from('weddings').select('id, wedding_date, location'),
+      supabase.from('weddings').select('id, wedding_date, location, status'),
     ])
     if (articlesRes.error) throw articlesRes.error
     if (weddingsRes.error) throw weddingsRes.error

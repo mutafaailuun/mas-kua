@@ -387,7 +387,6 @@ import AdminDokumentasiAkadPreview from '~/components/admin/DokumentasiAkadPrevi
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 const supabase = useSupabaseClient()
-const config = useRuntimeConfig()
 
 const BULAN_INDO = [
   'Januari','Februari','Maret','April','Mei','Juni',
@@ -531,6 +530,15 @@ const clearFilters = () => {
 const formatDate = (d: string) =>
   new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
 
+// Extract R2 key from either proxy URL (/api/photo/key) or legacy R2 public URL
+const extractKey = (url: string): string | null => {
+  if (!url) return null
+  if (url.startsWith('/api/photo/')) return url.replace('/api/photo/', '')
+  // Legacy: https://pub-xxx.r2.dev/key
+  const m = url.match(/r2\.dev\/(.+)$/)
+  return m ? m[1] : null
+}
+
 const formatTanggalUpper = (raw: string) => {
   const d = new Date(raw + 'T00:00:00')
   const dd = String(d.getDate()).padStart(2, '0')
@@ -596,10 +604,9 @@ const handleFileChange = async (e: Event) => {
     const existingCount = photoCounts.value[wedding.id] ?? 0
     if (existingCount > 0) {
       const existingPhotos = await fetchPhotosForWedding(wedding.id)
-      const r2Base = (config.public.r2PublicUrl as string).replace(/\/$/, '')
       for (const photo of existingPhotos) {
-        const key = photo.photo_url.replace(r2Base + '/', '')
-        await $fetch('/api/upload/photo', { method: 'DELETE', body: { key } }).catch(() => {})
+        const key = extractKey(photo.photo_url)
+        if (key) await $fetch('/api/upload/photo', { method: 'DELETE', body: { key } }).catch(() => {})
       }
       await supabase.from('wedding_photos').delete().eq('wedding_id', wedding.id)
     }
@@ -642,10 +649,9 @@ const deletePhoto = async (wedding: any) => {
 
   try {
     const photos = await fetchPhotosForWedding(wedding.id)
-    const r2Base = (config.public.r2PublicUrl as string).replace(/\/$/, '')
     for (const photo of photos) {
-      const key = photo.photo_url.replace(r2Base + '/', '')
-      await $fetch('/api/upload/photo', { method: 'DELETE', body: { key } }).catch(() => {})
+      const key = extractKey(photo.photo_url)
+      if (key) await $fetch('/api/upload/photo', { method: 'DELETE', body: { key } }).catch(() => {})
     }
     await supabase.from('wedding_photos').delete().eq('wedding_id', wedding.id)
     photoCounts.value[wedding.id] = 0

@@ -46,7 +46,8 @@ export default defineEventHandler(async (event) => {
     ContentType: filePart.type ?? 'image/jpeg',
   }))
 
-  const publicUrl = `${(config.public.r2PublicUrl as string).replace(/\/$/, '')}/${key}`
+  // Use server-proxied URL to avoid R2 public SSL issues
+  const publicUrl = `/api/photo/${key}`
 
   return { publicUrl, key }
 })

@@ -1,5 +1,20 @@
-# Menggunakan image resmi Nginx dari Docker Hub
-FROM nginx:alpine
+# ── Stage 1: Build ─────────────────────────────────────────────
+FROM node:20-alpine AS builder
+WORKDIR /app
 
-# Menyalin semua file dari folder proyek saat ini ke folder web root di dalam kontainer
-COPY . /usr/share/nginx/vue
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# ── Stage 2: Production runtime ────────────────────────────────
+FROM node:20-alpine
+WORKDIR /app
+
+COPY --from=builder /app/.output ./.output
+
+EXPOSE 3000
+ENV NODE_ENV=production
+
+CMD ["node", ".output/server/index.mjs"]

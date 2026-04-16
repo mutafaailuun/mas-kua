@@ -24,6 +24,12 @@ export default defineEventHandler(async (event) => {
 
   if (!key) throw createError({ statusCode: 400, message: 'key diperlukan' })
 
+  // Debug: log config presence (not values) to detect missing env vars
+  if (!config.r2AccountId || !config.r2AccessKeyId || !config.r2SecretAccessKey) {
+    console.error('[photo proxy] R2 credentials missing in environment!')
+    throw createError({ statusCode: 500, message: 'Konfigurasi R2 tidak lengkap di server' })
+  }
+
   try {
     const { Body, ContentType } = await getS3(config).send(
       new GetObjectCommand({ Bucket: config.r2BucketName, Key: key })

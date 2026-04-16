@@ -95,7 +95,6 @@
               <td class="px-4 py-2">
                 <input
                   :value="wedding.no_pendaftaran ?? ''"
-                  @focus="startEdit(wedding.id, 'no_pendaftaran')"
                   @blur="e => saveEdit(wedding, 'no_pendaftaran', (e.target as HTMLInputElement).value)"
                   @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
                   @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
@@ -108,7 +107,6 @@
               <td class="px-4 py-2">
                 <input
                   :value="wedding.no_akta ?? ''"
-                  @focus="startEdit(wedding.id, 'no_akta')"
                   @blur="e => saveEdit(wedding, 'no_akta', (e.target as HTMLInputElement).value)"
                   @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
                   @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
@@ -117,14 +115,49 @@
                 />
               </td>
 
-              <td class="px-4 py-3 font-medium text-gray-900">{{ wedding.groom_name }}</td>
-              <td class="px-4 py-3 text-gray-700">{{ wedding.bride_name }}</td>
-              <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ formatDate(wedding.wedding_date) }}</td>
-              <td class="px-4 py-3">
-                <span
-                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+              <!-- Nama Suami -->
+              <td class="px-2 py-1.5">
+                <input
+                  :value="wedding.groom_name"
+                  @blur="e => saveEdit(wedding, 'groom_name', (e.target as HTMLInputElement).value)"
+                  @keydown.enter.prevent="e => (e.target as HTMLInputElement).blur()"
+                  @keydown.escape.prevent="e => { (e.target as HTMLInputElement).value = wedding.groom_name; (e.target as HTMLInputElement).blur() }"
+                  class="w-full min-w-32 px-2 py-1 text-sm font-medium text-gray-900 rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors"
+                />
+              </td>
+
+              <!-- Nama Istri -->
+              <td class="px-2 py-1.5">
+                <input
+                  :value="wedding.bride_name"
+                  @blur="e => saveEdit(wedding, 'bride_name', (e.target as HTMLInputElement).value)"
+                  @keydown.enter.prevent="e => (e.target as HTMLInputElement).blur()"
+                  @keydown.escape.prevent="e => { (e.target as HTMLInputElement).value = wedding.bride_name; (e.target as HTMLInputElement).blur() }"
+                  class="w-full min-w-32 px-2 py-1 text-sm text-gray-700 rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors"
+                />
+              </td>
+
+              <!-- Tanggal Akad -->
+              <td class="px-2 py-1.5">
+                <input
+                  type="date"
+                  :value="wedding.wedding_date"
+                  @change="e => saveEdit(wedding, 'wedding_date', (e.target as HTMLInputElement).value)"
+                  class="w-36 px-2 py-1 text-sm text-gray-600 rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors"
+                />
+              </td>
+
+              <!-- Status -->
+              <td class="px-2 py-1.5">
+                <select
+                  :value="wedding.status"
+                  @change="e => saveEdit(wedding, 'status', (e.target as HTMLSelectElement).value)"
+                  class="px-2 py-1 text-xs font-medium rounded-full border border-transparent hover:border-gray-300 focus:outline-none focus:ring-1 focus:border-emerald-400 focus:ring-emerald-400 transition-colors cursor-pointer"
                   :class="wedding.status === 'Kantor' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'"
-                >{{ wedding.status }}</span>
+                >
+                  <option value="Kantor">Kantor</option>
+                  <option value="Luar Kantor">Luar Kantor</option>
+                </select>
               </td>
               <td class="px-4 py-3 text-center">
                 <span
@@ -515,29 +548,33 @@ const closeMenu = () => {
 }
 
 // ── Inline edit ──────────────────────────────────────────────────
-const editingKey = ref<string | null>(null)
+type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status'
 
-const startEdit = (weddingId: string, field: string) => {
-  editingKey.value = `${weddingId}:${field}`
-}
+// Fields that must not be empty
+const REQUIRED_FIELDS: WeddingField[] = ['groom_name', 'bride_name', 'wedding_date', 'status']
 
-const saveEdit = async (wedding: any, field: 'no_pendaftaran' | 'no_akta', value: string) => {
-  editingKey.value = null
+const saveEdit = async (wedding: any, field: WeddingField, value: string) => {
   const trimmed = value.trim()
-  if (trimmed === (wedding[field] ?? '')) return
+  const current = wedding[field] ?? ''
+
+  // Don't save if unchanged
+  if (trimmed === current) return
+
+  // Prevent clearing required fields
+  if (REQUIRED_FIELDS.includes(field) && !trimmed) return
 
   // Optimistic update
   const idx = weddings.value.findIndex(w => w.id === wedding.id)
-  if (idx !== -1) weddings.value[idx][field] = trimmed || null
+  const newVal = REQUIRED_FIELDS.includes(field) ? trimmed : (trimmed || null)
+  if (idx !== -1) weddings.value[idx][field] = newVal
 
   const { error } = await supabase
     .from('weddings')
-    .update({ [field]: trimmed || null })
+    .update({ [field]: newVal })
     .eq('id', wedding.id)
 
   if (error) {
     console.error(`Save ${field} error:`, error)
-    // Revert
     if (idx !== -1) weddings.value[idx][field] = wedding[field]
   }
 }

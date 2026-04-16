@@ -8,7 +8,7 @@
       </div>
       <button
         @click="openBulkModal"
-        class="mt-4 sm:mt-0 inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+        class="mt-4 sm:mt-0 inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
       >
         <Icon name="lucide:file-down" class="w-4 h-4" />
         Export PDF Bulanan
@@ -18,21 +18,14 @@
     <!-- ── FILTERS ── -->
     <div class="mb-5 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
       <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <!-- Search -->
         <div class="col-span-2 md:col-span-1">
           <label class="block text-xs font-medium text-gray-700 mb-1">Cari Nama</label>
           <div class="relative">
             <Icon name="lucide:search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Suami / Istri..."
-              class="block w-full pl-9 pr-3 py-2 text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-            />
+            <input v-model="searchQuery" type="text" placeholder="Suami / Istri..."
+              class="block w-full pl-9 pr-3 py-2 text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" />
           </div>
         </div>
-
-        <!-- Bulan -->
         <div>
           <label class="block text-xs font-medium text-gray-700 mb-1">Bulan</label>
           <select v-model="filterMonth" class="block w-full px-3 py-2 text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
@@ -40,8 +33,6 @@
             <option v-for="(name, idx) in BULAN_INDO" :key="idx" :value="idx + 1">{{ name }}</option>
           </select>
         </div>
-
-        <!-- Tahun -->
         <div>
           <label class="block text-xs font-medium text-gray-700 mb-1">Tahun</label>
           <select v-model="filterYear" class="block w-full px-3 py-2 text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
@@ -49,8 +40,6 @@
             <option v-for="y in availableYears" :key="y" :value="y">{{ y }}</option>
           </select>
         </div>
-
-        <!-- Status -->
         <div>
           <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
           <select v-model="filterStatus" class="block w-full px-3 py-2 text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">
@@ -59,16 +48,10 @@
             <option value="Luar Kantor">Luar Kantor</option>
           </select>
         </div>
-
-        <!-- Clear -->
         <div class="flex items-end">
-          <button
-            v-if="hasActiveFilters"
-            @click="clearFilters"
-            class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 py-2"
-          >
-            <Icon name="lucide:x" class="w-4 h-4" />
-            Reset
+          <button v-if="hasActiveFilters" @click="clearFilters"
+            class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 py-2">
+            <Icon name="lucide:x" class="w-4 h-4" />Reset
           </button>
         </div>
       </div>
@@ -76,39 +59,64 @@
 
     <!-- ── TABLE ── -->
     <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
-      <!-- Loading -->
       <div v-if="loading" class="p-10 text-center text-gray-400">
         <Icon name="lucide:loader-2" class="w-7 h-7 animate-spin mx-auto mb-2" />
         Memuat data...
       </div>
-
-      <!-- Empty -->
       <div v-else-if="filteredWeddings.length === 0" class="p-12 text-center text-gray-400">
         <Icon name="lucide:search-x" class="w-10 h-10 mx-auto mb-3 text-gray-300" />
         <p class="text-sm">Tidak ada data pernikahan ditemukan.</p>
       </div>
 
-      <!-- Data table -->
       <div v-else class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
           <thead class="bg-gray-50">
             <tr>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">No.</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Daftar</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Akta</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Suami</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Istri</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Akad</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-              <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider pr-6">Aksi</th>
+              <th class="px-4 py-3 w-12"></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
             <tr
               v-for="(wedding, i) in paginatedWeddings"
               :key="wedding.id"
-              class="hover:bg-gray-50 transition-colors"
+              class="hover:bg-gray-50/60 transition-colors"
             >
               <td class="px-4 py-3 text-gray-400 tabular-nums">{{ startIndex + i + 1 }}</td>
+
+              <!-- ── No. Pendaftaran (inline edit) ── -->
+              <td class="px-4 py-2">
+                <input
+                  :value="wedding.no_pendaftaran ?? ''"
+                  @focus="startEdit(wedding.id, 'no_pendaftaran')"
+                  @blur="e => saveEdit(wedding, 'no_pendaftaran', (e.target as HTMLInputElement).value)"
+                  @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
+                  @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
+                  placeholder="—"
+                  class="w-28 px-2 py-1 text-sm rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors placeholder-gray-300"
+                />
+              </td>
+
+              <!-- ── No. Akta (inline edit) ── -->
+              <td class="px-4 py-2">
+                <input
+                  :value="wedding.no_akta ?? ''"
+                  @focus="startEdit(wedding.id, 'no_akta')"
+                  @blur="e => saveEdit(wedding, 'no_akta', (e.target as HTMLInputElement).value)"
+                  @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
+                  @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
+                  placeholder="—"
+                  class="w-28 px-2 py-1 text-sm rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors placeholder-gray-300"
+                />
+              </td>
+
               <td class="px-4 py-3 font-medium text-gray-900">{{ wedding.groom_name }}</td>
               <td class="px-4 py-3 text-gray-700">{{ wedding.bride_name }}</td>
               <td class="px-4 py-3 text-gray-600 whitespace-nowrap">{{ formatDate(wedding.wedding_date) }}</td>
@@ -116,9 +124,7 @@
                 <span
                   class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
                   :class="wedding.status === 'Kantor' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'"
-                >
-                  {{ wedding.status }}
-                </span>
+                >{{ wedding.status }}</span>
               </td>
               <td class="px-4 py-3 text-center">
                 <span
@@ -126,52 +132,72 @@
                   :class="(photoCounts[wedding.id] ?? 0) > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-400'"
                 >
                   <Icon name="lucide:image" class="w-3 h-3" />
-                  {{ photoCounts[wedding.id] ?? 0 }}
+                  {{ (photoCounts[wedding.id] ?? 0) > 0 ? 'Ada' : 'Belum' }}
                 </span>
               </td>
-              <td class="px-4 py-3 text-right whitespace-nowrap">
-                <div class="inline-flex items-center gap-1">
-                  <!-- Upload -->
+
+              <!-- ── DROPDOWN AKSI ── -->
+              <td class="px-3 py-3 text-right">
+                <div class="relative inline-block">
                   <button
-                    @click="triggerUpload(wedding)"
-                    :disabled="uploadingId === wedding.id"
-                    class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md border border-gray-200 text-gray-600 hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50 disabled:opacity-50 transition-colors"
-                    title="Upload foto"
+                    @click.stop="toggleMenu(wedding.id)"
+                    class="p-1.5 rounded-md text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                    :class="{ 'text-indigo-600 bg-indigo-50': openMenuId === wedding.id }"
                   >
-                    <Icon :name="uploadingId === wedding.id ? 'lucide:loader-2' : 'lucide:upload'" class="w-3.5 h-3.5" :class="{'animate-spin': uploadingId === wedding.id}" />
-                    Foto
+                    <Icon name="lucide:more-horizontal" class="w-4 h-4" />
                   </button>
 
-                  <!-- Preview -->
-                  <button
-                    @click="openPreview(wedding)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md border border-gray-200 text-gray-600 hover:border-sky-300 hover:text-sky-700 hover:bg-sky-50 transition-colors"
-                    title="Preview dokumen"
+                  <Transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="opacity-0 scale-95"
+                    enter-to-class="opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="opacity-100 scale-100"
+                    leave-to-class="opacity-0 scale-95"
                   >
-                    <Icon name="lucide:eye" class="w-3.5 h-3.5" />
-                    Preview
-                  </button>
+                    <div
+                      v-if="openMenuId === wedding.id"
+                      class="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-30 origin-top-right"
+                    >
+                      <button @click="openPreview(wedding); closeMenu()"
+                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                        <Icon name="lucide:eye" class="w-4 h-4 text-sky-500 shrink-0" />
+                        Preview
+                      </button>
 
-                  <!-- Export JPG -->
-                  <button
-                    @click="exportJpg(wedding)"
-                    :disabled="exportingId === wedding.id"
-                    class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md border border-gray-200 text-gray-600 hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50 disabled:opacity-50 transition-colors"
-                    title="Export JPG"
-                  >
-                    <Icon :name="exportingId === wedding.id ? 'lucide:loader-2' : 'lucide:image'" class="w-3.5 h-3.5" :class="{'animate-spin': exportingId === wedding.id}" />
-                    JPG
-                  </button>
+                      <button @click="triggerUpload(wedding); closeMenu()"
+                        :disabled="uploadingId === wedding.id"
+                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+                        <Icon :name="uploadingId === wedding.id ? 'lucide:loader-2' : 'lucide:upload'"
+                          class="w-4 h-4 text-emerald-500 shrink-0" :class="{'animate-spin': uploadingId === wedding.id}" />
+                        {{ (photoCounts[wedding.id] ?? 0) > 0 ? 'Ganti Foto' : 'Upload Foto' }}
+                      </button>
 
-                  <!-- Export PDF -->
-                  <button
-                    @click="exportPdf(wedding)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md border border-gray-200 text-gray-600 hover:border-red-300 hover:text-red-700 hover:bg-red-50 transition-colors"
-                    title="Export PDF"
-                  >
-                    <Icon name="lucide:file-text" class="w-3.5 h-3.5" />
-                    PDF
-                  </button>
+                      <button
+                        v-if="(photoCounts[wedding.id] ?? 0) > 0"
+                        @click="deletePhoto(wedding); closeMenu()"
+                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                        <Icon name="lucide:trash-2" class="w-4 h-4 shrink-0" />
+                        Hapus Foto
+                      </button>
+
+                      <div class="border-t border-gray-100 my-1" />
+
+                      <button @click="exportJpg(wedding); closeMenu()"
+                        :disabled="exportingId === wedding.id"
+                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+                        <Icon :name="exportingId === wedding.id ? 'lucide:loader-2' : 'lucide:image'"
+                          class="w-4 h-4 text-amber-500 shrink-0" :class="{'animate-spin': exportingId === wedding.id}" />
+                        Export JPG
+                      </button>
+
+                      <button @click="exportPdf(wedding); closeMenu()"
+                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                        <Icon name="lucide:file-text" class="w-4 h-4 text-red-500 shrink-0" />
+                        Export PDF
+                      </button>
+                    </div>
+                  </Transition>
                 </div>
               </td>
             </tr>
@@ -194,12 +220,11 @@
       </div>
     </div>
 
-    <!-- ── HIDDEN FILE INPUT ── -->
+    <!-- ── HIDDEN FILE INPUT (single) ── -->
     <input
       ref="fileInputRef"
       type="file"
       accept="image/*"
-      multiple
       class="hidden"
       @change="handleFileChange"
     />
@@ -211,24 +236,18 @@
         class="fixed inset-0 z-50 flex flex-col bg-black/60"
         @click.self="closePreview"
       >
-        <!-- Modal header -->
         <div class="flex items-center justify-between px-5 py-3 bg-white border-b border-gray-200 shrink-0">
           <div class="text-sm font-medium text-gray-800">
             Preview — {{ previewWedding.groom_name }} & {{ previewWedding.bride_name }}
           </div>
           <div class="flex items-center gap-2">
-            <button
-              @click="exportJpg(previewWedding)"
-              :disabled="exportingId === previewWedding.id"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-amber-300 text-amber-700 hover:bg-amber-50 disabled:opacity-50"
-            >
+            <button @click="exportJpg(previewWedding)" :disabled="exportingId === previewWedding.id"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-amber-300 text-amber-700 hover:bg-amber-50 disabled:opacity-50">
               <Icon :name="exportingId === previewWedding.id ? 'lucide:loader-2' : 'lucide:image'" class="w-3.5 h-3.5" :class="{'animate-spin': exportingId === previewWedding.id}" />
               Export JPG
             </button>
-            <button
-              @click="exportPdf(previewWedding)"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-red-300 text-red-700 hover:bg-red-50"
-            >
+            <button @click="exportPdf(previewWedding)"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-red-300 text-red-700 hover:bg-red-50">
               <Icon name="lucide:file-text" class="w-3.5 h-3.5" />
               Export PDF
             </button>
@@ -237,18 +256,12 @@
             </button>
           </div>
         </div>
-
-        <!-- Scrollable preview area -->
         <div class="flex-1 overflow-auto flex items-start justify-center py-8 px-4">
           <div v-if="previewLoading" class="text-white flex items-center gap-2 mt-20">
             <Icon name="lucide:loader-2" class="w-5 h-5 animate-spin" />
             Memuat foto...
           </div>
-          <div
-            v-else
-            ref="previewRef"
-            style="transform-origin: top center;"
-          >
+          <div v-else ref="previewRef" style="transform-origin: top center;">
             <AdminDokumentasiAkadPreview
               :wedding="previewWedding"
               :photos="previewPhotos"
@@ -266,15 +279,12 @@
         @click.self="showBulkModal = false"
       >
         <div class="bg-white rounded-xl shadow-xl w-full max-w-xl max-h-[80vh] flex flex-col">
-          <!-- Modal header -->
           <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
             <h3 class="font-semibold text-gray-900">Export PDF Bulanan</h3>
             <button @click="showBulkModal = false" class="text-gray-400 hover:text-gray-600">
               <Icon name="lucide:x" class="w-5 h-5" />
             </button>
           </div>
-
-          <!-- Month/Year selector -->
           <div class="px-5 py-4 border-b border-gray-100 shrink-0">
             <div class="grid grid-cols-2 gap-3">
               <div>
@@ -291,62 +301,42 @@
               </div>
             </div>
           </div>
-
-          <!-- Wedding list with checkboxes -->
           <div class="flex-1 overflow-y-auto px-5 py-3">
             <div v-if="bulkWeddings.length === 0" class="py-8 text-center text-sm text-gray-400">
               Tidak ada data untuk bulan ini.
             </div>
             <div v-else>
-              <!-- Select All -->
               <label class="flex items-center gap-2 py-2 border-b border-gray-100 mb-2 cursor-pointer">
-                <input
-                  type="checkbox"
+                <input type="checkbox"
                   :checked="bulkSelected.length === bulkWeddings.length"
                   :indeterminate="bulkSelected.length > 0 && bulkSelected.length < bulkWeddings.length"
                   @change="toggleSelectAll"
-                  class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                />
+                  class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
                 <span class="text-sm font-medium text-gray-700">Pilih Semua ({{ bulkWeddings.length }} peristiwa)</span>
               </label>
-
-              <label
-                v-for="w in bulkWeddings"
-                :key="w.id"
-                class="flex items-center gap-2 py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded px-1"
-              >
-                <input
-                  type="checkbox"
-                  :value="w.id"
-                  v-model="bulkSelected"
-                  class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                />
+              <label v-for="w in bulkWeddings" :key="w.id"
+                class="flex items-center gap-2 py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded px-1">
+                <input type="checkbox" :value="w.id" v-model="bulkSelected"
+                  class="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
                 <div class="flex-1 min-w-0">
                   <div class="text-sm font-medium text-gray-800 truncate">{{ w.groom_name }}</div>
                   <div class="text-xs text-gray-500 truncate">{{ w.bride_name }} · {{ formatDate(w.wedding_date) }}</div>
                 </div>
-                <span
-                  class="text-xs px-2 py-0.5 rounded-full shrink-0"
-                  :class="w.status === 'Kantor' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'"
-                >
+                <span class="text-xs px-2 py-0.5 rounded-full shrink-0"
+                  :class="w.status === 'Kantor' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'">
                   {{ w.status }}
                 </span>
               </label>
             </div>
           </div>
-
-          <!-- Footer -->
           <div class="px-5 py-4 border-t border-gray-100 flex items-center justify-between shrink-0">
             <span class="text-sm text-gray-500">{{ bulkSelected.length }} dipilih</span>
             <div class="flex gap-2">
               <button @click="showBulkModal = false" class="px-4 py-2 text-sm rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50">
                 Batal
               </button>
-              <button
-                @click="executeBulkExport"
-                :disabled="bulkSelected.length === 0 || bulkExporting"
-                class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
-              >
+              <button @click="executeBulkExport" :disabled="bulkSelected.length === 0 || bulkExporting"
+                class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50">
                 <Icon :name="bulkExporting ? 'lucide:loader-2' : 'lucide:printer'" class="w-4 h-4" :class="{'animate-spin': bulkExporting}" />
                 {{ bulkExporting ? 'Menyiapkan...' : 'Export PDF' }}
               </button>
@@ -361,21 +351,18 @@
 <script setup lang="ts">
 import AdminDokumentasiAkadPreview from '~/components/admin/DokumentasiAkadPreview.vue'
 
-definePageMeta({
-  layout: 'admin',
-  middleware: 'admin'
-})
+definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 const supabase = useSupabaseClient()
+const config = useRuntimeConfig()
 
-// ── Constants ────────────────────────────────────────────────────
 const BULAN_INDO = [
   'Januari','Februari','Maret','April','Mei','Juni',
   'Juli','Agustus','September','Oktober','November','Desember'
 ]
 const BULAN_INDO_UPPER = BULAN_INDO.map(b => b.toUpperCase())
 
-// ── State ────────────────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────────────
 const weddings = ref<any[]>([])
 const photoCounts = ref<Record<string, number>>({})
 const loading = ref(true)
@@ -401,12 +388,21 @@ const previewRef = ref<HTMLElement | null>(null)
 // Export
 const exportingId = ref<string | null>(null)
 
+// Dropdown menu
+const openMenuId = ref<string | null>(null)
+
 // Bulk modal
 const showBulkModal = ref(false)
 const bulkMonth = ref(new Date().getMonth() + 1)
 const bulkYear = ref(new Date().getFullYear())
 const bulkSelected = ref<string[]>([])
 const bulkExporting = ref(false)
+
+// ── Lifecycle ────────────────────────────────────────────────────
+onMounted(() => {
+  document.addEventListener('click', closeMenu)
+})
+
 
 // ── Data Fetching ────────────────────────────────────────────────
 const fetchWeddings = async () => {
@@ -429,9 +425,7 @@ const fetchWeddings = async () => {
 
 const fetchPhotoCounts = async () => {
   try {
-    const { data, error } = await supabase
-      .from('wedding_photos')
-      .select('wedding_id')
+    const { data, error } = await supabase.from('wedding_photos').select('wedding_id')
     if (error) throw error
     const counts: Record<string, number> = {}
     for (const row of data ?? []) {
@@ -439,7 +433,6 @@ const fetchPhotoCounts = async () => {
     }
     photoCounts.value = counts
   } catch (e) {
-    // Table may not exist yet — silently ignore
     console.warn('wedding_photos table not found (run migration):', e)
   }
 }
@@ -483,7 +476,6 @@ const paginatedWeddings = computed(() => filteredWeddings.value.slice(startIndex
 
 watch([searchQuery, filterMonth, filterYear, filterStatus], () => { page.value = 1 })
 
-// Bulk: weddings for selected month/year
 const bulkWeddings = computed(() =>
   weddings.value
     .filter(w => {
@@ -506,12 +498,6 @@ const clearFilters = () => {
 const formatDate = (d: string) =>
   new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
 
-const parseNoAkta = (notes?: string | null) => {
-  if (!notes) return ''
-  const m = notes.match(/No\s*Akta[:\s]+(\S+)/i)
-  return m ? m[1] : ''
-}
-
 const formatTanggalUpper = (raw: string) => {
   const d = new Date(raw + 'T00:00:00')
   const dd = String(d.getDate()).padStart(2, '0')
@@ -519,7 +505,44 @@ const formatTanggalUpper = (raw: string) => {
   return `${dd}-${mm}-${d.getFullYear()}`
 }
 
-// ── Upload ───────────────────────────────────────────────────────
+// ── Dropdown menu ────────────────────────────────────────────────
+const toggleMenu = (id: string) => {
+  openMenuId.value = openMenuId.value === id ? null : id
+}
+
+const closeMenu = () => {
+  openMenuId.value = null
+}
+
+// ── Inline edit ──────────────────────────────────────────────────
+const editingKey = ref<string | null>(null)
+
+const startEdit = (weddingId: string, field: string) => {
+  editingKey.value = `${weddingId}:${field}`
+}
+
+const saveEdit = async (wedding: any, field: 'no_pendaftaran' | 'no_akta', value: string) => {
+  editingKey.value = null
+  const trimmed = value.trim()
+  if (trimmed === (wedding[field] ?? '')) return
+
+  // Optimistic update
+  const idx = weddings.value.findIndex(w => w.id === wedding.id)
+  if (idx !== -1) weddings.value[idx][field] = trimmed || null
+
+  const { error } = await supabase
+    .from('weddings')
+    .update({ [field]: trimmed || null })
+    .eq('id', wedding.id)
+
+  if (error) {
+    console.error(`Save ${field} error:`, error)
+    // Revert
+    if (idx !== -1) weddings.value[idx][field] = wedding[field]
+  }
+}
+
+// ── Upload (single photo, replace if exists) ─────────────────────
 const triggerUpload = (wedding: any) => {
   uploadTargetWedding.value = wedding
   fileInputRef.value?.click()
@@ -527,35 +550,42 @@ const triggerUpload = (wedding: any) => {
 
 const handleFileChange = async (e: Event) => {
   const files = (e.target as HTMLInputElement).files
-  if (!files || !uploadTargetWedding.value) return
+  if (!files || !files.length || !uploadTargetWedding.value) return
   const wedding = uploadTargetWedding.value
   uploadingId.value = wedding.id
 
   try {
+    // Delete existing photo first (replace behaviour)
     const existingCount = photoCounts.value[wedding.id] ?? 0
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-
-      // Kirim file ke server API → server upload ke R2
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('folder', `wedding-docs/${wedding.id}`)
-
-      const { publicUrl } = await $fetch<{ publicUrl: string; key: string }>(
-        '/api/upload/photo',
-        { method: 'POST', body: formData }
-      )
-
-      // Simpan URL ke Supabase wedding_photos
-      const { error: dbError } = await supabase.from('wedding_photos').insert({
-        wedding_id: wedding.id,
-        photo_url: publicUrl,
-        order_index: existingCount + i,
-      })
-      if (dbError) throw dbError
+    if (existingCount > 0) {
+      const existingPhotos = await fetchPhotosForWedding(wedding.id)
+      const r2Base = (config.public.r2PublicUrl as string).replace(/\/$/, '')
+      for (const photo of existingPhotos) {
+        const key = photo.photo_url.replace(r2Base + '/', '')
+        await $fetch('/api/upload/photo', { method: 'DELETE', body: { key } }).catch(() => {})
+      }
+      await supabase.from('wedding_photos').delete().eq('wedding_id', wedding.id)
     }
 
-    photoCounts.value[wedding.id] = (photoCounts.value[wedding.id] ?? 0) + files.length
+    // Upload single file
+    const file = files[0]
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('folder', `wedding-docs/${wedding.id}`)
+
+    const { publicUrl } = await $fetch<{ publicUrl: string; key: string }>(
+      '/api/upload/photo',
+      { method: 'POST', body: formData }
+    )
+
+    const { error: dbError } = await supabase.from('wedding_photos').insert({
+      wedding_id: wedding.id,
+      photo_url: publicUrl,
+      order_index: 0,
+    })
+    if (dbError) throw dbError
+
+    photoCounts.value[wedding.id] = 1
 
     if (previewWedding.value?.id === wedding.id) {
       previewPhotos.value = await fetchPhotosForWedding(wedding.id)
@@ -569,6 +599,26 @@ const handleFileChange = async (e: Event) => {
   }
 }
 
+// ── Delete photo ─────────────────────────────────────────────────
+const deletePhoto = async (wedding: any) => {
+  if (!confirm(`Hapus foto dokumentasi ${wedding.groom_name} & ${wedding.bride_name}?`)) return
+
+  try {
+    const photos = await fetchPhotosForWedding(wedding.id)
+    const r2Base = (config.public.r2PublicUrl as string).replace(/\/$/, '')
+    for (const photo of photos) {
+      const key = photo.photo_url.replace(r2Base + '/', '')
+      await $fetch('/api/upload/photo', { method: 'DELETE', body: { key } }).catch(() => {})
+    }
+    await supabase.from('wedding_photos').delete().eq('wedding_id', wedding.id)
+    photoCounts.value[wedding.id] = 0
+    if (previewWedding.value?.id === wedding.id) previewPhotos.value = []
+  } catch (err: any) {
+    console.error('Delete error:', err)
+    alert('Gagal menghapus foto.')
+  }
+}
+
 // ── Preview ──────────────────────────────────────────────────────
 const openPreview = async (wedding: any) => {
   previewWedding.value = wedding
@@ -576,11 +626,8 @@ const openPreview = async (wedding: any) => {
   previewLoading.value = true
   try {
     previewPhotos.value = await fetchPhotosForWedding(wedding.id)
-  } catch (e) {
-    previewPhotos.value = []
-  } finally {
-    previewLoading.value = false
-  }
+  } catch { previewPhotos.value = [] }
+  finally { previewLoading.value = false }
 }
 
 const closePreview = () => {
@@ -591,38 +638,28 @@ const closePreview = () => {
 // ── Export JPG ───────────────────────────────────────────────────
 const exportJpg = async (wedding: any) => {
   exportingId.value = wedding.id
-
-  // Fetch photos first if not in preview
   let photos = previewWedding.value?.id === wedding.id ? previewPhotos.value : []
   if (photos.length === 0) {
     try { photos = await fetchPhotosForWedding(wedding.id) } catch { photos = [] }
   }
 
-  // Mount a hidden preview to capture
   const container = document.createElement('div')
   container.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;'
   document.body.appendChild(container)
 
   const { createApp, defineComponent, h } = await import('vue')
   const app = createApp(defineComponent({
-    setup() {
-      return () => h(AdminDokumentasiAkadPreview, { wedding, photos })
-    }
+    setup() { return () => h(AdminDokumentasiAkadPreview, { wedding, photos }) }
   }))
   app.mount(container)
 
-  // Wait for images to load
   await new Promise(r => setTimeout(r, 800))
 
   try {
     const html2canvas = (await import('html2canvas')).default
     const canvas = await html2canvas(container.firstElementChild as HTMLElement, {
-      useCORS: true,
-      scale: 2,
-      backgroundColor: '#ffffff',
-      logging: false,
+      useCORS: true, scale: 2, backgroundColor: '#ffffff', logging: false,
     })
-
     const link = document.createElement('a')
     link.download = `Dokumentasi_${wedding.groom_name}_${wedding.bride_name}.jpg`.replace(/\s+/g, '_')
     link.href = canvas.toDataURL('image/jpeg', 0.92)
@@ -637,7 +674,7 @@ const exportJpg = async (wedding: any) => {
   }
 }
 
-// ── Export PDF (single) ──────────────────────────────────────────
+// ── Export PDF ───────────────────────────────────────────────────
 const exportPdf = async (wedding: any) => {
   let photos = previewWedding.value?.id === wedding.id ? previewPhotos.value : []
   if (photos.length === 0) {
@@ -655,11 +692,9 @@ const openBulkModal = () => {
 }
 
 const toggleSelectAll = () => {
-  if (bulkSelected.value.length === bulkWeddings.value.length) {
-    bulkSelected.value = []
-  } else {
-    bulkSelected.value = bulkWeddings.value.map(w => w.id)
-  }
+  bulkSelected.value = bulkSelected.value.length === bulkWeddings.value.length
+    ? []
+    : bulkWeddings.value.map(w => w.id)
 }
 
 const executeBulkExport = async () => {
@@ -682,14 +717,15 @@ const executeBulkExport = async () => {
   }
 }
 
-// ── Print Window Generator ───────────────────────────────────────
+// ── Print Window ─────────────────────────────────────────────────
 const buildPageHtml = (wedding: any, photos: any[]) => {
   const isKantor = wedding.status === 'Kantor'
   const d = new Date(wedding.wedding_date + 'T00:00:00')
   const bulan = BULAN_INDO_UPPER[d.getMonth()]
   const tahun = d.getFullYear()
   const tanggal = formatTanggalUpper(wedding.wedding_date)
-  const noAkta = parseNoAkta(wedding.notes) || '___________________________'
+  const noAkta = wedding.no_akta || '___________________________'
+  const noPendaftaran = wedding.no_pendaftaran || '___________________________'
 
   const photoHtml = photos.length > 0
     ? `<div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px;">
@@ -713,7 +749,7 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
         <tr>
           <td style="width:190px;">NO. PENDAFTARAN</td>
           <td style="padding:0 10px;">:</td>
-          <td style="font-weight:bold;">___________________________</td>
+          <td style="font-weight:bold;">${noPendaftaran}</td>
         </tr>
         <tr>
           <td>NO. AKTA NIKAH</td>
@@ -740,44 +776,36 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
     </div>`
 }
 
-const openPrintWindow = (pages: Array<{ wedding: any; photos: any[] }>) => {
-  const html = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
+const openPrintWindow = (pages: { wedding: any; photos: any[] }[]) => {
+  const w = window.open('', '_blank')
+  if (!w) { alert('Pop-up diblokir browser. Izinkan pop-up untuk halaman ini.'); return }
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
   <title>Dokumentasi Akad</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Liberation Serif', 'Times New Roman', serif; background: white; }
-    .page {
-      width: 21cm;
-      min-height: 29.7cm;
-      padding: 2cm 2.5cm;
-      page-break-after: always;
-    }
-    .page:last-child { page-break-after: auto; }
+    body { font-family: 'Liberation Serif', 'Times New Roman', serif; font-size: 13px; background: white; }
+    .page { width: 794px; min-height: 1123px; padding: 56px 70px; margin: 0 auto; background: white; }
+    .page + .page { page-break-before: always; }
     @media print {
       body { margin: 0; }
-      .page { width: 100%; min-height: 100vh; padding: 1.5cm 2cm; }
+      .page { margin: 0; page-break-after: always; }
     }
-  </style>
-</head>
-<body>
-  ${pages.map(p => buildPageHtml(p.wedding, p.photos)).join('')}
-  <script>
-    window.onload = function() {
-      setTimeout(function() { window.print(); }, 600);
-    };
-  <\/script>
-</body>
-</html>`
+  </style></head><body>
+  ${pages.map(({ wedding, photos }) => buildPageHtml(wedding, photos)).join('')}
+  <script>window.onload=()=>{setTimeout(()=>{window.print()},600)}<\/script>
+  </body></html>`
 
-  const win = window.open('', '_blank', 'width=900,height=700')
-  if (!win) { alert('Popup diblokir. Izinkan popup untuk halaman ini.'); return }
-  win.document.write(html)
-  win.document.close()
+  w.document.write(html)
+  w.document.close()
 }
 
-// ── Init ─────────────────────────────────────────────────────────
-onMounted(fetchWeddings)
+onMounted(() => {
+  fetchWeddings()
+  document.addEventListener('click', closeMenu)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', closeMenu)
+})
 </script>

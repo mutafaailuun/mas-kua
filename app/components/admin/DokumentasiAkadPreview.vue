@@ -21,12 +21,12 @@
         <tr>
           <td style="width: 190px; vertical-align: top; padding: 1px 0;">NO. PENDAFTARAN</td>
           <td style="padding: 1px 10px; vertical-align: top;">:</td>
-          <td style="vertical-align: top; font-weight: bold;">{{ noPendaftaran || '___________________________' }}</td>
+          <td style="vertical-align: top; font-weight: bold;">{{ wedding.no_pendaftaran || '___________________________' }}</td>
         </tr>
         <tr>
           <td style="vertical-align: top; padding: 1px 0;">NO. AKTA NIKAH</td>
           <td style="padding: 1px 10px; vertical-align: top;">:</td>
-          <td style="vertical-align: top; font-weight: bold;">{{ noAkta || '___________________________' }}</td>
+          <td style="vertical-align: top; font-weight: bold;">{{ wedding.no_akta || '___________________________' }}</td>
         </tr>
         <tr>
           <td style="vertical-align: top; padding: 1px 0;">NAMA SUAMI</td>
@@ -88,10 +88,10 @@ const props = defineProps<{
     bride_name: string
     wedding_date: string
     status: string
-    notes?: string | null
+    no_pendaftaran?: string | null
+    no_akta?: string | null
   }
   photos: WeddingPhoto[]
-  noPendaftaran?: string
 }>()
 
 const BULAN_INDO = [
@@ -109,12 +109,6 @@ const bulanNama = computed(() => {
 const tahun = computed(() =>
   new Date(props.wedding.wedding_date + 'T00:00:00').getFullYear()
 )
-
-const noAkta = computed(() => {
-  if (!props.wedding.notes) return ''
-  const m = props.wedding.notes.match(/No\s*Akta[:\s]+(\S+)/i)
-  return m ? m[1] : ''
-})
 
 const formatTanggal = (raw: string) => {
   const d = new Date(raw + 'T00:00:00')

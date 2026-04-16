@@ -17,22 +17,34 @@ const getS3 = (config: ReturnType<typeof useRuntimeConfig>) => {
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  // path param comes as array joined by '/'
-  const pathParam = getRouterParam(event, 'path')
-  if (!pathParam) throw createError({ statusCode: 400, message: 'path diperlukan' })
 
-  const key = Array.isArray(pathParam) ? pathParam.join('/') : pathParam
+  // Extract key from URL path directly — more reliable than getRouterParam
+  const rawPath = getRequestURL(event).pathname
+  const key = rawPath.replace(/^\/api\/photo\//, '')
+
+  if (!key) throw createError({ statusCode: 400, message: 'key diperlukan' })
 
   try {
-    const cmd = new GetObjectCommand({ Bucket: config.r2BucketName, Key: key })
-    const { Body, ContentType } = await getS3(config).send(cmd)
+    const { Body, ContentType } = await getS3(config).send(
+      new GetObjectCommand({ Bucket: config.r2BucketName, Key: key })
+    )
+
+    if (!Body) throw new Error('Empty body')
+
+    // Collect stream into buffer (compatible with all Nuxt/h3 versions)
+    const chunks: Uint8Array[] = []
+    for await (const chunk of Body as AsyncIterable<Uint8Array>) {
+      chunks.push(chunk)
+    }
+    const buffer = Buffer.concat(chunks)
 
     setHeader(event, 'Content-Type', ContentType ?? 'image/jpeg')
+    setHeader(event, 'Content-Length', buffer.length)
     setHeader(event, 'Cache-Control', 'public, max-age=86400, immutable')
 
-    // Stream the body back to the browser
-    return sendStream(event, Body as any)
+    return buffer
   } catch (err: any) {
+    console.error('[photo proxy] error key=%s msg=%s', key, err?.message)
     throw createError({ statusCode: 404, message: 'Foto tidak ditemukan' })
   }
 })

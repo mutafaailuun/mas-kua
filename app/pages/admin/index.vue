@@ -142,14 +142,38 @@ let barChart: Chart | null = null
 let pieChart: Chart | null = null
 
 // ── Desa extractor ────────────────────────────────────────────────
+const DESA_PEBAYURAN = [
+  'KARANGHARJA', 'KARANGPATRI', 'KARANGHAUR', 'KARANGJAYA',
+  'BANTARSARI',  'BANTARJAYA',  'KERTASARI',  'KARANGREJA',
+  'KARANGSEGAR', 'SUMBERURIP',  'SUMBEREJA',  'SUMBERSARI',
+  'KERTAJAYA',
+]
+
 const extractDesa = (location: string): string => {
   if (!location) return 'Lainnya'
-  // Match text after RT/RW numbers, e.g. "RT 002/005 BANTARJAYA" → BANTARJAYA
-  const m = location.match(/RT\.?\s*\d+[\/.]\d+\s+(?:DS\.?\s+)?([A-Z][A-Z\s]+)$/i)
-  if (m) return m[1].trim().toUpperCase()
-  // Fallback: match "DS XXXXX" or "DESA XXXXX"
-  const ds = location.match(/(?:DS\.?|DESA)\s+([A-Z][A-Z\s]+)/i)
-  if (ds) return ds[1].trim().toUpperCase()
+  const loc = location.toUpperCase()
+
+  // 1. Scan known desa names first (most reliable)
+  for (const desa of DESA_PEBAYURAN) {
+    if (loc.includes(desa)) return desa
+  }
+
+  // 2. Try regex: text after RT/RW pattern
+  const m = loc.match(/RT\.?\s*\d+[\/.]\d+\s+(?:DS\.?\s+)?([A-Z][A-Z\s]+)$/)
+  if (m) {
+    const candidate = m[1].trim()
+    // Check if candidate contains a known desa substring
+    const found = DESA_PEBAYURAN.find(d => candidate.includes(d))
+    if (found) return found
+  }
+
+  // 3. Match "DS XXXXX" or "DESA XXXXX" pattern
+  const ds = loc.match(/(?:DS\.?|DESA)\s+([A-Z]+)/)
+  if (ds) {
+    const found = DESA_PEBAYURAN.find(d => d.includes(ds[1]) || ds[1].includes(d))
+    if (found) return found
+  }
+
   return 'Lainnya'
 }
 

@@ -270,6 +270,7 @@
 </template>
 
 <script setup lang="ts">
+import { toRaw } from 'vue'
 import AdminSuratRalatPreview from '~/components/admin/SuratRalatPreview.vue'
 
 definePageMeta({
@@ -346,6 +347,11 @@ const saveSuratKeluar = async () => {
       tanggal_surat: form.tanggal_raw || null,
       jenis_surat: 'ralat',
       perihal: perihalSurat.value,
+      form_data: {
+        ...toRaw(form),
+        koreksi: koreksi.map(k => ({ ...toRaw(k) })),
+        hasKoreksiKedua: hasKoreksiKedua.value,
+      },
     }, { onConflict: 'nomor_surat' })
   } catch (e) {
     console.error('Gagal menyimpan log surat:', e)

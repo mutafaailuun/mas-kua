@@ -40,12 +40,12 @@
           <tr>
             <td style="width: 40%; padding: 1px 0 1px 2.5em;">Nama Suami</td>
             <td style="width: 4%; padding: 1px 8px;">:</td>
-            <td style="font-weight: bold;">{{ form.nama_suami || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_suami || '___________________________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Nama Isteri</td>
             <td style="padding: 1px 8px;">:</td>
-            <td style="font-weight: bold;">{{ form.nama_istri || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_istri || '___________________________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tanggal Nikah</td>
@@ -58,9 +58,14 @@
             <td>{{ form.tempat_nikah || '___________________________' }}</td>
           </tr>
           <tr v-if="jenis === 'tercatat' || jenis === 'tercatat_terlambat'">
-            <td style="padding: 1px 0 1px 2.5em;">Nomor Register</td>
+            <td style="padding: 1px 0 1px 2.5em;">Nomor Akta Nikah</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.nomor_register || '___________________________' }}</td>
+            <td>{{ form.nomor_akta || '___________________________' }}</td>
+          </tr>
+          <tr v-if="jenis === 'tercatat' || jenis === 'tercatat_terlambat'">
+            <td style="padding: 1px 0 1px 2.5em;">Nomor Perforasi</td>
+            <td style="padding: 1px 8px;">:</td>
+            <td>{{ form.nomor_perforasi || '___________________________' }}</td>
           </tr>
           <tr v-if="jenis === 'buku_nikah_palsu'">
             <td style="padding: 1px 0 1px 2.5em;">Nomor Akta Nikah</td>
@@ -78,7 +83,7 @@
           <tr>
             <td style="width: 40%; padding: 1px 0 1px 2.5em;">Nama</td>
             <td style="width: 4%; padding: 1px 8px;">:</td>
-            <td style="font-weight: bold;">{{ form.nama_suami || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_suami || '___________________________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tempat / Tgl. Lahir</td>
@@ -102,7 +107,7 @@
           <tr>
             <td style="width: 40%; padding: 1px 0 1px 2.5em;">Nama</td>
             <td style="width: 4%; padding: 1px 8px;">:</td>
-            <td style="font-weight: bold;">{{ form.nama_istri || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_istri || '___________________________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tempat / Tgl. Lahir</td>
@@ -184,8 +189,8 @@
         Bahwa setelah dilakukan penelitian dan pengecekan pada Buku Register Nikah Kantor Urusan
         Agama Kecamatan Pebayuran, <strong>Nomor Akta Nikah {{ form.nomor_akta || '______' }}</strong>
         atas nama
-        <strong>{{ form.nama_suami || '______' }}</strong> dan
-        <strong>{{ form.nama_istri || '______' }}</strong>
+        <strong style="text-transform: uppercase;">{{ form.nama_suami || '______' }}</strong> dan
+        <strong style="text-transform: uppercase;">{{ form.nama_istri || '______' }}</strong>
         <strong>tidak terdaftar</strong> dalam Buku Register Nikah KUA Kecamatan Pebayuran Kabupaten Bekasi.
       </div>
       <div v-if="form.nama_ppn_asli || form.nama_ppn_palsu"
@@ -202,8 +207,8 @@
       style="text-align: justify; text-indent: 2.5em; line-height: 1.8; margin-bottom: 14px;">
       Adalah pasangan suami-isteri yang telah menikah pada tanggal
       <strong>{{ form.tanggal_nikah ? formatTanggalNikah(form.tanggal_nikah) : '_______________' }}</strong>,
-      pernikahannya tercatat di kantor KUA Kecamatan Pebayuran, dengan nomor register:
-      <strong>{{ form.nomor_register || '______' }}</strong>,
+      pernikahannya tercatat di kantor KUA Kecamatan Pebayuran, dengan nomor akta nikah:
+      <strong>{{ form.nomor_akta || '______' }}</strong>,
       Seri: <strong>{{ form.seri || '______' }}</strong>,
       dan No Perforasi <strong>{{ form.nomor_perforasi || '______' }}</strong>.
     </div>

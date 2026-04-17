@@ -33,7 +33,8 @@
       Kabupaten Bekasi, dengan ini menerangkan bahwa kutipan Akta Nikah Nomor
       <strong>{{ form.nomor_akta || '___' }}</strong>, Seri <strong>{{ form.seri || '___' }}</strong>,
       Nomor Perforasi <strong>{{ form.nomor_perforasi || '___' }}</strong>, atas nama
-      <strong>{{ form.nama_suami || '___' }}</strong> dan <strong>{{ form.nama_istri || '___' }}</strong>,
+      <strong style="text-transform: uppercase;">{{ form.nama_suami || '___' }}</strong> dan
+      <strong style="text-transform: uppercase;">{{ form.nama_istri || '___' }}</strong>,
       {{ dasarKeterangan }} adalah sebagai berikut:
     </div>
 

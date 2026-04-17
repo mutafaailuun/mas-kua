@@ -99,13 +99,18 @@
           </div>
         </div>
 
-        <!-- Nomor Register (untuk tercatat standar) -->
+        <!-- Nomor Akta Nikah (untuk tercatat standar) -->
         <div v-if="form.jenis === 'tercatat' || form.jenis === 'tercatat_terlambat'"
           class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Data Register Nikah</h3>
+          <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Data Akta Nikah</h3>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Register Nikah</label>
-            <input v-model="form.nomor_register" type="text" placeholder="0412/2005"
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Akta Nikah</label>
+            <input v-model="form.nomor_akta" type="text" placeholder="0412/2005"
+              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Perforasi</label>
+            <input v-model="form.nomor_perforasi" type="text" placeholder="5504977"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
           </div>
         </div>
@@ -162,8 +167,8 @@
           <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Data Register Nikah</h3>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Register</label>
-            <input v-model="form.nomor_register" type="text" placeholder="577/17/VII/2008"
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Akta Nikah</label>
+            <input v-model="form.nomor_akta" type="text" placeholder="577/17/VII/2008"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
           </div>
 

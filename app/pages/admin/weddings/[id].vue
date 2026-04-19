@@ -127,14 +127,14 @@
 
       <!-- Actions -->
       <div class="pt-4 flex items-center justify-end space-x-4 border-t border-gray-100">
-        <button 
-          type="button" 
+        <button
+          type="button"
           @click="router.push('/admin/weddings')"
           class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
         >
           Batal
         </button>
-        <button 
+        <button
           type="submit"
           :disabled="submitting"
           class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50"
@@ -144,6 +144,14 @@
         </button>
       </div>
     </form>
+
+    <AdminConflictDialog
+      :visible="showConflictDialog"
+      :officiant-name="form.officiant_name"
+      :conflicts="conflictingWeddings"
+      @cancel="showConflictDialog = false"
+      @confirm="doUpdate"
+    />
   </div>
 </template>
 
@@ -158,6 +166,9 @@ const router = useRouter()
 const route = useRoute()
 const loading = ref(true)
 const submitting = ref(false)
+const showConflictDialog = ref(false)
+const conflictingWeddings = ref<any[]>([])
+const { checkConflict } = useScheduleConflict()
 
 const form = reactive({
   registration_date: '',
@@ -179,7 +190,7 @@ const fetchWedding = async () => {
       .select('*')
       .eq('id', route.params.id)
       .single()
-      
+
     if (error) throw error
     if (data) {
       Object.assign(form, {
@@ -203,16 +214,16 @@ const fetchWedding = async () => {
   }
 }
 
-const updateWedding = async () => {
+const doUpdate = async () => {
+  showConflictDialog.value = false
   submitting.value = true
   try {
     const { error } = await supabase
       .from('weddings')
       .update(form)
       .eq('id', route.params.id)
-      
+
     if (error) throw error
-    
     router.push('/admin/weddings')
   } catch (error) {
     console.error('Error updating wedding:', error)
@@ -220,6 +231,23 @@ const updateWedding = async () => {
   } finally {
     submitting.value = false
   }
+}
+
+const updateWedding = async () => {
+  if (form.officiant_name) {
+    const conflicts = await checkConflict(
+      form.officiant_name,
+      form.wedding_date,
+      form.wedding_time,
+      route.params.id as string
+    )
+    if (conflicts.length > 0) {
+      conflictingWeddings.value = conflicts
+      showConflictDialog.value = true
+      return
+    }
+  }
+  await doUpdate()
 }
 
 onMounted(() => {

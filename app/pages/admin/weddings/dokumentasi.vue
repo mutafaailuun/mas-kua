@@ -176,67 +176,13 @@
 
               <!-- ── DROPDOWN AKSI ── -->
               <td class="px-3 py-3 text-right">
-                <div class="relative inline-block">
-                  <button
-                    @click.stop="toggleMenu(wedding.id)"
-                    class="p-1.5 rounded-md text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-                    :class="{ 'text-indigo-600 bg-indigo-50': openMenuId === wedding.id }"
-                  >
-                    <Icon name="lucide:more-horizontal" class="w-4 h-4" />
-                  </button>
-
-                  <Transition
-                    enter-active-class="transition ease-out duration-100"
-                    enter-from-class="opacity-0 scale-95"
-                    enter-to-class="opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="opacity-100 scale-100"
-                    leave-to-class="opacity-0 scale-95"
-                  >
-                    <div
-                      v-if="openMenuId === wedding.id"
-                      class="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[9999] origin-top-right"
-                    >
-                      <button @click="openPreview(wedding); closeMenu()"
-                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                        <Icon name="lucide:eye" class="w-4 h-4 text-sky-500 shrink-0" />
-                        Preview
-                      </button>
-
-                      <button @click="triggerUpload(wedding); closeMenu()"
-                        :disabled="uploadingId === wedding.id"
-                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50">
-                        <Icon :name="uploadingId === wedding.id ? 'lucide:loader-2' : 'lucide:upload'"
-                          class="w-4 h-4 text-emerald-500 shrink-0" :class="{'animate-spin': uploadingId === wedding.id}" />
-                        {{ (photoCounts[wedding.id] ?? 0) > 0 ? 'Ganti Foto' : 'Upload Foto' }}
-                      </button>
-
-                      <button
-                        v-if="(photoCounts[wedding.id] ?? 0) > 0"
-                        @click="deletePhoto(wedding); closeMenu()"
-                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                        <Icon name="lucide:trash-2" class="w-4 h-4 shrink-0" />
-                        Hapus Foto
-                      </button>
-
-                      <div class="border-t border-gray-100 my-1" />
-
-                      <button @click="exportJpg(wedding); closeMenu()"
-                        :disabled="exportingId === wedding.id"
-                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50">
-                        <Icon :name="exportingId === wedding.id ? 'lucide:loader-2' : 'lucide:image'"
-                          class="w-4 h-4 text-amber-500 shrink-0" :class="{'animate-spin': exportingId === wedding.id}" />
-                        Export JPG
-                      </button>
-
-                      <button @click="exportPdf(wedding); closeMenu()"
-                        class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                        <Icon name="lucide:file-text" class="w-4 h-4 text-red-500 shrink-0" />
-                        Export PDF
-                      </button>
-                    </div>
-                  </Transition>
-                </div>
+                <button
+                  @click.stop="toggleMenu(wedding.id, $event)"
+                  class="p-1.5 rounded-md text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                  :class="{ 'text-indigo-600 bg-indigo-50': openMenuId === wedding.id }"
+                >
+                  <Icon name="lucide:more-horizontal" class="w-4 h-4" />
+                </button>
               </td>
             </tr>
           </tbody>
@@ -307,6 +253,63 @@
           </div>
         </div>
       </div>
+    </Teleport>
+
+    <!-- ── ACTION DROPDOWN (teleported to avoid overflow clipping) ── -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition ease-out duration-100"
+        enter-from-class="opacity-0 scale-95"
+        enter-to-class="opacity-100 scale-100"
+        leave-active-class="transition ease-in duration-75"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95"
+      >
+        <div
+          v-if="openMenuId && openMenuWedding"
+          :style="{ position: 'fixed', top: menuPosition.top + 'px', right: menuPosition.right + 'px' }"
+          class="w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[9999] origin-top-right"
+          @click.stop
+        >
+          <button @click="openPreview(openMenuWedding); closeMenu()"
+            class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+            <Icon name="lucide:eye" class="w-4 h-4 text-sky-500 shrink-0" />
+            Preview
+          </button>
+
+          <button @click="triggerUpload(openMenuWedding); closeMenu()"
+            :disabled="uploadingId === openMenuWedding.id"
+            class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+            <Icon :name="uploadingId === openMenuWedding.id ? 'lucide:loader-2' : 'lucide:upload'"
+              class="w-4 h-4 text-emerald-500 shrink-0" :class="{'animate-spin': uploadingId === openMenuWedding.id}" />
+            {{ (photoCounts[openMenuWedding.id] ?? 0) > 0 ? 'Ganti Foto' : 'Upload Foto' }}
+          </button>
+
+          <button
+            v-if="(photoCounts[openMenuWedding.id] ?? 0) > 0"
+            @click="deletePhoto(openMenuWedding); closeMenu()"
+            class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+            <Icon name="lucide:trash-2" class="w-4 h-4 shrink-0" />
+            Hapus Foto
+          </button>
+
+          <div class="border-t border-gray-100 my-1" />
+
+          <button @click="exportJpg(openMenuWedding); closeMenu()"
+            :disabled="exportingId === openMenuWedding.id"
+            class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+            <Icon :name="exportingId === openMenuWedding.id ? 'lucide:loader-2' : 'lucide:image'"
+              class="w-4 h-4 text-amber-500 shrink-0" :class="{'animate-spin': exportingId === openMenuWedding.id}" />
+            Export JPG
+          </button>
+
+          <button @click="exportPdf(openMenuWedding); closeMenu()"
+            class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+            <Icon name="lucide:file-text" class="w-4 h-4 text-red-500 shrink-0" />
+            Export PDF
+          </button>
+        </div>
+      </Transition>
     </Teleport>
 
     <!-- ── BULK EXPORT MODAL ── -->
@@ -428,6 +431,8 @@ const exportingId = ref<string | null>(null)
 
 // Dropdown menu
 const openMenuId = ref<string | null>(null)
+const menuPosition = ref({ top: 0, right: 0 })
+const openMenuWedding = computed(() => weddings.value.find(w => w.id === openMenuId.value) ?? null)
 
 // Bulk modal
 const showBulkModal = ref(false)
@@ -555,8 +560,13 @@ const formatTanggalUpper = (raw: string) => {
 }
 
 // ── Dropdown menu ────────────────────────────────────────────────
-const toggleMenu = (id: string) => {
-  openMenuId.value = openMenuId.value === id ? null : id
+const toggleMenu = (id: string, event?: MouseEvent) => {
+  if (openMenuId.value === id) { openMenuId.value = null; return }
+  if (event) {
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    menuPosition.value = { top: rect.bottom + 4, right: window.innerWidth - rect.right }
+  }
+  openMenuId.value = id
 }
 
 const closeMenu = () => {

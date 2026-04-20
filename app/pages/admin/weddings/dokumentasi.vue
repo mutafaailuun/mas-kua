@@ -17,7 +17,7 @@
 
     <!-- ── FILTERS ── -->
     <div class="mb-5 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
         <div class="col-span-2 md:col-span-1">
           <label class="block text-xs font-medium text-gray-700 mb-1">Cari Nama</label>
           <div class="relative">
@@ -47,6 +47,11 @@
             <option value="Kantor">Kantor</option>
             <option value="Luar Kantor">Luar Kantor</option>
           </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Tanggal Akad</label>
+          <input v-model="filterDate" type="date"
+            class="block w-full px-3 py-2 text-sm border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500" />
         </div>
         <div class="flex items-end">
           <button v-if="hasActiveFilters" @click="clearFilters"
@@ -403,6 +408,7 @@ const searchQuery = ref('')
 const filterMonth = ref<number | ''>('')
 const filterYear = ref<number | ''>('')
 const filterStatus = ref('')
+const filterDate = ref('')
 const page = ref(1)
 const pageSize = 15
 
@@ -486,7 +492,7 @@ const availableYears = computed(() => {
 })
 
 const hasActiveFilters = computed(() =>
-  searchQuery.value !== '' || filterMonth.value !== '' || filterYear.value !== '' || filterStatus.value !== ''
+  searchQuery.value !== '' || filterMonth.value !== '' || filterYear.value !== '' || filterStatus.value !== '' || filterDate.value !== ''
 )
 
 const filteredWeddings = computed(() => {
@@ -494,6 +500,7 @@ const filteredWeddings = computed(() => {
   return weddings.value.filter(w => {
     if (q && !w.groom_name.toLowerCase().includes(q) && !w.bride_name.toLowerCase().includes(q)) return false
     if (filterStatus.value && w.status !== filterStatus.value) return false
+    if (filterDate.value && w.wedding_date !== filterDate.value) return false
     const d = new Date(w.wedding_date + 'T00:00:00')
     if (filterMonth.value !== '' && d.getMonth() + 1 !== filterMonth.value) return false
     if (filterYear.value !== '' && d.getFullYear() !== filterYear.value) return false
@@ -506,7 +513,7 @@ const startIndex = computed(() => (page.value - 1) * pageSize)
 const endIndex = computed(() => Math.min(startIndex.value + pageSize, filteredWeddings.value.length))
 const paginatedWeddings = computed(() => filteredWeddings.value.slice(startIndex.value, endIndex.value))
 
-watch([searchQuery, filterMonth, filterYear, filterStatus], () => { page.value = 1 })
+watch([searchQuery, filterMonth, filterYear, filterStatus, filterDate], () => { page.value = 1 })
 
 const bulkWeddings = computed(() =>
   weddings.value
@@ -525,6 +532,7 @@ const clearFilters = () => {
   filterMonth.value = ''
   filterYear.value = ''
   filterStatus.value = ''
+  filterDate.value = ''
 }
 
 const formatDate = (d: string) =>

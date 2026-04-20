@@ -190,7 +190,7 @@
                   >
                     <div
                       v-if="openMenuId === wedding.id"
-                      class="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-30 origin-top-right"
+                      class="absolute right-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[9999] origin-top-right"
                     >
                       <button @click="openPreview(wedding); closeMenu()"
                         class="flex items-center gap-2.5 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">

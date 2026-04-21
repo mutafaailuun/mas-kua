@@ -50,31 +50,16 @@
       </thead>
       <tbody>
 
-        <!-- ── Koreksi 1 Label Row ── -->
-        <tr>
-          <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center; vertical-align: middle;">1</td>
-          <td style="border: 1px solid black; padding: 5px 8px;">{{ k1.kolom || 'Nama Istri' }}</td>
-          <td style="border: 1px solid black; padding: 5px 8px;">{{ k1.kolom || 'Nama Istri' }}</td>
-          <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; vertical-align: top; white-space: pre-line;">{{ k1.data_pendukung || '' }}</td>
-        </tr>
-        <!-- ── Koreksi 1 Value Row ── -->
-        <tr>
-          <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k1.tertulis || '' }}</td>
-          <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k1.seharusnya || '' }}</td>
-        </tr>
-
-        <!-- ── Koreksi 2 Label Row (conditional) ── -->
-        <template v-if="hasKoreksiKedua">
+        <template v-for="(k, i) in koreksi" :key="i">
           <tr>
-            <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center; vertical-align: middle;">2</td>
-            <td style="border: 1px solid black; padding: 5px 8px;">{{ k2.kolom || 'Nama Suami' }}</td>
-            <td style="border: 1px solid black; padding: 5px 8px;">{{ k2.kolom || 'Nama Suami' }}</td>
-            <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; vertical-align: top; white-space: pre-line;">{{ k2.data_pendukung || '' }}</td>
+            <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center; vertical-align: middle;">{{ i + 1 }}</td>
+            <td style="border: 1px solid black; padding: 5px 8px;">{{ k.kolom }}</td>
+            <td style="border: 1px solid black; padding: 5px 8px;">{{ k.kolom }}</td>
+            <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; vertical-align: top; white-space: pre-line;">{{ k.data_pendukung }}</td>
           </tr>
-          <!-- ── Koreksi 2 Value Row ── -->
           <tr>
-            <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k2.tertulis || '' }}</td>
-            <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k2.seharusnya || '' }}</td>
+            <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k.tertulis }}</td>
+            <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k.seharusnya }}</td>
           </tr>
         </template>
 
@@ -123,13 +108,10 @@ const props = defineProps<{
     nomor_kel: string
   }
   nomorSurat: string
-  koreksi: [KoreksiItem, KoreksiItem]
-  hasKoreksiKedua: boolean
+  koreksi: KoreksiItem[]
   tanggalFormatted: string
 }>()
 
-const k1 = computed(() => props.koreksi[0])
-const k2 = computed(() => props.koreksi[1])
 const hasKelurahanName = computed(() => props.form.kelurahan.trim().length > 0)
 const hasKelurahanNumber = computed(() => props.form.nomor_kel.trim().length > 0)
 

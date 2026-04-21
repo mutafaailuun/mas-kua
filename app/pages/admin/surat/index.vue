@@ -223,7 +223,6 @@
           :form="reprintFormData"
           :nomor-surat="reprintSurat.nomor_surat"
           :koreksi="reprintKoreksi"
-          :has-koreksi-kedua="reprintHasKoreksiKedua"
           :tanggal-formatted="reprintTanggal"
         />
       </template>
@@ -343,13 +342,9 @@ const reprintTanggal = computed(() => {
 
 const reprintKoreksi = computed(() => {
   const koreksi = reprintSurat.value?.form_data?.koreksi ?? []
-  const empty = { kolom: '', tertulis: '', seharusnya: '', data_pendukung: '' }
-  return [koreksi[0] ?? empty, koreksi[1] ?? empty] as [any, any]
+  if (koreksi.length > 0) return koreksi
+  return [{ kolom: '', tertulis: '', seharusnya: '', data_pendukung: '' }]
 })
-
-const reprintHasKoreksiKedua = computed(() =>
-  reprintSurat.value?.form_data?.hasKoreksiKedua ?? false
-)
 
 // ── Print from log ────────────────────────────────────────────────
 const printFromLog = async (surat: SuratKeluar) => {

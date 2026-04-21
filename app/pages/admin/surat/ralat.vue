@@ -112,13 +112,24 @@
           </div>
         </div>
 
-        <!-- Koreksi 1 -->
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Koreksi Data #1</h3>
+        <!-- Koreksi (Dinamis) -->
+        <div v-for="(k, i) in koreksi" :key="i"
+          class="bg-white rounded-xl border shadow-sm p-5 space-y-4"
+          :class="i === 0 ? 'border-gray-200' : 'border-emerald-200'">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold uppercase tracking-wide"
+              :class="i === 0 ? 'text-gray-700' : 'text-emerald-700'">
+              Koreksi Data #{{ i + 1 }}
+            </h3>
+            <button v-if="koreksi.length > 1" @click="hapusKoreksi(i)"
+              class="text-red-400 hover:text-red-600 transition-colors" title="Hapus koreksi ini">
+              <Icon name="lucide:trash-2" class="w-4 h-4" />
+            </button>
+          </div>
 
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Kolom yang Dikoreksi</label>
-            <select v-model="koreksi[0].kolom"
+            <select v-model="k.kolom"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
               <option value="Nomor Akta Nikah">Nomor Akta Nikah</option>
               <option value="Nama Istri">Nama Istri</option>
@@ -136,82 +147,30 @@
 
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Tertulis (Data Salah)</label>
-            <input v-model="koreksi[0].tertulis" type="text" placeholder="AI ZAKIAH"
+            <input v-model="k.tertulis" type="text" placeholder="AI ZAKIAH"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Seharusnya (Data Benar)</label>
-            <input v-model="koreksi[0].seharusnya" type="text" placeholder="ZAKIAH MUHIBAH"
+            <input v-model="k.seharusnya" type="text" placeholder="ZAKIAH MUHIBAH"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
           </div>
 
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Data Pendukung</label>
-            <textarea v-model="koreksi[0].data_pendukung" rows="4"
+            <textarea v-model="k.data_pendukung" rows="4"
               placeholder="1. KTP&#10;2. KK (Kartu Keluarga)&#10;3. Surat Keterangan Kelurahan ..."
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
           </div>
         </div>
 
-        <!-- Toggle Koreksi Kedua -->
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
-          <label class="flex items-center gap-3 cursor-pointer select-none">
-            <div class="relative">
-              <input type="checkbox" v-model="hasKoreksiKedua" class="sr-only" />
-              <div class="w-10 h-6 rounded-full transition-colors"
-                :class="hasKoreksiKedua ? 'bg-emerald-500' : 'bg-gray-300'"></div>
-              <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform"
-                :class="hasKoreksiKedua ? 'translate-x-4' : 'translate-x-0'"></div>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-gray-700">Tambah Koreksi Data #2</p>
-              <p class="text-xs text-gray-400">Aktifkan jika ada dua data yang perlu dikoreksi</p>
-            </div>
-          </label>
-        </div>
-
-        <!-- Koreksi 2 (Conditional) -->
-        <div v-if="hasKoreksiKedua" class="bg-white rounded-xl border border-emerald-200 shadow-sm p-5 space-y-4">
-          <h3 class="text-sm font-semibold text-emerald-700 uppercase tracking-wide">Koreksi Data #2</h3>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Kolom yang Dikoreksi</label>
-            <select v-model="koreksi[1].kolom"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
-              <option value="Nomor Akta Nikah">Nomor Akta Nikah</option>
-              <option value="Nama Suami">Nama Suami</option>
-              <option value="Nama Istri">Nama Istri</option>
-              <option value="Tempat Lahir Istri">Tempat Lahir Istri</option>
-              <option value="Tempat Lahir Suami">Tempat Lahir Suami</option>
-              <option value="Tanggal Lahir Istri">Tanggal Lahir Istri</option>
-              <option value="Tanggal Lahir Suami">Tanggal Lahir Suami</option>
-              <option value="Nama Ayah Istri">Nama Ayah Istri</option>
-              <option value="Nama Ayah Suami">Nama Ayah Suami</option>
-              <option value="Nama Ibu Istri">Nama Ibu Istri</option>
-              <option value="Nama Ibu Suami">Nama Ibu Suami</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tertulis (Data Salah)</label>
-            <input v-model="koreksi[1].tertulis" type="text" placeholder="ADE SURATMAN"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Seharusnya (Data Benar)</label>
-            <input v-model="koreksi[1].seharusnya" type="text" placeholder="ADE SUPATMAN"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Data Pendukung</label>
-            <textarea v-model="koreksi[1].data_pendukung" rows="4"
-              placeholder="1. KTP&#10;2. KK (Kartu Keluarga)&#10;3. Surat Keterangan Kelurahan ..."
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
-          </div>
-        </div>
+        <!-- Tombol Tambah Koreksi -->
+        <button @click="tambahKoreksi"
+          class="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-dashed border-emerald-300 text-sm font-medium rounded-xl text-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
+          <Icon name="lucide:plus" class="w-4 h-4 mr-2" />
+          Tambah Koreksi Data #{{ koreksi.length + 1 }}
+        </button>
 
         <!-- Print Button -->
         <button @click="printSurat"
@@ -247,7 +206,6 @@
                   :form="form"
                   :nomor-surat="nomorSurat"
                   :koreksi="koreksi"
-                  :has-koreksi-kedua="hasKoreksiKedua"
                   :tanggal-formatted="tanggalFormatted"
                 />
               </div>
@@ -264,7 +222,6 @@
         :form="form"
         :nomor-surat="nomorSurat"
         :koreksi="koreksi"
-        :has-koreksi-kedua="hasKoreksiKedua"
         :tanggal-formatted="tanggalFormatted"
       />
     </div>
@@ -294,15 +251,17 @@ const form = reactive({
   nomor_kel: '',
 })
 
-const koreksi = reactive([
+const koreksi = reactive<{ kolom: string; tertulis: string; seharusnya: string; data_pendukung: string }[]>([
   { kolom: 'Nama Istri', tertulis: '', seharusnya: '', data_pendukung: '' },
-  { kolom: 'Nama Suami', tertulis: '', seharusnya: '', data_pendukung: '' },
-] as [
-  { kolom: string; tertulis: string; seharusnya: string; data_pendukung: string },
-  { kolom: string; tertulis: string; seharusnya: string; data_pendukung: string }
 ])
 
-const hasKoreksiKedua = ref(false)
+const tambahKoreksi = () => {
+  koreksi.push({ kolom: 'Nama Suami', tertulis: '', seharusnya: '', data_pendukung: '' })
+}
+
+const hapusKoreksi = (i: number) => {
+  koreksi.splice(i, 1)
+}
 
 // Derive month/year from the letter date, fallback to today
 const tanggalRef = computed(() => {
@@ -352,7 +311,6 @@ const saveSuratKeluar = async () => {
       form_data: {
         ...toRaw(form),
         koreksi: koreksi.map(k => ({ ...toRaw(k) })),
-        hasKoreksiKedua: hasKoreksiKedua.value,
       },
     }, { onConflict: 'nomor_surat' })
   } catch (e) {

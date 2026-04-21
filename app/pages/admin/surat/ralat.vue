@@ -120,6 +120,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kolom yang Dikoreksi</label>
             <select v-model="koreksi[0].kolom"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
+              <option value="Nomor Akta Nikah">Nomor Akta Nikah</option>
               <option value="Nama Istri">Nama Istri</option>
               <option value="Nama Suami">Nama Suami</option>
               <option value="Tempat Lahir Istri">Tempat Lahir Istri</option>
@@ -178,6 +179,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kolom yang Dikoreksi</label>
             <select v-model="koreksi[1].kolom"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
+              <option value="Nomor Akta Nikah">Nomor Akta Nikah</option>
               <option value="Nama Suami">Nama Suami</option>
               <option value="Nama Istri">Nama Istri</option>
               <option value="Tempat Lahir Istri">Tempat Lahir Istri</option>

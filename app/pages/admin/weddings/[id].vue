@@ -128,6 +128,7 @@
               v-model="form.phone_number"
               type="tel"
               placeholder="812 3456 7890"
+              @blur="saveContactField('phone_number')"
               class="block w-full pl-12 pr-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
             />
           </div>
@@ -141,6 +142,7 @@
             v-model="form.email"
             type="email"
             placeholder="contoh@email.com"
+            @blur="saveContactField('email')"
             class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
@@ -241,6 +243,23 @@ const form = reactive({
 const sendingWa = ref(false)
 const waResult = ref<{ ok: boolean; message: string } | null>(null)
 
+// Auto-save field kontak langsung ke database tanpa perlu klik Update
+const savingContact = ref(false)
+const saveContactField = async (field: 'phone_number' | 'email') => {
+  savingContact.value = true
+  try {
+    const { error } = await supabase
+      .from('weddings')
+      .update({ [field]: form[field] || null })
+      .eq('id', route.params.id)
+    if (error) throw error
+  } catch (err) {
+    console.error('Auto-save contact error:', err)
+  } finally {
+    savingContact.value = false
+  }
+}
+
 const kirimKonfirmasi = async () => {
   sendingWa.value = true
   waResult.value = null
@@ -295,9 +314,17 @@ const doUpdate = async () => {
   showConflictDialog.value = false
   submitting.value = true
   try {
+    const payload = {
+      ...form,
+      registration_date: form.registration_date || null,
+      phone_number: form.phone_number || null,
+      email: form.email || null,
+      officiant_name: form.officiant_name || null,
+      notes: form.notes || null,
+    }
     const { error } = await supabase
       .from('weddings')
-      .update(form)
+      .update(payload)
       .eq('id', route.params.id)
 
     if (error) throw error

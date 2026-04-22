@@ -113,10 +113,41 @@
         </div>
       </div>
 
+      <!-- Kontak Catin -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            No. HP Catin
+            <span class="ml-1 text-xs font-normal text-gray-400">(Opsional, untuk notif WA)</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm select-none">+62</span>
+            <input
+              v-model="form.phone_number"
+              type="tel"
+              placeholder="812 3456 7890"
+              class="block w-full pl-12 pr-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Email Catin
+            <span class="ml-1 text-xs font-normal text-gray-400">(Opsional)</span>
+          </label>
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="contoh@email.com"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+          />
+        </div>
+      </div>
+
       <!-- Notes -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan Tambahan (Opsional)</label>
-        <textarea 
+        <textarea
           v-model="form.notes"
           rows="3"
           placeholder="Contoh: Wali Hakim, Persyaratan kurang, dll"
@@ -176,7 +207,9 @@ const form = reactive({
   location: '',
   officiant_name: '',
   status: 'Luar Kantor',
-  notes: ''
+  notes: '',
+  phone_number: '',
+  email: '',
 })
 
 const doSave = async () => {

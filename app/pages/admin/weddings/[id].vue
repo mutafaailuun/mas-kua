@@ -115,14 +115,68 @@
         </div>
       </div>
 
+      <!-- Kontak Catin -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            No. HP Catin
+            <span class="ml-1 text-xs font-normal text-gray-400">(Opsional, untuk notif WA)</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm select-none">+62</span>
+            <input
+              v-model="form.phone_number"
+              type="tel"
+              placeholder="812 3456 7890"
+              class="block w-full pl-12 pr-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Email Catin
+            <span class="ml-1 text-xs font-normal text-gray-400">(Opsional)</span>
+          </label>
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="contoh@email.com"
+            class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+          />
+        </div>
+      </div>
+
       <!-- Notes -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan Tambahan (Opsional)</label>
-        <textarea 
+        <textarea
           v-model="form.notes"
           rows="3"
           class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
         ></textarea>
+      </div>
+
+      <!-- Kirim Notifikasi WA -->
+      <div v-if="form.phone_number" class="rounded-xl border border-green-200 bg-green-50 p-4">
+        <div class="flex items-start gap-3">
+          <Icon name="lucide:message-circle" class="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-green-800">Kirim Notifikasi WhatsApp</p>
+            <p class="text-xs text-green-600 mt-0.5">Kirim konfirmasi bahwa data catin sudah terdaftar di sistem KUA.</p>
+          </div>
+          <button
+            type="button"
+            @click="kirimKonfirmasi"
+            :disabled="sendingWa"
+            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 disabled:opacity-60 transition-colors"
+          >
+            <Icon :name="sendingWa ? 'lucide:loader-2' : 'lucide:send'" class="w-3.5 h-3.5" :class="{ 'animate-spin': sendingWa }" />
+            {{ sendingWa ? 'Mengirim...' : 'Kirim Verifikasi' }}
+          </button>
+        </div>
+        <p v-if="waResult" class="mt-2 text-xs" :class="waResult.ok ? 'text-green-700' : 'text-red-600'">
+          {{ waResult.message }}
+        </p>
       </div>
 
       <!-- Actions -->
@@ -179,8 +233,29 @@ const form = reactive({
   location: '',
   officiant_name: '',
   status: '',
-  notes: ''
+  notes: '',
+  phone_number: '',
+  email: '',
 })
+
+const sendingWa = ref(false)
+const waResult = ref<{ ok: boolean; message: string } | null>(null)
+
+const kirimKonfirmasi = async () => {
+  sendingWa.value = true
+  waResult.value = null
+  try {
+    await $fetch('/api/notify/catin', {
+      method: 'POST',
+      body: { type: 'konfirmasi', wedding_id: route.params.id },
+    })
+    waResult.value = { ok: true, message: `✓ Pesan konfirmasi berhasil dikirim ke ${form.phone_number}` }
+  } catch (err: any) {
+    waResult.value = { ok: false, message: `✗ Gagal kirim: ${err?.data?.message ?? err?.message}` }
+  } finally {
+    sendingWa.value = false
+  }
+}
 
 const fetchWedding = async () => {
   loading.value = true
@@ -202,7 +277,9 @@ const fetchWedding = async () => {
         location: data.location,
         officiant_name: data.officiant_name || '',
         status: data.status,
-        notes: data.notes || ''
+        notes: data.notes || '',
+        phone_number: data.phone_number || '',
+        email: data.email || '',
       })
     }
   } catch (error) {

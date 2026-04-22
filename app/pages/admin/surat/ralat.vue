@@ -11,6 +11,20 @@
       </NuxtLink>
       <h2 class="mt-3 text-2xl font-bold text-gray-900">Surat Keterangan Ralat</h2>
       <p class="mt-1 text-sm text-gray-500">Isi form di bawah ini, preview akan muncul secara otomatis.</p>
+
+      <!-- Nomor surat terdahulu -->
+      <div v-if="lastSurat" class="mt-3 inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2 text-sm">
+        <Icon name="lucide:history" class="w-4 h-4 shrink-0 text-amber-500" />
+        <span class="text-amber-700">Surat ralat terakhir:</span>
+        <span class="font-mono font-semibold text-amber-900">{{ lastSurat.nomor_surat }}</span>
+        <span class="text-amber-500">·</span>
+        <span class="text-amber-600">{{ lastSurat.perihal }}</span>
+        <span v-if="lastSurat.tanggal_surat" class="text-amber-500 text-xs">({{ formatTanggalShort(lastSurat.tanggal_surat) }})</span>
+      </div>
+      <div v-else-if="lastSuratLoading" class="mt-3 inline-flex items-center gap-2 text-sm text-gray-400">
+        <Icon name="lucide:loader-2" class="w-3.5 h-3.5 animate-spin" />
+        Memuat nomor surat terdahulu...
+      </div>
     </div>
 
     <div class="flex gap-8 items-start">
@@ -290,6 +304,30 @@ const tanggalFormatted = computed(() => {
 const supabase = useSupabaseClient()
 const printTargetRef = ref<HTMLElement | null>(null)
 const saving = ref(false)
+
+// Surat terdahulu
+const lastSurat = ref<{ nomor_surat: string; perihal: string; tanggal_surat: string | null } | null>(null)
+const lastSuratLoading = ref(true)
+
+const formatTanggalShort = (raw: string) =>
+  new Date(raw + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+
+onMounted(async () => {
+  try {
+    const { data } = await supabase
+      .from('surat_keluar')
+      .select('nomor_surat, perihal, tanggal_surat')
+      .eq('jenis_surat', 'ralat')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+    lastSurat.value = data ?? null
+  } catch {
+    lastSurat.value = null
+  } finally {
+    lastSuratLoading.value = false
+  }
+})
 
 // Build perihal string from current form data
 const perihalSurat = computed(() => {

@@ -104,7 +104,7 @@
                   {{ jenisLabel(surat.jenis_surat) }}
                 </span>
               </td>
-              <td class="px-4 py-3 text-gray-800">{{ surat.perihal }}</td>
+              <td class="px-4 py-3 font-semibold uppercase text-gray-800">{{ surat.perihal }}</td>
               <td class="px-4 py-3 text-gray-500 text-xs">{{ surat.keterangan || '—' }}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center justify-end gap-1">

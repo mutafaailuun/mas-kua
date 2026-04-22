@@ -1,3 +1,20 @@
+/* ── shadcn-vue Dialog animations ── */
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes fadeOut { from { opacity: 1 } to { opacity: 0 } }
+@keyframes zoomIn { from { transform: translate(-50%, -50%) scale(0.95) } to { transform: translate(-50%, -50%) scale(1) } }
+@keyframes zoomOut { from { transform: translate(-50%, -50%) scale(1) } to { transform: translate(-50%, -50%) scale(0.95) } }
+@keyframes slideInFromTop { from { transform: translate(-50%, calc(-50% - 12px)) } to { transform: translate(-50%, -50%) } }
+@keyframes slideOutToTop { from { transform: translate(-50%, -50%) } to { transform: translate(-50%, calc(-50% - 12px)) } }
+
+[data-state=open].animate-in { animation-duration: 200ms; animation-fill-mode: both; }
+[data-state=closed].animate-out { animation-duration: 150ms; animation-fill-mode: both; }
+[data-state=open].fade-in-0 { animation-name: fadeIn; }
+[data-state=closed].fade-out-0 { animation-name: fadeOut; }
+[data-state=open].zoom-in-95 { animation-name: zoomIn; }
+[data-state=closed].zoom-out-95 { animation-name: zoomOut; }
+[data-state=open].slide-in-from-top-\[48\%\] { animation-name: slideInFromTop; }
+[data-state=closed].slide-out-to-top-\[48\%\] { animation-name: slideOutToTop; }
+
 /* Container */
 .container {
   max-width: 1200px;

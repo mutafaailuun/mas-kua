@@ -167,10 +167,18 @@
               <td class="px-4 py-3 text-center">
                 <span
                   class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full"
-                  :class="(photoCounts[wedding.id] ?? 0) > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-400'"
+                  :class="uploadingId === wedding.id
+                    ? 'bg-blue-50 text-blue-500'
+                    : (photoCounts[wedding.id] ?? 0) > 0
+                      ? 'bg-emerald-50 text-emerald-700'
+                      : 'bg-gray-100 text-gray-400'"
                 >
-                  <Icon name="lucide:image" class="w-3 h-3" />
-                  {{ (photoCounts[wedding.id] ?? 0) > 0 ? 'Ada' : 'Belum' }}
+                  <Icon
+                    :name="uploadingId === wedding.id ? 'lucide:loader-2' : 'lucide:image'"
+                    class="w-3 h-3"
+                    :class="{ 'animate-spin': uploadingId === wedding.id }"
+                  />
+                  {{ uploadingId === wedding.id ? 'Mengupload...' : (photoCounts[wedding.id] ?? 0) > 0 ? 'Ada' : 'Belum' }}
                 </span>
               </td>
 
@@ -312,40 +320,6 @@
       </Transition>
     </Teleport>
 
-    <!-- ── UPLOAD SUCCESS MODAL (shadcn-vue Dialog) ── -->
-    <Dialog :open="showSuccessModal" @update:open="showSuccessModal = $event">
-      <DialogContent class="sm:max-w-md text-center">
-        <DialogHeader class="items-center">
-          <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100">
-            <Icon name="lucide:check-circle-2" class="h-8 w-8 text-emerald-600" />
-          </div>
-          <DialogTitle class="text-center text-xl">Foto Berhasil Diupload</DialogTitle>
-          <DialogDescription class="text-center" v-if="successWedding">
-            Foto dokumentasi untuk
-            <span class="font-semibold text-gray-700">{{ successWedding.groom_name }}</span>
-            &amp;
-            <span class="font-semibold text-gray-700">{{ successWedding.bride_name }}</span>
-            telah tersimpan ke cloud storage dan database.
-          </DialogDescription>
-        </DialogHeader>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:justify-center">
-          <button
-            @click="successWedding && openPreview(successWedding); showSuccessModal = false"
-            class="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 transition-colors"
-          >
-            <Icon name="lucide:eye" class="h-4 w-4" />
-            Preview Dokumentasi
-          </button>
-          <button
-            @click="showSuccessModal = false"
-            class="inline-flex items-center justify-center rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Tutup
-          </button>
-        </div>
-      </DialogContent>
-    </Dialog>
-
     <!-- ── BULK EXPORT MODAL ── -->
     <Teleport to="body">
       <div
@@ -425,7 +399,6 @@
 
 <script setup lang="ts">
 import AdminDokumentasiAkadPreview from '~/components/admin/DokumentasiAkadPreview.vue'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '~/components/ui/dialog'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
@@ -455,9 +428,6 @@ const fileInputRef = ref<HTMLInputElement | null>(null)
 const uploadTargetWedding = ref<any>(null)
 const uploadingId = ref<string | null>(null)
 
-// Success modal
-const showSuccessModal = ref(false)
-const successWedding = ref<any>(null)
 
 // Preview modal
 const previewWedding = ref<any>(null)
@@ -692,8 +662,6 @@ const handleFileChange = async (e: Event) => {
       previewPhotos.value = await fetchPhotosForWedding(wedding.id)
     }
 
-    successWedding.value = wedding
-    showSuccessModal.value = true
   } catch (err: any) {
     console.error('Upload error:', err)
     alert(`Gagal mengupload foto: ${err?.data?.message ?? err?.message ?? 'Periksa konfigurasi R2 di .env'}`)

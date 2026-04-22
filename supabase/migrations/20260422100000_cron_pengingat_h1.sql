@@ -1,9 +1,5 @@
--- Enable pg_cron dan pg_net untuk scheduled HTTP calls
-CREATE EXTENSION IF NOT EXISTS pg_cron;
-CREATE EXTENSION IF NOT EXISTS pg_net;
-
 -- ─────────────────────────────────────────────────────────────────────────────
--- LANGKAH PERSIAPAN (jalankan SEKALI di SQL Editor Supabase sebelum migrasi ini):
+-- LANGKAH PERSIAPAN (jalankan SEKALI di SQL Editor sebelum migrasi ini):
 --
 --   SELECT vault.create_secret(
 --     'YOUR_SERVICE_ROLE_KEY',
@@ -11,9 +7,16 @@ CREATE EXTENSION IF NOT EXISTS pg_net;
 --     'Service role key untuk memanggil edge function'
 --   );
 --
--- Ganti YOUR_SERVICE_ROLE_KEY dengan nilai dari:
--- Supabase Dashboard → Project Settings → API → service_role (secret)
+-- Nilai key: Supabase Dashboard → Project Settings → API → service_role
 -- ─────────────────────────────────────────────────────────────────────────────
+
+-- pg_cron dan pg_net sudah dikelola Supabase di level platform.
+-- Aktifkan via Dashboard → Database → Extensions jika belum aktif.
+
+-- Hapus job lama jika ada (idempotent)
+SELECT cron.unschedule('pengingat-h1-catin') WHERE EXISTS (
+  SELECT 1 FROM cron.job WHERE jobname = 'pengingat-h1-catin'
+);
 
 -- Jadwalkan pengingat H-1 setiap hari jam 02:00 UTC = 09:00 WIB
 SELECT cron.schedule(

@@ -32,6 +32,7 @@
               <option value="tidak_tercatat">Nikah Tidak Tercatat</option>
               <option value="tidak_tercatat_isbat">Tidak Tercatat – Keperluan Isbat Nikah</option>
               <option value="tidak_tercatat_bpjs">Tidak Tercatat – Keperluan BPJS</option>
+              <option value="tidak_tercatat_jht">Tidak Tercatat – Keperluan Klaim JHT</option>
               <option value="buku_nikah_palsu">Buku Nikah Palsu / Tidak Terdaftar</option>
             </select>
           </div>
@@ -325,6 +326,7 @@ const perihalSurat = computed(() => {
     tidak_tercatat: 'Surat Keterangan Nikah Tidak Tercatat',
     tidak_tercatat_isbat: 'Surat Keterangan Tidak Tercatat (Isbat Nikah)',
     tidak_tercatat_bpjs: 'Surat Keterangan Tidak Tercatat (BPJS)',
+    tidak_tercatat_jht: 'Surat Keterangan Tidak Tercatat (Klaim JHT)',
     buku_nikah_palsu: 'Surat Keterangan Buku Nikah',
   }
   const label = jenisLabel[form.jenis] ?? 'Surat Keterangan'

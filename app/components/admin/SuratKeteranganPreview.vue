@@ -184,6 +184,20 @@
       </div>
     </template>
 
+    <!-- tidak_tercatat_jht -->
+    <template v-if="jenis === 'tidak_tercatat_jht'">
+      <div style="text-align: justify; text-indent: 2.5em; line-height: 1.8; margin-bottom: 14px;">
+        Bahwa pasangan tersebut di atas telah melangsungkan akad nikah secara sah menurut
+        agama Islam, namun pernikahan tersebut <strong>tidak tercatat</strong> dalam Buku Register Nikah
+        Kantor Urusan Agama Kecamatan Pebayuran Kabupaten Bekasi.
+      </div>
+      <div style="text-align: justify; text-indent: 2.5em; line-height: 1.8; margin-bottom: 14px;">
+        Surat keterangan ini diterbitkan untuk keperluan persyaratan administratif klaim
+        <strong>Jaminan Hari Tua (JHT) BPJS Ketenagakerjaan</strong> atas nama yang bersangkutan.
+      </div>
+    </template>
+
+
     <!-- buku_nikah_palsu -->
     <template v-if="jenis === 'buku_nikah_palsu'">
       <div style="text-align: justify; text-indent: 2.5em; line-height: 1.8; margin-bottom: 14px;">

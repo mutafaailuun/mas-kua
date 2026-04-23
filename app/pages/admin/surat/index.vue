@@ -188,6 +188,7 @@
                     <option value="tidak_tercatat">Nikah Tidak Tercatat</option>
                     <option value="tidak_tercatat_isbat">Tidak Tercatat – Isbat Nikah</option>
                     <option value="tidak_tercatat_bpjs">Tidak Tercatat – BPJS</option>
+                    <option value="tidak_tercatat_jht">Tidak Tercatat – Klaim JHT</option>
                     <option value="buku_nikah_palsu">Buku Nikah Palsu</option>
                     <option value="ralat">Ralat Akta Nikah</option>
                     <option value="penolakan_nikah">Penolakan Kehendak Nikah/Rujuk (N7)</option>
@@ -295,7 +296,8 @@ const printing = ref<string | null>(null)
 // ── Jenis helpers ─────────────────────────────────────────────────
 const KETERANGAN_TYPES = new Set([
   'tercatat', 'tercatat_terlambat', 'tercatat_kepolisian',
-  'tidak_tercatat', 'tidak_tercatat_isbat', 'tidak_tercatat_bpjs', 'buku_nikah_palsu',
+  'tidak_tercatat', 'tidak_tercatat_isbat', 'tidak_tercatat_bpjs',
+  'tidak_tercatat_jht', 'buku_nikah_palsu',
 ])
 
 const isKeteranganType = (jenis: string) => KETERANGAN_TYPES.has(jenis)
@@ -307,6 +309,7 @@ const JENIS_LABELS: Record<string, string> = {
   tidak_tercatat: 'Tidak Tercatat',
   tidak_tercatat_isbat: 'Isbat Nikah',
   tidak_tercatat_bpjs: 'BPJS',
+  tidak_tercatat_jht: 'JHT BPJS',
   buku_nikah_palsu: 'Buku Palsu',
   ralat: 'Ralat',
   penolakan_nikah: 'Penolakan N7',

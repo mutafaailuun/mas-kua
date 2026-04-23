@@ -44,6 +44,25 @@
           Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
         </div>
       </NuxtLink>
+
+      <NuxtLink to="/admin/surat/penolakan"
+        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-lg bg-red-50 text-red-500 group-hover:bg-red-100 transition-colors">
+            <Icon name="lucide:x-circle" class="w-7 h-7" />
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Penolakan Kehendak Nikah Rujuk</h3>
+            <p class="text-xs text-gray-500 mt-0.5">Formulir Model N7</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Pemberitahuan kekurangan syarat atau penolakan kehendak nikah/rujuk kepada calon pengantin atau wali.
+        </p>
+        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
+          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+        </div>
+      </NuxtLink>
     </div>
 
     <!-- ── Log Surat Keluar ── -->
@@ -171,6 +190,7 @@
                     <option value="tidak_tercatat_bpjs">Tidak Tercatat – BPJS</option>
                     <option value="buku_nikah_palsu">Buku Nikah Palsu</option>
                     <option value="ralat">Ralat Akta Nikah</option>
+                    <option value="penolakan_nikah">Penolakan Kehendak Nikah/Rujuk (N7)</option>
                   </optgroup>
                   <optgroup label="Surat Lainnya">
                     <option value="umum">Umum</option>
@@ -289,6 +309,7 @@ const JENIS_LABELS: Record<string, string> = {
   tidak_tercatat_bpjs: 'BPJS',
   buku_nikah_palsu: 'Buku Palsu',
   ralat: 'Ralat',
+  penolakan_nikah: 'Penolakan N7',
   umum: 'Umum',
   rekomendasi: 'Rekomendasi',
   keterangan: 'Keterangan',
@@ -300,6 +321,7 @@ const jenisLabel = (jenis: string) => JENIS_LABELS[jenis] ?? jenis
 const jenisColor = (jenis: string) => {
   if (isKeteranganType(jenis)) return 'bg-emerald-50 text-emerald-700'
   if (jenis === 'ralat') return 'bg-amber-50 text-amber-700'
+  if (jenis === 'penolakan_nikah') return 'bg-red-50 text-red-700'
   if (jenis === 'rekomendasi') return 'bg-blue-50 text-blue-700'
   return 'bg-gray-100 text-gray-600'
 }

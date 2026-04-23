@@ -12,6 +12,20 @@
       <h2 class="mt-3 text-2xl font-bold text-gray-900">Surat Keterangan Ralat</h2>
       <p class="mt-1 text-sm text-gray-500">Isi form di bawah ini, preview akan muncul secara otomatis.</p>
 
+      <!-- Versi toggle -->
+      <div class="mt-4 inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1 gap-1">
+        <button @click="versi = 'baru'"
+          class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors"
+          :class="versi === 'baru' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'">
+          Versi Baru
+        </button>
+        <button @click="versi = 'lama'"
+          class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors"
+          :class="versi === 'lama' ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'">
+          Versi Lama
+        </button>
+      </div>
+
       <!-- Nomor surat terdahulu -->
       <div v-if="lastSurat" class="mt-3 inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2 text-sm">
         <Icon name="lucide:history" class="w-4 h-4 shrink-0 text-amber-500" />
@@ -106,85 +120,133 @@
           </div>
         </div>
 
-        <!-- Surat Kelurahan -->
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
-          <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Surat Keterangan Kelurahan</h3>
-          <p class="text-xs leading-relaxed text-gray-500">
-            Opsional. Jika warga tidak membawa surat dari kelurahan, kosongkan bagian ini dan gunakan dokumen pendukung lain pada kolom koreksi.
-          </p>
+        <!-- ── VERSI BARU: Koreksi dengan NAMA + TGL LAHIR terpisah ── -->
+        <template v-if="versi === 'baru'">
+          <div v-for="(k, i) in koreksi" :key="'baru-'+i"
+            class="bg-white rounded-xl border shadow-sm p-5 space-y-4"
+            :class="i === 0 ? 'border-gray-200' : 'border-emerald-200'">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-semibold uppercase tracking-wide"
+                :class="i === 0 ? 'text-gray-700' : 'text-emerald-700'">
+                Koreksi Data #{{ i + 1 }}
+              </h3>
+              <button v-if="koreksi.length > 1" @click="hapusKoreksi(i)"
+                class="text-red-400 hover:text-red-600 transition-colors" title="Hapus koreksi ini">
+                <Icon name="lucide:trash-2" class="w-4 h-4" />
+              </button>
+            </div>
+            <p class="text-xs text-gray-500 -mt-1">Kolom <span class="font-semibold">Tertulis</span> = data salah di buku nikah. Kolom <span class="font-semibold">Seharusnya</span> = data benar sesuai KTP.</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nama — Tertulis</label>
+                <input v-model="k.nama_tertulis" type="text" placeholder="SUMI"
+                  class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nama — Seharusnya</label>
+                <input v-model="k.nama_seharusnya" type="text" placeholder="IDA ROHAYANI"
+                  class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir — Tertulis</label>
+                <input v-model="k.ttl_tertulis" type="text" placeholder="Bekasi, 11-09-1994"
+                  class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir — Seharusnya</label>
+                <input v-model="k.ttl_seharusnya" type="text" placeholder="Bekasi, 11-09-1994"
+                  class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Data Pendukung</label>
+              <textarea v-model="k.data_pendukung" rows="4"
+                placeholder="KTP No. NIK 3216134401920006&#10;Surat Ket. No. 3215232008/SURKET/01/230118/0002"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
+            </div>
+          </div>
+          <button @click="tambahKoreksi"
+            class="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-dashed border-emerald-300 text-sm font-medium rounded-xl text-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
+            <Icon name="lucide:plus" class="w-4 h-4 mr-2" />
+            Tambah Koreksi Data #{{ koreksi.length + 1 }}
+          </button>
+        </template>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kelurahan / Desa</label>
-            <input v-model="form.kelurahan" type="text" placeholder="Kertasari (opsional)"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+        <!-- ── VERSI LAMA: Kolom dropdown + Tertulis/Seharusnya ── -->
+        <template v-if="versi === 'lama'">
+          <!-- Surat Kelurahan (hanya versi lama) -->
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Surat Keterangan Kelurahan</h3>
+            <p class="text-xs leading-relaxed text-gray-500">Opsional. Kosongkan jika tidak ada surat dari kelurahan.</p>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kelurahan / Desa</label>
+              <input v-model="form.kelurahan" type="text" placeholder="Kertasari (opsional)"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Surat Kelurahan</label>
+              <input v-model="form.nomor_kel" type="text" placeholder="400.12.2.1/68/IV/2026 (opsional)"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+            </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Surat Kelurahan</label>
-            <input v-model="form.nomor_kel" type="text" placeholder="400.12.2.1/68/IV/2026 (opsional)"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+          <div v-for="(k, i) in koreksiLama" :key="'lama-'+i"
+            class="bg-white rounded-xl border shadow-sm p-5 space-y-4"
+            :class="i === 0 ? 'border-gray-200' : 'border-emerald-200'">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-semibold uppercase tracking-wide"
+                :class="i === 0 ? 'text-gray-700' : 'text-emerald-700'">
+                Koreksi Data #{{ i + 1 }}
+              </h3>
+              <button v-if="koreksiLama.length > 1" @click="hapusKoreksiLama(i)"
+                class="text-red-400 hover:text-red-600 transition-colors">
+                <Icon name="lucide:trash-2" class="w-4 h-4" />
+              </button>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Kolom yang Dikoreksi</label>
+              <select v-model="k.kolom"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
+                <option value="Nomor Akta Nikah">Nomor Akta Nikah</option>
+                <option value="Nama Istri">Nama Istri</option>
+                <option value="Nama Suami">Nama Suami</option>
+                <option value="Tempat Lahir Istri">Tempat Lahir Istri</option>
+                <option value="Tempat Lahir Suami">Tempat Lahir Suami</option>
+                <option value="Tanggal Lahir Istri">Tanggal Lahir Istri</option>
+                <option value="Tanggal Lahir Suami">Tanggal Lahir Suami</option>
+                <option value="Nama Ayah Istri">Nama Ayah Istri</option>
+                <option value="Nama Ayah Suami">Nama Ayah Suami</option>
+                <option value="Nama Ibu Istri">Nama Ibu Istri</option>
+                <option value="Nama Ibu Suami">Nama Ibu Suami</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tertulis (Data Salah)</label>
+              <input v-model="k.tertulis" type="text"
+                :placeholder="k.kolom.includes('Tanggal') ? 'Bekasi, 11-09-1994' : k.kolom.includes('Nomor') ? '214/60/IV/2012' : 'AI ZAKIAH'"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Seharusnya (Data Benar)</label>
+              <input v-model="k.seharusnya" type="text"
+                :placeholder="k.kolom.includes('Tanggal') ? 'Bekasi, 11-09-1994' : k.kolom.includes('Nomor') ? '214/60/IV/2013' : 'ZAKIAH MUHIBAH'"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Data Pendukung</label>
+              <textarea v-model="k.data_pendukung" rows="4"
+                placeholder="1. KTP&#10;2. KK (Kartu Keluarga)&#10;3. Surat Keterangan Kelurahan ..."
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
+            </div>
           </div>
-        </div>
-
-        <!-- Koreksi (Dinamis) -->
-        <div v-for="(k, i) in koreksi" :key="i"
-          class="bg-white rounded-xl border shadow-sm p-5 space-y-4"
-          :class="i === 0 ? 'border-gray-200' : 'border-emerald-200'">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold uppercase tracking-wide"
-              :class="i === 0 ? 'text-gray-700' : 'text-emerald-700'">
-              Koreksi Data #{{ i + 1 }}
-            </h3>
-            <button v-if="koreksi.length > 1" @click="hapusKoreksi(i)"
-              class="text-red-400 hover:text-red-600 transition-colors" title="Hapus koreksi ini">
-              <Icon name="lucide:trash-2" class="w-4 h-4" />
-            </button>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Kolom yang Dikoreksi</label>
-            <select v-model="k.kolom"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
-              <option value="Nomor Akta Nikah">Nomor Akta Nikah</option>
-              <option value="Nama Istri">Nama Istri</option>
-              <option value="Nama Suami">Nama Suami</option>
-              <option value="Tempat Lahir Istri">Tempat Lahir Istri</option>
-              <option value="Tempat Lahir Suami">Tempat Lahir Suami</option>
-              <option value="Tanggal Lahir Istri">Tanggal Lahir Istri</option>
-              <option value="Tanggal Lahir Suami">Tanggal Lahir Suami</option>
-              <option value="Nama Ayah Istri">Nama Ayah Istri</option>
-              <option value="Nama Ayah Suami">Nama Ayah Suami</option>
-              <option value="Nama Ibu Istri">Nama Ibu Istri</option>
-              <option value="Nama Ibu Suami">Nama Ibu Suami</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tertulis (Data Salah)</label>
-            <input v-model="k.tertulis" type="text" placeholder="AI ZAKIAH"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Seharusnya (Data Benar)</label>
-            <input v-model="k.seharusnya" type="text" placeholder="ZAKIAH MUHIBAH"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Data Pendukung</label>
-            <textarea v-model="k.data_pendukung" rows="4"
-              placeholder="1. KTP&#10;2. KK (Kartu Keluarga)&#10;3. Surat Keterangan Kelurahan ..."
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"></textarea>
-          </div>
-        </div>
-
-        <!-- Tombol Tambah Koreksi -->
-        <button @click="tambahKoreksi"
-          class="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-dashed border-emerald-300 text-sm font-medium rounded-xl text-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
-          <Icon name="lucide:plus" class="w-4 h-4 mr-2" />
-          Tambah Koreksi Data #{{ koreksi.length + 1 }}
-        </button>
+          <button @click="tambahKoreksiLama"
+            class="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-dashed border-emerald-300 text-sm font-medium rounded-xl text-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
+            <Icon name="lucide:plus" class="w-4 h-4 mr-2" />
+            Tambah Koreksi Data #{{ koreksiLama.length + 1 }}
+          </button>
+        </template>
 
         <!-- Print Button -->
         <button @click="printSurat"
@@ -216,10 +278,16 @@
             -->
             <div style="width: 492px; height: 696px; overflow: hidden; margin: 0 auto;">
               <div style="width: 794px; transform: scale(0.62); transform-origin: top left;">
-                <AdminSuratRalatPreview
+                <AdminSuratRalatPreview v-if="versi === 'baru'"
                   :form="form"
                   :nomor-surat="nomorSurat"
                   :koreksi="koreksi"
+                  :tanggal-formatted="tanggalFormatted"
+                />
+                <AdminSuratRalatPreviewLama v-else
+                  :form="formLama"
+                  :nomor-surat="nomorSurat"
+                  :koreksi="koreksiLama"
                   :tanggal-formatted="tanggalFormatted"
                 />
               </div>
@@ -232,10 +300,16 @@
 
     <!-- Hidden print target (full size, always rendered, hidden visually) -->
     <div id="surat-print-content" ref="printTargetRef" aria-hidden="true">
-      <AdminSuratRalatPreview
+      <AdminSuratRalatPreview v-if="versi === 'baru'"
         :form="form"
         :nomor-surat="nomorSurat"
         :koreksi="koreksi"
+        :tanggal-formatted="tanggalFormatted"
+      />
+      <AdminSuratRalatPreviewLama v-else
+        :form="formLama"
+        :nomor-surat="nomorSurat"
+        :koreksi="koreksiLama"
         :tanggal-formatted="tanggalFormatted"
       />
     </div>
@@ -245,12 +319,16 @@
 <script setup lang="ts">
 import { toRaw } from 'vue'
 import AdminSuratRalatPreview from '~/components/admin/SuratRalatPreview.vue'
+import AdminSuratRalatPreviewLama from '~/components/admin/SuratRalatPreviewLama.vue'
 
 definePageMeta({
   layout: 'admin',
   middleware: 'admin'
 })
 
+const versi = ref<'baru' | 'lama'>('baru')
+
+// ── Shared form fields ──
 const form = reactive({
   nomor_urut: '',
   tanggal_raw: '',
@@ -261,21 +339,30 @@ const form = reactive({
   nomor_perforasi: '',
   nama_suami: '',
   nama_istri: '',
-  kelurahan: '',
-  nomor_kel: '',
 })
 
-const koreksi = reactive<{ kolom: string; tertulis: string; seharusnya: string; data_pendukung: string }[]>([
+// formLama extends form with kelurahan fields for the old preview
+const formLama = computed(() => ({
+  ...toRaw(form),
+  kelurahan: formKelurahan.kelurahan,
+  nomor_kel: formKelurahan.nomor_kel,
+}))
+
+const formKelurahan = reactive({ kelurahan: '', nomor_kel: '' })
+
+// ── Versi Baru koreksi ──
+const koreksi = reactive<{ nama_tertulis: string; ttl_tertulis: string; nama_seharusnya: string; ttl_seharusnya: string; data_pendukung: string }[]>([
+  { nama_tertulis: '', ttl_tertulis: '', nama_seharusnya: '', ttl_seharusnya: '', data_pendukung: '' },
+])
+const tambahKoreksi = () => koreksi.push({ nama_tertulis: '', ttl_tertulis: '', nama_seharusnya: '', ttl_seharusnya: '', data_pendukung: '' })
+const hapusKoreksi = (i: number) => koreksi.splice(i, 1)
+
+// ── Versi Lama koreksi ──
+const koreksiLama = reactive<{ kolom: string; tertulis: string; seharusnya: string; data_pendukung: string }[]>([
   { kolom: 'Nama Istri', tertulis: '', seharusnya: '', data_pendukung: '' },
 ])
-
-const tambahKoreksi = () => {
-  koreksi.push({ kolom: 'Nama Suami', tertulis: '', seharusnya: '', data_pendukung: '' })
-}
-
-const hapusKoreksi = (i: number) => {
-  koreksi.splice(i, 1)
-}
+const tambahKoreksiLama = () => koreksiLama.push({ kolom: 'Nama Suami', tertulis: '', seharusnya: '', data_pendukung: '' })
+const hapusKoreksiLama = (i: number) => koreksiLama.splice(i, 1)
 
 // Derive month/year from the letter date, fallback to today
 const tanggalRef = computed(() => {
@@ -341,6 +428,9 @@ const saveSuratKeluar = async () => {
   if (!form.nomor_urut) return // jangan simpan jika nomor belum diisi
   saving.value = true
   try {
+    const koreksiData = versi.value === 'baru'
+      ? koreksi.map(k => ({ ...toRaw(k) }))
+      : koreksiLama.map(k => ({ ...toRaw(k) }))
     await supabase.from('surat_keluar').upsert({
       nomor_surat: nomorSurat.value,
       tanggal_surat: form.tanggal_raw || null,
@@ -348,7 +438,8 @@ const saveSuratKeluar = async () => {
       perihal: perihalSurat.value,
       form_data: {
         ...toRaw(form),
-        koreksi: koreksi.map(k => ({ ...toRaw(k) })),
+        versi: versi.value,
+        koreksi: koreksiData,
       },
     }, { onConflict: 'nomor_surat' })
   } catch (e) {

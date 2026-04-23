@@ -1,6 +1,6 @@
 <template>
   <div class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 60px 75px 60px 100px; box-sizing: border-box;">
+    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box;">
 
     <!-- ══ KOP SURAT ══ -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
@@ -48,8 +48,8 @@
     <div style="margin-bottom: 16px; font-size: 13px; line-height: 1.7;">
       <div>Kepada yth,</div>
       <div>Calon pengantin/Wali</div>
-      <div style="font-weight: bold;">{{ form.nama_penerima || '________________________' }}</div>
-      <div>di {{ form.alamat_penerima || '________________________' }}</div>
+      <div style="font-weight: bold;">{{ form.nama_penerima || '__________' }}</div>
+      <div>di {{ form.alamat_penerima || '__________' }}</div>
     </div>
 
     <!-- ══ TUBUH SURAT ══ -->
@@ -57,9 +57,9 @@
       Dengan hormat, setelah dilakukan pemeriksaan terhadap persyaratan pendaftaran
       pernikahan yang diatur dalam peraturan perundang-undangan bahwa permohonan
       pendaftaran nikah/rujuk Saudara
-      <strong style="text-transform: uppercase;">{{ form.nama_catin || '_______________' }}</strong>
+      <strong style="text-transform: uppercase;">{{ form.nama_catin || '__________' }}</strong>
       dengan Saudara
-      <strong style="text-transform: uppercase;">{{ form.nama_pasangan || '_______________' }}</strong>
+      <strong style="text-transform: uppercase;">{{ form.nama_pasangan || '__________' }}</strong>
       diberitahukan sebagai berikut:
     </div>
 
@@ -71,7 +71,7 @@
         Pernikahan dapat dilaksanakan dengan melengkapi persyaratan:
         <ol style="margin: 4px 0 0 20px; padding: 0;">
           <li v-for="(item, i) in syaratDapat" :key="'dapat-'+i" style="margin-bottom: 2px;">
-            {{ item || '________________________________' }}
+            {{ item || '__________' }}
           </li>
         </ol>
       </div>
@@ -85,7 +85,7 @@
         Tidak dapat dilaksanakan (ditolak) karena tidak melengkapi persyaratan berupa:
         <ol style="margin: 4px 0 0 20px; padding: 0;">
           <li v-for="(item, i) in syaratTolak" :key="'tolak-'+i" style="margin-bottom: 2px;">
-            {{ item || '________________________________' }}
+            {{ item || '__________' }}
           </li>
         </ol>
       </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 60px 75px 60px 100px; box-sizing: border-box;">
+    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box;">
 
     <!-- ══ KOP SURAT ══ -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
@@ -37,38 +37,38 @@
     </div>
 
     <!-- ══ TABEL KOREKSI ══ -->
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12.5px;">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 11.5px; table-layout: fixed; word-wrap: break-word;">
       <thead>
         <tr>
-          <th rowspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center; width: 36px;">NO</th>
-          <th colspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center;">TERTULIS</th>
-          <th colspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center;">SEHARUSNYA BERDASARKAN<br>KARTU TANDA PENDUDUK</th>
-          <th rowspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center;">DATA PENDUKUNG</th>
+          <th rowspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 30px;">NO</th>
+          <th colspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center;">TERTULIS</th>
+          <th colspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center;">SEHARUSNYA BERDASARKAN KTP</th>
+          <th rowspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 25%;">DATA PENDUKUNG</th>
         </tr>
         <tr>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center;">NAMA</th>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center;">TANGGAL<br>LAHIR</th>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center;">NAMA</th>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center;">TANGGAL<br>LAHIR</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 17%;">NAMA</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 15%;">TANGGAL LAHIR</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 17%;">NAMA</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 15%;">TANGGAL LAHIR</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(k, i) in koreksi" :key="i">
-          <td style="border: 1px solid black; padding: 5px 8px; text-align: center; vertical-align: middle;">{{ i + 1 }}</td>
-          <td style="border: 1px solid black; padding: 6px 8px; font-weight: bold; vertical-align: top; text-transform: uppercase;">
-            {{ k.nama_tertulis || '________________________' }}
+          <td style="border: 1px solid black; padding: 5px 4px; text-align: center; vertical-align: middle;">{{ i + 1 }}</td>
+          <td style="border: 1px solid black; padding: 6px 4px; font-weight: bold; vertical-align: top; text-transform: uppercase;">
+            {{ k.nama_tertulis || '__________' }}
           </td>
-          <td style="border: 1px solid black; padding: 6px 8px; font-weight: bold; vertical-align: top;">
-            {{ k.ttl_tertulis || '________________________' }}
+          <td style="border: 1px solid black; padding: 6px 4px; font-weight: bold; vertical-align: top;">
+            {{ k.ttl_tertulis || '__________' }}
           </td>
-          <td style="border: 1px solid black; padding: 6px 8px; font-weight: bold; vertical-align: top; text-transform: uppercase;">
-            {{ k.nama_seharusnya || '________________________' }}
+          <td style="border: 1px solid black; padding: 6px 4px; font-weight: bold; vertical-align: top; text-transform: uppercase;">
+            {{ k.nama_seharusnya || '__________' }}
           </td>
-          <td style="border: 1px solid black; padding: 6px 8px; font-weight: bold; vertical-align: top;">
-            {{ k.ttl_seharusnya || '________________________' }}
+          <td style="border: 1px solid black; padding: 6px 4px; font-weight: bold; vertical-align: top;">
+            {{ k.ttl_seharusnya || '__________' }}
           </td>
-          <td style="border: 1px solid black; padding: 6px 8px; vertical-align: top; white-space: pre-line;">
-            {{ k.data_pendukung || '________________________' }}
+          <td style="border: 1px solid black; padding: 6px 4px; vertical-align: top; white-space: pre-line;">
+            {{ k.data_pendukung || '__________' }}
           </td>
         </tr>
       </tbody>

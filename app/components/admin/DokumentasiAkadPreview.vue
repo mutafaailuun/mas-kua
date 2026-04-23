@@ -1,7 +1,7 @@
 <template>
   <div
     class="dok-preview text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 56px 70px; box-sizing: border-box; font-family: 'Liberation Serif', 'Times New Roman', serif; font-size: 13px; line-height: 1.5;"
+    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box; font-family: 'Liberation Serif', 'Times New Roman', serif; font-size: 13px; line-height: 1.5;"
   >
     <!-- ══ JUDUL ══ -->
     <div style="text-align: center; margin-bottom: 10px;">
@@ -21,12 +21,12 @@
         <tr>
           <td style="width: 190px; vertical-align: top; padding: 1px 0;">NO. PENDAFTARAN</td>
           <td style="padding: 1px 10px; vertical-align: top;">:</td>
-          <td style="vertical-align: top; font-weight: bold;">{{ wedding.no_pendaftaran || '___________________________' }}</td>
+          <td style="vertical-align: top; font-weight: bold;">{{ wedding.no_pendaftaran || '__________' }}</td>
         </tr>
         <tr>
           <td style="vertical-align: top; padding: 1px 0;">NO. AKTA NIKAH</td>
           <td style="padding: 1px 10px; vertical-align: top;">:</td>
-          <td style="vertical-align: top; font-weight: bold;">{{ wedding.no_akta || '___________________________' }}</td>
+          <td style="vertical-align: top; font-weight: bold;">{{ wedding.no_akta || '__________' }}</td>
         </tr>
         <tr>
           <td style="vertical-align: top; padding: 1px 0;">NAMA SUAMI</td>

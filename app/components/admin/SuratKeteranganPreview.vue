@@ -1,6 +1,6 @@
 <template>
   <div class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 60px 75px 60px 100px; box-sizing: border-box;">
+    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box;">
 
     <!-- ══ KOP SURAT ══ -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
@@ -41,37 +41,37 @@
           <tr>
             <td style="width: 40%; padding: 1px 0 1px 2.5em;">Nama Suami</td>
             <td style="width: 4%; padding: 1px 8px;">:</td>
-            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_suami || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_suami || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Nama Isteri</td>
             <td style="padding: 1px 8px;">:</td>
-            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_istri || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_istri || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tanggal Nikah</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.tanggal_nikah ? formatTanggalNikah(form.tanggal_nikah) : '___________________________' }}</td>
+            <td>{{ form.tanggal_nikah ? formatTanggalNikah(form.tanggal_nikah) : '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tempat Nikah</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.tempat_nikah || '___________________________' }}</td>
+            <td>{{ form.tempat_nikah || '__________' }}</td>
           </tr>
           <tr v-if="jenis === 'tercatat' || jenis === 'tercatat_terlambat'">
             <td style="padding: 1px 0 1px 2.5em;">Nomor Akta Nikah</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.nomor_akta || '___________________________' }}</td>
+            <td>{{ form.nomor_akta || '__________' }}</td>
           </tr>
           <tr v-if="jenis === 'tercatat' || jenis === 'tercatat_terlambat'">
             <td style="padding: 1px 0 1px 2.5em;">Nomor Perforasi</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.nomor_perforasi || '___________________________' }}</td>
+            <td>{{ form.nomor_perforasi || '__________' }}</td>
           </tr>
           <tr v-if="jenis === 'buku_nikah_palsu'">
             <td style="padding: 1px 0 1px 2.5em;">Nomor Akta Nikah</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.nomor_akta || '___________________________' }}</td>
+            <td>{{ form.nomor_akta || '__________' }}</td>
           </tr>
         </tbody>
       </table>
@@ -84,22 +84,22 @@
           <tr>
             <td style="width: 40%; padding: 1px 0 1px 2.5em;">Nama</td>
             <td style="width: 4%; padding: 1px 8px;">:</td>
-            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_suami || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_suami || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tempat / Tgl. Lahir</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.ttl_suami || '___________________________' }}</td>
+            <td>{{ form.ttl_suami || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Pekerjaan</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.pekerjaan_suami || '___________________________' }}</td>
+            <td>{{ form.pekerjaan_suami || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em; vertical-align: top;">Alamat</td>
             <td style="padding: 1px 8px; vertical-align: top;">:</td>
-            <td style="white-space: pre-line;">{{ form.alamat_suami || '___________________________' }}</td>
+            <td style="white-space: pre-line;">{{ form.alamat_suami || '__________' }}</td>
           </tr>
         </tbody>
       </table>
@@ -108,22 +108,22 @@
           <tr>
             <td style="width: 40%; padding: 1px 0 1px 2.5em;">Nama</td>
             <td style="width: 4%; padding: 1px 8px;">:</td>
-            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_istri || '___________________________' }}</td>
+            <td style="font-weight: bold; text-transform: uppercase;">{{ form.nama_istri || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Tempat / Tgl. Lahir</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.ttl_istri || '___________________________' }}</td>
+            <td>{{ form.ttl_istri || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em;">Pekerjaan</td>
             <td style="padding: 1px 8px;">:</td>
-            <td>{{ form.pekerjaan_istri || '___________________________' }}</td>
+            <td>{{ form.pekerjaan_istri || '__________' }}</td>
           </tr>
           <tr>
             <td style="padding: 1px 0 1px 2.5em; vertical-align: top;">Alamat</td>
             <td style="padding: 1px 8px; vertical-align: top;">:</td>
-            <td style="white-space: pre-line;">{{ form.alamat_istri || '___________________________' }}</td>
+            <td style="white-space: pre-line;">{{ form.alamat_istri || '__________' }}</td>
           </tr>
         </tbody>
       </table>

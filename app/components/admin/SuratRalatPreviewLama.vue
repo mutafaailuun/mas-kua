@@ -1,6 +1,6 @@
 <template>
   <div class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 60px 75px 60px 100px; box-sizing: border-box;">
+    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box;">
 
     <!-- ══ KOP SURAT ══ -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
@@ -37,26 +37,26 @@
     </div>
 
     <!-- ══ TABEL KOREKSI ══ -->
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12.5px;">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12px; table-layout: fixed; word-wrap: break-word;">
       <thead>
         <tr>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center; width: 36px; background: #f0f0f0;">NO</th>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center; background: #f0f0f0;">TERTULIS DALAM BUKU NIKAH</th>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center; background: #f0f0f0;">SEHARUSNYA</th>
-          <th style="border: 1px solid black; padding: 5px 8px; text-align: center; background: #f0f0f0;">DATA PENDUKUNG</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 35px; background: #f0f0f0;">NO</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; background: #f0f0f0; width: 30%;">TERTULIS DALAM BUKU NIKAH</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; background: #f0f0f0; width: 30%;">SEHARUSNYA</th>
+          <th style="border: 1px solid black; padding: 5px 4px; text-align: center; background: #f0f0f0;">DATA PENDUKUNG</th>
         </tr>
       </thead>
       <tbody>
         <template v-for="(k, i) in koreksi" :key="i">
           <tr>
-            <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; text-align: center; vertical-align: middle;">{{ i + 1 }}</td>
-            <td style="border: 1px solid black; padding: 5px 8px; color: #555;">{{ k.kolom }}</td>
-            <td style="border: 1px solid black; padding: 5px 8px; color: #555;">{{ k.kolom }}</td>
-            <td rowspan="2" style="border: 1px solid black; padding: 5px 8px; vertical-align: top; white-space: pre-line;">{{ k.data_pendukung }}</td>
+            <td rowspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center; vertical-align: middle;">{{ i + 1 }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; color: #555;">{{ k.kolom }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; color: #555;">{{ k.kolom }}</td>
+            <td rowspan="2" style="border: 1px solid black; padding: 5px 4px; vertical-align: top; white-space: pre-line;">{{ k.data_pendukung || '__________' }}</td>
           </tr>
           <tr>
-            <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k.tertulis || '________________________' }}</td>
-            <td style="border: 1px solid black; padding: 5px 8px; font-weight: bold;">{{ k.seharusnya || '________________________' }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; font-weight: bold;">{{ k.tertulis || '__________' }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; font-weight: bold;">{{ k.seharusnya || '__________' }}</td>
           </tr>
         </template>
       </tbody>

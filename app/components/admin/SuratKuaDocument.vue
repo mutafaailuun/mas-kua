@@ -1,20 +1,21 @@
 <template>
   <div
     class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
-    style="width: 794px; min-height: 1123px; padding: 60px 75px 60px 100px; box-sizing: border-box;"
+    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box;"
   >
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
       <img
         src="/logo-kua.png"
         alt="Logo KUA"
-        style="width: 70px; height: 70px; object-fit: contain; flex-shrink: 0;"
+        style="width: 88px; height: 88px; object-fit: contain; flex-shrink: 0;"
       />
 
-      <div style="flex: 1; text-align: center; line-height: 1.45;">
-        <div style="font-size: 14px; font-weight: bold; letter-spacing: 0.3px;">KEMENTERIAN AGAMA REPUBLIK INDONESIA</div>
-        <div style="font-size: 14px; font-weight: bold;">KANTOR KEMENTERIAN AGAMA KABUPATEN BEKASI</div>
-        <div style="font-size: 15px; font-weight: bold;">KANTOR URUSAN AGAMA KECAMATAN PEBAYURAN</div>
-        <div style="font-size: 11.5px; margin-top: 2px;">Jl. Raya Pebayuran Kec. Pebayuran 17710 Kabupaten Bekasi</div>
+      <div style="flex: 1; text-align: center; line-height: 1.4;">
+        <div style="font-size: 17px; font-weight: bold; letter-spacing: 0.3px;">KEMENTERIAN AGAMA REPUBLIK INDONESIA</div>
+        <div style="font-size: 13px; font-weight: bold;">KANTOR KEMENTERIAN AGAMA KABUPATEN BEKASI</div>
+        <div style="font-size: 13px; font-weight: bold;">KANTOR URUSAN AGAMA KECAMATAN PEBAYURAN</div>
+        <div style="font-size: 11px; margin-top: 3px;">Jl. Raya Pebayuran, Kecamatan Pebayuran, Kabupaten Bekasi</div>
+        <div style="font-size: 11px;">Email: kuabayuran@gmail.com</div>
       </div>
     </div>
 

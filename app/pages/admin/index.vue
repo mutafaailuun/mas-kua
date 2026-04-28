@@ -86,7 +86,7 @@
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold text-gray-800 truncate">{{ w.groom_name }} & {{ w.bride_name }}</p>
             <p class="text-xs text-gray-500 mt-0.5 truncate">{{ w.location ?? '—' }}</p>
-            <p v-if="w.officiant_name" class="text-xs text-gray-400 truncate">{{ w.officiant_name }}</p>
+            <p class="text-xs text-gray-400 truncate">{{ formatTanggal(w.wedding_date) }}{{ w.officiant_name ? ` · ${w.officiant_name}` : '' }}</p>
           </div>
           <div class="text-right shrink-0">
             <p class="text-sm font-medium text-gray-700">{{ w.wedding_time ? w.wedding_time.slice(0, 5) : '—' }}</p>
@@ -361,7 +361,18 @@ const scheduleTabs = [
   { key: 'week',     label: 'Minggu Ini', icon: 'lucide:calendar-range' },
 ] as const
 
-const toDateStr = (d: Date) => d.toISOString().slice(0, 10)
+const toDateStr = (d: Date) => {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+const formatTanggal = (dateStr: string) => {
+  const d = new Date(dateStr + 'T00:00:00')
+  const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][d.getDay()]
+  return `${hari}, ${d.getDate()} ${BULAN_FULL[d.getMonth()]} ${d.getFullYear()}`
+}
 
 const filteredSchedule = computed(() => {
   const todayStr    = toDateStr(now)

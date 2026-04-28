@@ -42,6 +42,65 @@
       </div>
     </div>
 
+    <!-- ── JADWAL AKAD NIKAH ── -->
+    <div class="mb-8 bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+      <div class="mb-4">
+        <h3 class="text-sm font-semibold text-gray-800">Jadwal Akad Nikah</h3>
+        <p class="text-xs text-gray-400 mt-0.5">Daftar akad nikah terjadwal secara real-time.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-1 bg-gray-100 rounded-full p-1 w-fit mb-4">
+        <button
+          v-for="tab in scheduleTabs"
+          :key="tab.key"
+          @click="scheduleTab = tab.key"
+          :class="[
+            'flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-all',
+            scheduleTab === tab.key
+              ? 'bg-white text-emerald-700 shadow-sm border border-emerald-200'
+              : 'text-gray-500 hover:text-gray-700'
+          ]"
+        >
+          <Icon :name="tab.icon" class="w-4 h-4" />
+          {{ tab.label }}
+        </button>
+      </div>
+
+      <!-- Empty state -->
+      <div v-if="filteredSchedule.length === 0" class="border-2 border-dashed border-gray-200 rounded-xl py-10 flex flex-col items-center gap-3 text-gray-400">
+        <Icon name="lucide:calendar-x" class="w-10 h-10" />
+        <p class="text-sm">{{ emptyScheduleMessage }}</p>
+      </div>
+
+      <!-- Wedding rows -->
+      <div v-else class="space-y-2">
+        <div
+          v-for="w in filteredSchedule"
+          :key="w.id"
+          class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100"
+        >
+          <div class="p-2.5 rounded-lg bg-pink-50 text-pink-500 shrink-0">
+            <Icon name="lucide:heart" class="w-4 h-4" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-800 truncate">{{ w.groom_name }} & {{ w.bride_name }}</p>
+            <p class="text-xs text-gray-500 mt-0.5 truncate">{{ w.location ?? '—' }}</p>
+            <p v-if="w.officiant_name" class="text-xs text-gray-400 truncate">{{ w.officiant_name }}</p>
+          </div>
+          <div class="text-right shrink-0">
+            <p class="text-sm font-medium text-gray-700">{{ w.wedding_time ? w.wedding_time.slice(0, 5) : '—' }}</p>
+            <span
+              :class="[
+                'text-xs px-2 py-0.5 rounded-full',
+                w.status === 'Kantor' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+              ]"
+            >{{ w.status }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ── CHARTS ROW ── -->
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
@@ -293,6 +352,44 @@ const renderPie = () => {
   })
 }
 
+// ── Schedule tabs ─────────────────────────────────────────────────
+const scheduleTab = ref<'today' | 'tomorrow' | 'week'>('today')
+
+const scheduleTabs = [
+  { key: 'today',    label: 'Hari Ini',   icon: 'lucide:calendar-check' },
+  { key: 'tomorrow', label: 'Besok',      icon: 'lucide:calendar-clock' },
+  { key: 'week',     label: 'Minggu Ini', icon: 'lucide:calendar-range' },
+] as const
+
+const toDateStr = (d: Date) => d.toISOString().slice(0, 10)
+
+const filteredSchedule = computed(() => {
+  const todayStr    = toDateStr(now)
+  const tomorrow    = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+  const tomorrowStr = toDateStr(tomorrow)
+
+  const daysFromMon = now.getDay() === 0 ? 6 : now.getDay() - 1
+  const weekStart   = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysFromMon)
+  const weekEnd     = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysFromMon + 6)
+  const weekStartStr = toDateStr(weekStart)
+  const weekEndStr   = toDateStr(weekEnd)
+
+  return weddings.value
+    .filter(w => {
+      const d = w.wedding_date
+      if (scheduleTab.value === 'today')    return d === todayStr
+      if (scheduleTab.value === 'tomorrow') return d === tomorrowStr
+      return d >= weekStartStr && d <= weekEndStr
+    })
+    .sort((a, b) => (a.wedding_time ?? '').localeCompare(b.wedding_time ?? ''))
+})
+
+const emptyScheduleMessage = computed(() => {
+  if (scheduleTab.value === 'today')    return 'Tidak ada jadwal akad nikah hari ini.'
+  if (scheduleTab.value === 'tomorrow') return 'Tidak ada jadwal akad nikah besok.'
+  return 'Tidak ada jadwal akad nikah minggu ini.'
+})
+
 // ── Watchers ──────────────────────────────────────────────────────
 watch(barYear, () => nextTick(renderBar))
 watch([pieMonth, pieYear], () => nextTick(renderPie))
@@ -302,7 +399,7 @@ onMounted(async () => {
   try {
     const [articlesRes, weddingsRes] = await Promise.all([
       supabase.from('articles').select('id, published'),
-      supabase.from('weddings').select('id, wedding_date, location, status'),
+      supabase.from('weddings').select('id, wedding_date, wedding_time, groom_name, bride_name, location, officiant_name, status'),
     ])
     if (articlesRes.error) throw articlesRes.error
     if (weddingsRes.error) throw weddingsRes.error

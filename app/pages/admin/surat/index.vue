@@ -82,6 +82,25 @@
           Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
         </div>
       </NuxtLink>
+
+      <NuxtLink to="/admin/surat/bimwin"
+        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-lg bg-teal-50 text-teal-600 group-hover:bg-teal-100 transition-colors">
+            <Icon name="lucide:book-open" class="w-7 h-7" />
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Bimbingan Perkawinan</h3>
+            <p class="text-xs text-gray-500 mt-0.5">Undangan, daftar hadir & tanda terima sertifikat</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Undangan BIMWIN per pasangan, daftar hadir, dan tanda terima sertifikat &amp; buku bimbingan perkawinan mandiri (landscape).
+        </p>
+        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
+          Buka <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+        </div>
+      </NuxtLink>
     </div>
 
     <!-- ── Log Surat Keluar ── -->

@@ -359,14 +359,14 @@ const form = reactive({
 
 // formLama extends form with kelurahan fields for the old preview
 const formLama = computed(() => ({
-  ...toRaw(form),
+  ...form,
   kelurahan: formKelurahan.kelurahan,
   nomor_kel: formKelurahan.nomor_kel,
 }))
 
 // formBaru extends form with kelurahan fields for the new preview
 const formBaru = computed(() => ({
-  ...toRaw(form),
+  ...form,
   kelurahan: formKelurahan.kelurahan,
   nomor_kel: formKelurahan.nomor_kel,
 }))

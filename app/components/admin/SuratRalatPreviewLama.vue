@@ -29,7 +29,7 @@
     <div style="text-align: justify; margin-bottom: 16px; text-indent: 2.5em; line-height: 1.7;">
       Yang bertanda tangan di bawah ini, Kepala Kantor Urusan Agama Kecamatan Pebayuran
       Kabupaten Bekasi, dengan ini menerangkan bahwa kutipan Akta Nikah Nomor
-      <strong>{{ form.nomor_akta || '___' }}</strong>, Seri <strong>{{ form.seri || '___' }}</strong>,
+      <strong>{{ nomorAktaUpper || '___' }}</strong>, Seri <strong>{{ seriUpper || '___' }}</strong>,
       Nomor Perforasi <strong>{{ form.nomor_perforasi || '___' }}</strong>, atas nama
       <strong style="text-transform: uppercase;">{{ form.nama_suami || '___' }}</strong> dan
       <strong style="text-transform: uppercase;">{{ form.nama_istri || '___' }}</strong>,
@@ -50,13 +50,13 @@
         <template v-for="(k, i) in koreksi" :key="i">
           <tr>
             <td rowspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center; vertical-align: middle;">{{ i + 1 }}</td>
-            <td style="border: 1px solid black; padding: 5px 4px; color: #555;">{{ k.kolom }}</td>
-            <td style="border: 1px solid black; padding: 5px 4px; color: #555;">{{ k.kolom }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; color: #555; text-transform: uppercase;">{{ k.kolom }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; color: #555; text-transform: uppercase;">{{ k.kolom }}</td>
             <td rowspan="2" style="border: 1px solid black; padding: 5px 4px; vertical-align: top; white-space: pre-line;">{{ k.data_pendukung || '__________' }}</td>
           </tr>
           <tr>
-            <td style="border: 1px solid black; padding: 5px 4px; font-weight: bold;">{{ k.tertulis || '__________' }}</td>
-            <td style="border: 1px solid black; padding: 5px 4px; font-weight: bold;">{{ k.seharusnya || '__________' }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; font-weight: bold; text-transform: uppercase;">{{ k.tertulis || '__________' }}</td>
+            <td style="border: 1px solid black; padding: 5px 4px; font-weight: bold; text-transform: uppercase;">{{ k.seharusnya || '__________' }}</td>
           </tr>
         </template>
       </tbody>
@@ -106,6 +106,10 @@ const props = defineProps<{
   koreksi: KoreksiItem[]
   tanggalFormatted: string
 }>()
+
+// Uppercase transformations
+const nomorAktaUpper = computed(() => props.form.nomor_akta?.toUpperCase())
+const seriUpper = computed(() => props.form.seri?.toUpperCase())
 
 const hasKelurahanName = computed(() => props.form.kelurahan?.trim().length > 0)
 const hasKelurahanNumber = computed(() => props.form.nomor_kel?.trim().length > 0)

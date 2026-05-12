@@ -91,14 +91,14 @@
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Akta Nikah</label>
             <input v-model="form.nomor_akta" type="text" placeholder="57/42/1990"
-              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Seri</label>
               <input v-model="form.seri" type="text" placeholder="PH"
-                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Perforasi</label>
@@ -122,6 +122,22 @@
 
         <!-- ── VERSI BARU: Koreksi dengan NAMA + TGL LAHIR terpisah ── -->
         <template v-if="versi === 'baru'">
+          <!-- Surat Kelurahan (opsional untuk versi baru juga) -->
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Surat Keterangan Kelurahan</h3>
+            <p class="text-xs leading-relaxed text-gray-500">Opsional. Kosongkan jika tidak ada surat dari kelurahan.</p>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kelurahan / Desa</label>
+              <input v-model="formKelurahan.kelurahan" type="text" placeholder="Kertasari (opsional)"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Surat Kelurahan</label>
+              <input v-model="formKelurahan.nomor_kel" type="text" placeholder="400.12.2.1/68/IV/2026 (opsional)"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+            </div>
+          </div>
+
           <div v-for="(k, i) in koreksi" :key="'baru-'+i"
             class="bg-white rounded-xl border shadow-sm p-5 space-y-4"
             :class="i === 0 ? 'border-gray-200' : 'border-emerald-200'">
@@ -279,7 +295,7 @@
             <div style="width: 492px; height: 696px; overflow: hidden; margin: 0 auto;">
               <div style="width: 794px; transform: scale(0.62); transform-origin: top left;">
                 <AdminSuratRalatPreview v-if="versi === 'baru'"
-                  :form="form"
+                  :form="formBaru"
                   :nomor-surat="nomorSurat"
                   :koreksi="koreksi"
                   :tanggal-formatted="tanggalFormatted"
@@ -301,7 +317,7 @@
     <!-- Hidden print target (full size, always rendered, hidden visually) -->
     <div id="surat-print-content" ref="printTargetRef" aria-hidden="true">
       <AdminSuratRalatPreview v-if="versi === 'baru'"
-        :form="form"
+        :form="formBaru"
         :nomor-surat="nomorSurat"
         :koreksi="koreksi"
         :tanggal-formatted="tanggalFormatted"
@@ -343,6 +359,13 @@ const form = reactive({
 
 // formLama extends form with kelurahan fields for the old preview
 const formLama = computed(() => ({
+  ...toRaw(form),
+  kelurahan: formKelurahan.kelurahan,
+  nomor_kel: formKelurahan.nomor_kel,
+}))
+
+// formBaru extends form with kelurahan fields for the new preview
+const formBaru = computed(() => ({
   ...toRaw(form),
   kelurahan: formKelurahan.kelurahan,
   nomor_kel: formKelurahan.nomor_kel,
@@ -438,6 +461,8 @@ const saveSuratKeluar = async () => {
       perihal: perihalSurat.value,
       form_data: {
         ...toRaw(form),
+        kelurahan: formKelurahan.kelurahan,
+        nomor_kel: formKelurahan.nomor_kel,
         versi: versi.value,
         koreksi: koreksiData,
       },

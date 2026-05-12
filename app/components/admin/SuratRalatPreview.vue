@@ -22,27 +22,27 @@
     <!-- ══ JUDUL SURAT ══ -->
     <div style="text-align: center; margin-bottom: 14px;">
       <div style="font-size: 14px; font-weight: bold; text-decoration: underline; letter-spacing: 1px;">SURAT KETERANGAN</div>
-      <div style="font-size: 13px;">Nomor : {{ nomorSurat }}</div>
+      <div style="font-size: 13px;">Nomor: {{ nomorSurat }}</div>
     </div>
 
     <!-- ══ TUBUH SURAT ══ -->
-    <div style="text-align: justify; margin-bottom: 16px; text-indent: 2.5em; line-height: 1.8;">
+    <div style="text-align: justify; margin-bottom: 16px; text-indent: 2.5em; line-height: 1.7;">
       Yang bertanda tangan di bawah ini, Kepala Kantor Urusan Agama Kecamatan Pebayuran
       Kabupaten Bekasi menerangkan bahwa kutipan Akta Nikah Nomor
-      <strong>{{ form.nomor_akta || '___' }}</strong>, Seri <strong>{{ form.seri || '___' }}</strong>
+      <strong>{{ nomorAktaUpper || '___' }}</strong>, Seri <strong>{{ seriUpper || '___' }}</strong>
       Perforasi <strong>{{ form.nomor_perforasi || '___' }}</strong> atas nama
-      <strong style="text-transform: uppercase;">{{ form.nama_suami || '___' }}</strong>,
-      dengan pasangan <strong style="text-transform: uppercase;">{{ form.nama_istri || '___' }}</strong>
-      terdapat kekeliruan dalam penulisan, sebagai berikut :
+      <strong style="text-transform: uppercase;">{{ form.nama_suami || '___' }}</strong> dan
+      <strong style="text-transform: uppercase;">{{ form.nama_istri || '___' }}</strong>,
+      {{ dasarKeterangan }} adalah sebagai berikut:
     </div>
 
     <!-- ══ TABEL KOREKSI ══ -->
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 11.5px; table-layout: fixed; word-wrap: break-word;">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 12px; table-layout: fixed; word-wrap: break-word;">
       <thead>
         <tr>
           <th rowspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 30px;">NO</th>
-          <th colspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center;">TERTULIS</th>
-          <th colspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center;">SEHARUSNYA BERDASARKAN KTP</th>
+          <th colspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center;">TERTULIS DALAM BUKU NIKAH</th>
+          <th colspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center;">{{ seharusnyaHeader }}</th>
           <th rowspan="2" style="border: 1px solid black; padding: 5px 4px; text-align: center; width: 25%;">DATA PENDUKUNG</th>
         </tr>
         <tr>
@@ -103,7 +103,7 @@ interface KoreksiItem {
   data_pendukung: string
 }
 
-defineProps<{
+const props = defineProps<{
   form: {
     lokasi: string
     kepala: string
@@ -112,9 +112,41 @@ defineProps<{
     nomor_perforasi: string
     nama_suami: string
     nama_istri: string
+    kelurahan?: string
+    nomor_kel?: string
   }
   nomorSurat: string
   koreksi: KoreksiItem[]
   tanggalFormatted: string
 }>()
+
+// Uppercase transformations
+const nomorAktaUpper = computed(() => props.form.nomor_akta?.toUpperCase())
+const seriUpper = computed(() => props.form.seri?.toUpperCase())
+
+// Kelurahan/desa logic
+const hasKelurahanName = computed(() => props.form.kelurahan?.trim().length > 0)
+const hasKelurahanNumber = computed(() => props.form.nomor_kel?.trim().length > 0)
+
+// Header untuk kolom seharusnya
+const seharusnyaHeader = computed(() => {
+  if (hasKelurahanName.value) {
+    return 'SEHARUSNYA BERDASARKAN SURAT KETERANGAN DESA'
+  }
+  return 'SEHARUSNYA BERDASARKAN KTP'
+})
+
+// Dasar keterangan text
+const dasarKeterangan = computed(() => {
+  if (hasKelurahanName.value && hasKelurahanNumber.value) {
+    return `berdasarkan surat keterangan dari Kelurahan ${props.form.kelurahan} Nomor: ${props.form.nomor_kel}`
+  }
+  if (hasKelurahanName.value) {
+    return `berdasarkan surat keterangan dari Kelurahan ${props.form.kelurahan}`
+  }
+  if (hasKelurahanNumber.value) {
+    return `berdasarkan surat keterangan kelurahan Nomor: ${props.form.nomor_kel}`
+  }
+  return 'berdasarkan dokumen pendukung yang dilampirkan oleh pemohon'
+})
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
-    style="width: 210mm; min-height: 297mm; padding: 100px 75px 80px 113px; box-sizing: border-box;">
+    style="width: 210mm; min-height: 297mm; padding: 10mm 20mm 20mm 20mm; box-sizing: border-box;">
 
     <!-- ══ KOP SURAT ══ -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">

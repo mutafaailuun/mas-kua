@@ -140,7 +140,7 @@
 			style="
 				width: 210mm;
 				min-height: 297mm;
-				padding: 100px 75px 80px 113px;
+				padding: 10mm 20mm 20mm 20mm;
 				box-sizing: border-box;
 			"
 		>

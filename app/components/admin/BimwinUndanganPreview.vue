@@ -1,6 +1,6 @@
 <template>
   <div class="surat-paper"
-    style="font-family: 'Times New Roman', Times, serif; font-size: 13px; line-height: 1.6; color: #000; background: #fff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 30mm; box-sizing: border-box;">
+    style="font-family: 'Times New Roman', Times, serif; font-size: 13px; line-height: 1.6; color: #000; background: #fff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 20mm 20mm; box-sizing: border-box;">
 
     <!-- KOP -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">

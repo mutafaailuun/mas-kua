@@ -1,5 +1,5 @@
 <template>
-  <div style="font-family: 'Times New Roman', Times, serif; font-size: 11px; color: #000; background: #fff; width: 297mm; padding: 15mm 20mm 15mm 20mm; box-sizing: border-box;">
+  <div style="font-family: 'Times New Roman', Times, serif; font-size: 11px; color: #000; background: #fff; width: 297mm; padding: 10mm 20mm 20mm 20mm; box-sizing: border-box;">
 
     <div style="text-align: center; margin-bottom: 12px;">
       <div style="font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">

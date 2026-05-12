@@ -215,6 +215,15 @@
         sedangkan PPN yang bertugas di KUA Kecamatan Pebayuran pada periode yang bersangkutan adalah
         <strong>{{ form.nama_ppn_asli || '______' }}</strong>.
       </div>
+      <div v-if="form.tahun_ppn || form.nama_ppn_asli || form.nama_ppn_palsu"
+        style="text-align: justify; text-indent: 2.5em; line-height: 1.8; margin-bottom: 14px;">
+        Bahwa Pegawai Pencatat Nikah pada tahun
+        <strong>{{ form.tahun_ppn || '______' }}</strong>
+        adalah
+        <strong>{{ form.nama_ppn_asli || '______' }}</strong>,
+        bukan
+        <strong>{{ form.nama_ppn_palsu || '______' }}</strong>.
+      </div>
     </template>
 
     <!-- tercatat_kepolisian -->
@@ -267,6 +276,7 @@ const props = defineProps<{
     nomor_akta: string
     nama_ppn_asli: string
     nama_ppn_palsu: string
+    tahun_ppn: string
     // tercatat_kepolisian fields
     ttl_suami: string
     pekerjaan_suami: string

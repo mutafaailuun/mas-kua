@@ -381,6 +381,7 @@ const reprintFormData = computed(() => {
     nomor_akta: fd.nomor_akta ?? '',
     nama_ppn_asli: fd.nama_ppn_asli ?? '',
     nama_ppn_palsu: fd.nama_ppn_palsu ?? '',
+    tahun_ppn: fd.tahun_ppn ?? '',
     ttl_suami: fd.ttl_suami ?? '',
     pekerjaan_suami: fd.pekerjaan_suami ?? '',
     alamat_suami: fd.alamat_suami ?? '',

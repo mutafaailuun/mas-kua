@@ -100,6 +100,25 @@
           </div>
         </div>
 
+        <!-- Surat Keterangan Nikah Siri dari Desa/Kel (opsional, untuk isbat) -->
+        <div v-if="form.jenis === 'tidak_tercatat_isbat'"
+          class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
+          <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            Surat Ket. Nikah Siri dari Desa/Kel
+            <span class="ml-1 text-xs font-normal text-gray-400 normal-case">(opsional)</span>
+          </h3>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Desa / Kelurahan</label>
+            <input v-model="form.instansi_surat_siri" type="text" placeholder="Desa Bantarjaya"
+              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Surat</label>
+            <input v-model="form.no_surat_siri" type="text" placeholder="474/001/Desa/V/2026"
+              class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+          </div>
+        </div>
+
         <!-- Nomor Akta Nikah (untuk tercatat standar) -->
         <div v-if="form.jenis === 'tercatat' || form.jenis === 'tercatat_terlambat'"
           class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
@@ -290,6 +309,8 @@ const form = reactive({
   tempat_nikah: '',
   nomor_register: '',
   nomor_akta: '',
+  no_surat_siri: '',
+  instansi_surat_siri: '',
   nama_ppn_palsu: '',
   nama_ppn_asli: '',
   tahun_ppn: '',

@@ -284,6 +284,21 @@
 				Agama Kecamatan Pebayuran Kabupaten Bekasi.
 			</div>
 			<div
+				v-if="form.no_surat_siri || form.instansi_surat_siri"
+				style="
+					text-align: justify;
+					text-indent: 2.5em;
+					line-height: 1.8;
+					margin-bottom: 14px;
+				"
+			>
+				Berdasarkan Surat Keterangan Nikah Siri dari
+				<strong>{{ form.instansi_surat_siri || '_______________' }}</strong>
+				Nomor <strong>{{ form.no_surat_siri || '_______________' }}</strong>,
+				diketahui bahwa pasangan tersebut telah melangsungkan pernikahan secara
+				agama (nikah siri) di luar pencatatan resmi.
+			</div>
+			<div
 				style="
 					text-align: justify;
 					text-indent: 2.5em;
@@ -472,6 +487,8 @@ const props = defineProps<{
 		tempat_nikah: string;
 		nomor_register: string;
 		nomor_akta: string;
+		no_surat_siri: string;
+		instansi_surat_siri: string;
 		nama_ppn_asli: string;
 		nama_ppn_palsu: string;
 		tahun_ppn: string;

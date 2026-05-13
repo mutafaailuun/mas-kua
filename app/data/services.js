@@ -9,6 +9,7 @@ export const services = ref([
       <ul class="list-disc list-inside space-y-2 mb-4">
         <li>FC KTP calon pengantin</li>
         <li>FC KK calon pengantin</li>
+        <li>Fotokopi KTP Saksi (2 orang)</li>
         <li>FC Akta kelahiran/Ijazah terakhir</li>
         <li>Surat keterangan untuk nikah (N1-N4)</li>
         <li>Surat keterangan sehat</li>

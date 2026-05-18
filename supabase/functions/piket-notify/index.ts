@@ -56,11 +56,32 @@ Deno.serve(async () => {
   const petugasList = JADWAL_PIKET[hariKe];
   const namaHari = HARI_ID[hariKe];
 
+  // Skip akhir pekan (Sabtu/Minggu)
   if (!petugasList) {
     return new Response(
-      JSON.stringify({ skipped: true, reason: "Hari libur, tidak ada piket." }),
+      JSON.stringify({ skipped: true, reason: "Akhir pekan, tidak ada piket." }),
       { headers: { "Content-Type": "application/json" } },
     );
+  }
+
+  // Cek hari libur nasional via libur.deno.dev
+  try {
+    const liburRes = await fetch("https://libur.deno.dev/api/today");
+    if (liburRes.ok) {
+      const liburData = await liburRes.json();
+      if (liburData.is_holiday) {
+        const namaLibur = liburData.holiday_list?.join(", ") ?? "Hari Libur";
+        console.log("Hari ini libur nasional, piket dilewati:", namaLibur);
+        return new Response(
+          JSON.stringify({ skipped: true, reason: `Hari libur nasional: ${namaLibur}` }),
+          { headers: { "Content-Type": "application/json" } },
+        );
+      }
+    } else {
+      console.warn("Gagal mengambil data libur, lanjutkan kirim notifikasi.");
+    }
+  } catch (err: any) {
+    console.warn("Error cek libur nasional, lanjutkan kirim notifikasi:", err.message);
   }
 
   const tgl = nowWib.getUTCDate();

@@ -53,10 +53,19 @@
           />
         </div>
 
+      </div>
+
+      <!-- Panel 10 Hari Kerja -->
+      <AdminHariKerjaPanel
+        :wedding-date="form.wedding_date"
+        :registration-date="form.registration_date"
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Groom -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Calon Suami</label>
-          <input 
+          <input
             v-model="form.groom_name"
             type="text"
             required
@@ -67,7 +76,7 @@
         <!-- Bride -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Calon Istri</label>
-          <input 
+          <input
             v-model="form.bride_name"
             type="text"
             required

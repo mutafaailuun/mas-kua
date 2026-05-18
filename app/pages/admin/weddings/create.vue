@@ -17,19 +17,19 @@
         <!-- Registration Date -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Pendaftaran</label>
-          <input 
+          <input
             v-model="form.registration_date"
             type="date"
             class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
-        
+
         <div class="hidden md:block"></div>
 
         <!-- Date -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Akad</label>
-          <input 
+          <input
             v-model="form.wedding_date"
             type="date"
             required
@@ -40,18 +40,26 @@
         <!-- Time -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Jam Akad</label>
-          <input 
+          <input
             v-model="form.wedding_time"
             type="time"
             required
             class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
         </div>
+      </div>
 
+      <!-- Panel 10 Hari Kerja -->
+      <AdminHariKerjaPanel
+        :wedding-date="form.wedding_date"
+        :registration-date="form.registration_date"
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Groom -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Calon Suami</label>
-          <input 
+          <input
             v-model="form.groom_name"
             type="text"
             required
@@ -63,7 +71,7 @@
         <!-- Bride -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Calon Istri</label>
-          <input 
+          <input
             v-model="form.bride_name"
             type="text"
             required

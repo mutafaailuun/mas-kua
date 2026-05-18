@@ -47,6 +47,39 @@
         </NuxtLink>
       </nav>
 
+      <!-- Widget 10 Hari Kerja -->
+      <div class="border-t border-gray-200 shrink-0" :class="collapsed ? 'p-2' : 'p-4'">
+        <div v-if="!collapsed" class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mb-3">
+          <p class="text-xs font-semibold text-emerald-700 mb-1 flex items-center gap-1">
+            <Icon name="lucide:calendar-check" class="w-3.5 h-3.5" />
+            10 Hari Kerja ke Depan
+          </p>
+          <p v-if="loadingHK" class="text-xs text-emerald-600 flex items-center gap-1">
+            <Icon name="lucide:loader-2" class="w-3 h-3 animate-spin" />
+            Menghitung...
+          </p>
+          <template v-else>
+            <p class="text-xs font-bold text-emerald-900">{{ hk10Hari }}</p>
+            <p class="text-xs text-emerald-600 mt-0.5">dari hari ini</p>
+          </template>
+        </div>
+        <div
+          v-else
+          class="flex justify-center group relative mb-2"
+        >
+          <button
+            class="p-1.5 rounded-md text-emerald-600 hover:bg-emerald-50 transition-colors"
+            title="10 Hari Kerja ke Depan"
+          >
+            <Icon name="lucide:calendar-check" class="w-5 h-5" />
+          </button>
+          <div class="absolute left-full ml-2 z-50 px-3 py-2 text-xs font-medium text-white bg-gray-800 rounded-md whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity leading-relaxed">
+            <p class="font-semibold mb-0.5">10 Hari Kerja ke Depan:</p>
+            <p>{{ loadingHK ? 'Menghitung...' : hk10Hari }}</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Logout -->
       <div class="border-t border-gray-200 shrink-0" :class="collapsed ? 'p-2' : 'p-4'">
         <button
@@ -91,12 +124,25 @@ const router = useRouter()
 
 const collapsed = ref(false)
 
+const { tambahHariKerja, formatTanggal } = useHariKerja()
+const loadingHK = ref(true)
+const hk10Hari = ref('')
+
+onMounted(async () => {
+  const today = new Date()
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+  const result = await tambahHariKerja(todayStr, 11)
+  hk10Hari.value = result ? formatTanggal(result) : '-'
+  loadingHK.value = false
+})
+
 const navItems = [
   { to: '/admin', icon: 'lucide:layout-dashboard', label: 'Dashboard', exact: true },
   { to: '/admin/articles', icon: 'lucide:file-text', label: 'Articles', exact: false },
   { to: '/admin/weddings', icon: 'lucide:heart', label: 'Jadwal Nikah', exact: true },
   { to: '/admin/weddings/dokumentasi', icon: 'lucide:camera', label: 'Dokumentasi Akad', exact: false },
   { to: '/admin/surat', icon: 'lucide:file-pen', label: 'Surat Menyurat', exact: false },
+  { to: '/admin/harikerja', icon: 'lucide:calendar-clock', label: '10 Hari Kerja', exact: true },
 ]
 
 supabase.auth.onAuthStateChange((event) => {

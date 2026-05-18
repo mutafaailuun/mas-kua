@@ -166,9 +166,9 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <span 
                   class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                  :class="wedding.status === 'Kantor' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'"
+                  :class="wedding.status.toLowerCase().startsWith('luar') || wedding.status.toLowerCase() === 'bedol' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'"
                 >
-                  {{ wedding.status }}
+                  {{ wedding.status.toLowerCase().startsWith('luar') || wedding.status.toLowerCase() === 'bedol' ? 'Luar Kantor' : 'Kantor' }}
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

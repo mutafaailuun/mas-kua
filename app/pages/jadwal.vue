@@ -100,7 +100,7 @@
                   v-for="(w, idx) in (weddingsByDate[dateString(day)] || []).slice(0, 2)"
                   :key="w.id"
                   class="text-[10px] leading-tight px-1 py-0.5 rounded truncate"
-                  :class="w.status.includes('Luar') ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
+                  :class="w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
                 >
                   {{ w.groom_name.split(' ')[0] }}
                 </div>
@@ -179,9 +179,9 @@
                   </div>
                   <span
                     class="inline-block mt-2 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                    :class="w.status.includes('Luar') ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
+                    :class="w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
                   >
-                    {{ w.status }}
+                    {{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'LUAR KANTOR' : 'KANTOR' }}
                   </span>
                 </div>
               </div>
@@ -252,9 +252,9 @@
               </div>
               <span
                 class="flex-shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full"
-                :class="w.status.includes('Luar') ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
+                :class="w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
               >
-                {{ w.status.includes('Luar') ? 'Luar' : 'Kantor' }}
+                {{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'Luar Kantor' : 'Kantor' }}
               </span>
             </div>
           </template>

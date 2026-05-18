@@ -210,12 +210,12 @@ const groupByDate = (weddings: Wedding[]) => {
 									<span
 										class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
 										:class="
-											w.status.toLowerCase() === 'kantor'
-												? 'bg-blue-100 text-blue-700'
-												: 'bg-amber-100 text-amber-700'
+											w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol'
+												? 'bg-amber-100 text-amber-700'
+												: 'bg-blue-100 text-blue-700'
 										"
 									>
-										{{ w.status.toLowerCase() === 'kantor' ? 'KANTOR' : 'LUAR / BEDOL' }}
+										{{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'LUAR KANTOR' : 'KANTOR' }}
 									</span>
 								</div>
 							</div>
@@ -278,12 +278,12 @@ const groupByDate = (weddings: Wedding[]) => {
 									<span
 										class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
 										:class="
-											w.status.toLowerCase() === 'kantor'
-												? 'bg-blue-100 text-blue-700'
-												: 'bg-amber-100 text-amber-700'
+											w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol'
+												? 'bg-amber-100 text-amber-700'
+												: 'bg-blue-100 text-blue-700'
 										"
 									>
-										{{ w.status.toLowerCase() === 'kantor' ? 'KANTOR' : 'LUAR / BEDOL' }}
+										{{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'LUAR KANTOR' : 'KANTOR' }}
 									</span>
 								</div>
 							</div>
@@ -382,7 +382,7 @@ const groupByDate = (weddings: Wedding[]) => {
 											<span
 												class="text-[10px] font-bold uppercase text-gray-400 border border-gray-200 px-1.5 py-0.5 rounded"
 											>
-												{{ w.status.toLowerCase() === 'kantor' ? 'Kantor' : 'Luar / Bedol' }}
+												{{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'Luar Kantor' : 'Kantor' }}
 											</span>
 										</div>
 									</div>

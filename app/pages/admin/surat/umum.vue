@@ -9,7 +9,7 @@
         <Icon name="lucide:arrow-left" class="w-4 h-4 mr-1" />
         Kembali ke Surat Menyurat
       </NuxtLink>
-      <h2 class="mt-3 text-2xl font-bold text-gray-900">Surat Keterangan Umum</h2>
+      <h2 class="mt-3 text-2xl font-bold text-gray-900">Surat Keterangan Tercatat/Tidak Tercatat</h2>
       <p class="mt-1 text-sm text-gray-500">Pilih jenis surat, isi form, preview akan muncul otomatis.</p>
     </div>
 

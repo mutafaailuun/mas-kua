@@ -33,7 +33,7 @@
             <Icon name="lucide:file-text" class="w-7 h-7" />
           </div>
           <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Surat Keterangan Umum</h3>
+            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Surat Keterangan Tercatat/Tidak Tercatat</h3>
             <p class="text-xs text-gray-500 mt-0.5">Berbagai surat keterangan (Kepolisian, BPJS, dsb.)</p>
           </div>
         </div>

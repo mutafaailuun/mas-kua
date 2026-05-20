@@ -14,7 +14,15 @@ async function fetchHariLiburTahun(year: number): Promise<Set<string>> {
       `https://libur.deno.dev/api?year=${year}`
     )
     // Masukkan semua tanggal: libur nasional DAN cuti bersama
-    const set = new Set(data.map(h => h.date.slice(0, 10)))
+    const set = new Set(
+      data
+        .filter(h => {
+          const d = new Date(h.date.slice(0, 10) + 'T00:00:00')
+          const day = d.getDay()
+          return day !== 0 && day !== 6
+        })
+        .map(h => h.date.slice(0, 10))
+    )
     holidayCache.set(year, set)
     return set
   } catch {

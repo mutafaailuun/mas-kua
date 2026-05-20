@@ -249,10 +249,12 @@ async function ambilLiburDiRange(from: string, to: string) {
     }
   }
 
-  // Filter hanya yang masuk di range
+  // Filter hanya yang masuk di range DAN jatuh di hari kerja (Senin–Jumat)
   liburDipakai.value = allData.filter(h => {
     const d = h.date.slice(0, 10)
-    return d > from && d <= to
+    if (d <= from || d > to) return false
+    const day = new Date(d + 'T00:00:00').getDay()
+    return day !== 0 && day !== 6
   }).sort((a, b) => a.date.localeCompare(b.date))
 }
 

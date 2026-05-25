@@ -16,8 +16,8 @@ export const services = ref([
         <li>Pas foto 2x3 (4 lembar)</li>
         <li>Pas foto 4x6 (2 lembar)</li>
         <li>Surat Dispensasi Pengadilan Agama (Bagi Catin Berusia dibawah 19 tahun) </li>
-        <li>Surat Pernyataan Belum Menikah bagi Jejaka/Perawan <a class='text-blue-700 font-bold' target='_blank' href='https://drive.google.com/file/d/1HX60mlmP1BmKAqen4RDJo96ldnr6PQPG/preview?usp=sharing'><span'>[Download]</span></a></li>
-        <li>Surat Pernyataan Wali Nikah <a class='text-blue-700 font-bold' target='_blank' href='https://drive.google.com/file/d/18w2nfl-4zpm6KPAoaDZOjdXD8_gkZWWK/preview?usp=sharing'><span'>[Download]</span></a></li>
+        <li>Surat Pernyataan Belum Menikah bagi Jejaka/Perawan <a class='text-blue-700 font-bold' target='_blank' href='/surat_pernyataan_belum_menikah.pdf'><span>[Download]</span></a></li>
+        <li>Surat Pernyataan Wali Nikah <a class='text-blue-700 font-bold' target='_blank' href='/surat_pernyataan_wali.pdf'><span>[Download]</span></a></li>
         <li>Surat Akta Cerai (Bagi Catin duda/janda cerai hidup)</li>
         <li>Surat Izin Komandan (Bagi calon pengantin TNI atau POLRI</li>
         <li>Surat Izin Kedutaan Bagi WNA</li>

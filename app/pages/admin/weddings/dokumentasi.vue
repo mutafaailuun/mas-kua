@@ -93,6 +93,7 @@
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Istri</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Akad</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Petugas</th>
               <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
               <th class="px-4 py-3 w-12"></th>
             </tr>
@@ -173,6 +174,19 @@
                   <option value="Luar Kantor">Luar Kantor</option>
                 </select>
               </td>
+
+              <!-- Petugas -->
+              <td class="px-2 py-1.5">
+                <input
+                  :value="wedding.petugas ?? ''"
+                  @blur="e => saveEdit(wedding, 'petugas', (e.target as HTMLInputElement).value)"
+                  @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
+                  @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
+                  placeholder="—"
+                  class="w-32 px-2 py-1 text-sm text-gray-700 rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors placeholder-gray-300"
+                />
+              </td>
+
               <td class="px-4 py-3 text-center">
                 <span
                   class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full"
@@ -685,7 +699,7 @@ const closeMenu = () => {
 }
 
 // ── Inline edit ──────────────────────────────────────────────────
-type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status'
+type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status' | 'petugas'
 
 // Fields that must not be empty
 const REQUIRED_FIELDS: WeddingField[] = ['groom_name', 'bride_name', 'wedding_date', 'status']
@@ -933,6 +947,7 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
   const tanggal = formatTanggalUpper(wedding.wedding_date)
   const noAkta = wedding.no_akta || '___________________________'
   const noPendaftaran = wedding.no_pendaftaran || '___________________________'
+  const petugas = wedding.petugas || '___________________________'
 
   const photoHtml = photos.length > 0
     ? `<div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px;">
@@ -977,6 +992,11 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
           <td>TANGGAL AKAD</td>
           <td style="padding:0 10px;">:</td>
           <td style="font-weight:bold;">${tanggal}</td>
+        </tr>
+        <tr>
+          <td>PETUGAS</td>
+          <td style="padding:0 10px;">:</td>
+          <td style="font-weight:bold;">${petugas}</td>
         </tr>
       </table>
       ${photoHtml}

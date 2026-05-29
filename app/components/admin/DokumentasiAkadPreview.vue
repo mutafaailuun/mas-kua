@@ -43,6 +43,11 @@
           <td style="padding: 1px 10px; vertical-align: top;">:</td>
           <td style="vertical-align: top; font-weight: bold;">{{ formatTanggal(wedding.wedding_date) }}</td>
         </tr>
+        <tr>
+          <td style="vertical-align: top; padding: 1px 0;">PETUGAS</td>
+          <td style="padding: 1px 10px; vertical-align: top;">:</td>
+          <td style="vertical-align: top; font-weight: bold;">{{ wedding.petugas || '__________' }}</td>
+        </tr>
       </tbody>
     </table>
 
@@ -90,6 +95,7 @@ const props = defineProps<{
     status: string
     no_pendaftaran?: string | null
     no_akta?: string | null
+    petugas?: string | null
   }
   photos: WeddingPhoto[]
 }>()

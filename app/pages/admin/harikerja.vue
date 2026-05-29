@@ -4,7 +4,7 @@
       <h2 class="text-2xl font-bold text-gray-900">Kalkulator Hari Kerja</h2>
       <p class="mt-1 text-sm text-gray-500">
         Menghitung hari kerja berdasarkan hari libur nasional & cuti bersama Indonesia.
-        Syarat minimum: <strong>11 hari kerja</strong> (10 hari kerja + 1 hari pengaman).
+        Syarat minimum: <strong>10 hari kerja</strong>.
       </p>
     </div>
 
@@ -138,10 +138,10 @@
             <strong>{{ hasilValidasi.jumlah }} hari kerja</strong>
           </p>
           <p v-if="!hasilValidasi.ok" class="text-xs mt-1 text-red-500">
-            Kurang {{ 11 - hasilValidasi.jumlah }} hari kerja dari syarat minimum 11 hari kerja (10+1). Perlu dispensasi.
+            Kurang {{ 10 - hasilValidasi.jumlah }} hari kerja dari syarat minimum 10 hari kerja. Perlu dispensasi.
           </p>
           <p v-else class="text-xs mt-1 text-green-600">
-            Memenuhi syarat minimum 11 hari kerja (10+1) sebelum akad.
+            Memenuhi syarat minimum 10 hari kerja sebelum akad.
           </p>
         </div>
       </template>
@@ -263,9 +263,9 @@ async function hitungDariDaftar() {
   loading.value = true
   hasilDaftar.value = null
   try {
-    const result = await tambahHariKerja(inputDaftar.value, 11)
+    const result = await tambahHariKerja(inputDaftar.value, 10)
     if (result) {
-      hasilDaftar.value = buatHasil(result, '11 hari kerja (10+1) dihitung maju')
+      hasilDaftar.value = buatHasil(result, '10 hari kerja dihitung maju')
       await ambilLiburDiRange(inputDaftar.value, result.toISOString().slice(0, 10))
     }
   } finally {
@@ -278,9 +278,9 @@ async function hitungDariAkad() {
   loading.value = true
   hasilAkad.value = null
   try {
-    const result = await kurangHariKerja(inputAkad.value, 11)
+    const result = await kurangHariKerja(inputAkad.value, 10)
     if (result) {
-      hasilAkad.value = buatHasil(result, '11 hari kerja (10+1) dihitung mundur dari tanggal akad')
+      hasilAkad.value = buatHasil(result, '10 hari kerja dihitung mundur dari tanggal akad')
       await ambilLiburDiRange(result.toISOString().slice(0, 10), inputAkad.value)
     }
   } finally {
@@ -294,7 +294,7 @@ async function hitungValidasi() {
   hasilValidasi.value = null
   try {
     const jumlah = await hitungHariKerja(inputValidDaftar.value, inputValidAkad.value)
-    hasilValidasi.value = { ok: jumlah >= 11, jumlah }
+    hasilValidasi.value = { ok: jumlah >= 10, jumlah }
     const start = inputValidDaftar.value < inputValidAkad.value ? inputValidDaftar.value : inputValidAkad.value
     const end = inputValidDaftar.value < inputValidAkad.value ? inputValidAkad.value : inputValidDaftar.value
     await ambilLiburDiRange(start, end)

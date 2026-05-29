@@ -3,7 +3,7 @@
     <div class="flex items-start gap-3">
       <Icon name="lucide:calendar-clock" class="w-5 h-5 shrink-0 mt-0.5" :class="iconClass" />
       <div class="text-sm w-full">
-        <p class="font-semibold mb-2" :class="titleClass">Pengecekan 11 Hari Kerja (10+1)</p>
+        <p class="font-semibold mb-2" :class="titleClass">Pengecekan 10 Hari Kerja</p>
 
         <div v-if="loading" class="flex items-center gap-2 text-gray-500">
           <Icon name="lucide:loader-2" class="w-4 h-4 animate-spin" />
@@ -24,7 +24,7 @@
               Pendaftaran valid — {{ hariKerjaHitung }} hari kerja sebelum akad
             </span>
             <span v-else>
-              Baru {{ hariKerjaHitung }} hari kerja — kurang dari min. 11 hari kerja (perlu dispensasi)
+              Baru {{ hariKerjaHitung }} hari kerja — kurang dari min. 10 hari kerja (perlu dispensasi)
             </span>
           </div>
           <div v-else class="mt-1 text-xs text-gray-400">
@@ -48,7 +48,7 @@ const loading = ref(false)
 const batasPendaftaranStr = ref('')
 const hariKerjaHitung = ref(0)
 
-const validasiOk = computed(() => hariKerjaHitung.value >= 11)
+const validasiOk = computed(() => hariKerjaHitung.value >= 10)
 
 const panelClass = computed(() => {
   if (!props.registrationDate) return 'bg-blue-50 border-blue-200'
@@ -74,7 +74,7 @@ watch(
   async (val) => {
     if (!val) { batasPendaftaranStr.value = ''; return }
     loading.value = true
-    const batas = await kurangHariKerja(val, 11)
+    const batas = await kurangHariKerja(val, 10)
     batasPendaftaranStr.value = batas ? formatTanggal(batas) : '-'
     if (props.registrationDate) {
       hariKerjaHitung.value = await hitungHariKerja(props.registrationDate, val)

@@ -83,6 +83,25 @@
         </div>
       </NuxtLink>
 
+      <NuxtLink to="/admin/surat/keabsahan-buku-nikah"
+        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-lg bg-sky-50 text-sky-600 group-hover:bg-sky-100 transition-colors">
+            <Icon name="lucide:shield-check" class="w-7 h-7" />
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Keabsahan Buku Nikah</h3>
+            <p class="text-xs text-gray-500 mt-0.5">Surat permohonan keterangan keabsahan akta nikah</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          Surat permohonan untuk meminta keterangan tentang keabsahan Kutipan Akta Nikah yang dialamatkan ke KUA tertentu.
+        </p>
+        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
+          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+        </div>
+      </NuxtLink>
+
       <NuxtLink to="/admin/surat/bimwin"
         class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
         <div class="flex items-center gap-4">

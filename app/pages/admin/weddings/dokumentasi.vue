@@ -178,8 +178,8 @@
               <!-- Penghulu -->
               <td class="px-2 py-1.5">
                 <input
-                  :value="wedding.penghulu ?? ''"
-                  @blur="e => saveEdit(wedding, 'penghulu', (e.target as HTMLInputElement).value)"
+                  :value="wedding.officiant_name ?? ''"
+                  @blur="e => saveEdit(wedding, 'officiant_name', (e.target as HTMLInputElement).value)"
                   @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
                   @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
                   placeholder="—"
@@ -699,7 +699,7 @@ const closeMenu = () => {
 }
 
 // ── Inline edit ──────────────────────────────────────────────────
-type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status' | 'penghulu'
+type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status' | 'officiant_name'
 
 // Fields that must not be empty
 const REQUIRED_FIELDS: WeddingField[] = ['groom_name', 'bride_name', 'wedding_date', 'status']
@@ -947,7 +947,7 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
   const tanggal = formatTanggalUpper(wedding.wedding_date)
   const noAkta = wedding.no_akta || '___________________________'
   const noPendaftaran = wedding.no_pendaftaran || '___________________________'
-  const penghulu = wedding.penghulu || '___________________________'
+  const officiant_name = wedding.officiant_name || '___________________________'
 
   const photoHtml = photos.length > 0
     ? `<div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px;">
@@ -996,7 +996,7 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
         <tr>
           <td>PENGHULU</td>
           <td style="padding:0 10px;">:</td>
-          <td style="font-weight:bold;">${penghulu}</td>
+          <td style="font-weight:bold;">${officiant_name}</td>
         </tr>
       </table>
       ${photoHtml}

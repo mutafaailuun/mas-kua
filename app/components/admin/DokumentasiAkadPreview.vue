@@ -46,7 +46,7 @@
         <tr>
           <td style="vertical-align: top; padding: 1px 0;">PENGHULU</td>
           <td style="padding: 1px 10px; vertical-align: top;">:</td>
-          <td style="vertical-align: top; font-weight: bold;">{{ wedding.penghulu || '__________' }}</td>
+          <td style="vertical-align: top; font-weight: bold;">{{ wedding.officiant_name || '__________' }}</td>
         </tr>
       </tbody>
     </table>
@@ -95,7 +95,7 @@ const props = defineProps<{
     status: string
     no_pendaftaran?: string | null
     no_akta?: string | null
-    penghulu?: string | null
+    officiant_name?: string | null
   }
   photos: WeddingPhoto[]
 }>()

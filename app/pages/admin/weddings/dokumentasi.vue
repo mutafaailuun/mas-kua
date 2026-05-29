@@ -93,7 +93,7 @@
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Istri</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Akad</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Petugas</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penghulu</th>
               <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
               <th class="px-4 py-3 w-12"></th>
             </tr>
@@ -175,11 +175,11 @@
                 </select>
               </td>
 
-              <!-- Petugas -->
+              <!-- Penghulu -->
               <td class="px-2 py-1.5">
                 <input
-                  :value="wedding.petugas ?? ''"
-                  @blur="e => saveEdit(wedding, 'petugas', (e.target as HTMLInputElement).value)"
+                  :value="wedding.penghulu ?? ''"
+                  @blur="e => saveEdit(wedding, 'penghulu', (e.target as HTMLInputElement).value)"
                   @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
                   @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
                   placeholder="—"
@@ -699,7 +699,7 @@ const closeMenu = () => {
 }
 
 // ── Inline edit ──────────────────────────────────────────────────
-type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status' | 'petugas'
+type WeddingField = 'no_pendaftaran' | 'no_akta' | 'groom_name' | 'bride_name' | 'wedding_date' | 'status' | 'penghulu'
 
 // Fields that must not be empty
 const REQUIRED_FIELDS: WeddingField[] = ['groom_name', 'bride_name', 'wedding_date', 'status']
@@ -947,7 +947,7 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
   const tanggal = formatTanggalUpper(wedding.wedding_date)
   const noAkta = wedding.no_akta || '___________________________'
   const noPendaftaran = wedding.no_pendaftaran || '___________________________'
-  const petugas = wedding.petugas || '___________________________'
+  const penghulu = wedding.penghulu || '___________________________'
 
   const photoHtml = photos.length > 0
     ? `<div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px;">
@@ -994,9 +994,9 @@ const buildPageHtml = (wedding: any, photos: any[]) => {
           <td style="font-weight:bold;">${tanggal}</td>
         </tr>
         <tr>
-          <td>PETUGAS</td>
+          <td>PENGHULU</td>
           <td style="padding:0 10px;">:</td>
-          <td style="font-weight:bold;">${petugas}</td>
+          <td style="font-weight:bold;">${penghulu}</td>
         </tr>
       </table>
       ${photoHtml}

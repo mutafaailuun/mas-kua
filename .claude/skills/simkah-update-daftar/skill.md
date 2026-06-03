@@ -5,7 +5,9 @@ description: "Ambil data pendaftaran nikah terbaru dari SIMKAH dan sync ke datab
 
 # Skill: Update Daftar Pendaftaran dari SIMKAH
 
-Tugas: Login ke SIMKAH, buka halaman Daftar Nikah, scrape data terbaru, POST ke `/api/simkah/sync` dengan mode `daftar`.
+Tugas: Login ke SIMKAH, buka **Laporan → Laporan Pendaftaran Nikah**, scrape data per bulan, POST ke `/api/simkah/sync` dengan mode `daftar`.
+
+> ⚠️ Sumber data: **Laporan → Laporan Pendaftaran Nikah** (bukan Pencatatan Nikah → Daftar Nikah)
 
 ## Langkah-langkah
 
@@ -14,95 +16,114 @@ Tugas: Login ke SIMKAH, buka halaman Daftar Nikah, scrape data terbaru, POST ke 
 grep -E "SIMKAH_USERNAME|SIMKAH_PASSWORD|SIMKAH_URL" /Users/Jaliel/Dev/mas-kua/.env
 ```
 
-### 2. Cek tanggal sync terakhir
-Cek `no_pendaftaran` terbaru di DB untuk tahu mulai dari mana scraping:
+### 2. Cek data terbaru di DB
 ```bash
 SUPABASE_ACCESS_TOKEN=$(grep SUPABASE_ACCESS_TOKEN /Users/Jaliel/Dev/mas-kua/.env | cut -d= -f2) \
 supabase db query --linked --workdir /Users/Jaliel/Dev/mas-kua \
-  "SELECT registration_date FROM weddings ORDER BY registration_date DESC LIMIT 1;"
+  "SELECT COUNT(*) as total, MAX(no_pendaftaran) as last_no FROM weddings;"
 ```
 
-### 3. Buka browser dan navigasi ke SIMKAH
-- Gunakan `mcp__Claude_in_Chrome__tabs_context_mcp` untuk cek tab yang ada
-- Jika sudah ada tab SIMKAH yang sudah login (URL mengandung UUID dashboard), langsung ke langkah 5
-- Jika belum, buka tab baru dengan `mcp__Claude_in_Chrome__tabs_create_mcp`
-- Navigate ke `https://simkah4.kemenag.go.id/admin/authentication`
+### 3. Buka browser dan cek sesi SIMKAH
+- Gunakan `mcp__Claude_in_Chrome__tabs_context_mcp` untuk cek tab
+- Jika tab SIMKAH sudah login (URL mengandung UUID), langsung ke langkah 5
+- Jika belum, buat tab baru → navigate ke `https://simkah4.kemenag.go.id/admin/authentication`
 
-### 4. Login
-- Isi field Email/Username dengan `SIMKAH_USERNAME` dari .env
-- Isi field Password dengan `SIMKAH_PASSWORD` dari .env
-- Klik tombol MASUK
-- Tunggu 3 detik hingga dashboard muncul (URL berubah ke UUID)
-- Jika ada popup notifikasi, klik "OK, SAYA MENGERTI !"
+### 4. Login (jika belum)
+- Isi Email/Username: `SIMKAH_USERNAME` dari .env
+- Isi Password: `SIMKAH_PASSWORD` dari .env
+- Klik **MASUK**, tunggu 3 detik
+- Jika ada popup, klik **"OK, SAYA MENGERTI !"**
 
-### 5. Navigasi ke Daftar Nikah
-- Klik menu **Pencatatan Nikah** di sidebar (ada arrow expand di kiri)
-- Klik submenu **Daftar Nikah**
+### 5. Navigasi ke Laporan Pendaftaran Nikah
+- Klik menu **Laporan** di sidebar (expand dengan klik arrow kiri)
+- Klik submenu **Laporan Pendaftaran Nikah**
 
-### 6. Filter data terbaru
-- Isi field **Tgl Akad Dari** dengan tanggal hari ini (format dd/mm/yyyy)
-  - Gunakan tanggal hari ini untuk ambil semua yang akan datang
-  - ATAU kosongkan filter untuk ambil semua data baru sejak sync terakhir
-- Klik tombol **Tampilkan**
-- Tunggu tabel load
+### 6. Loop per bulan — ambil data dari bulan ini + beberapa bulan ke depan
+Untuk setiap bulan yang perlu di-sync (minimal: bulan ini + 3 bulan ke depan):
 
-### 7. Scrape semua halaman
-Jalankan JavaScript berikut di browser untuk scrape halaman saat ini:
+a. Pastikan filter **Tahun** dan **Bulan** sudah sesuai (default sudah terisi bulan/tahun sekarang)
+b. Klik tombol hijau **Lihat Data**
+c. Tunggu 2 detik hingga tabel load
+d. Jalankan JavaScript scraping berikut:
 
 ```javascript
-// Scrape semua baris data dari DevExtreme grid
+// Laporan Pendaftaran Nikah — mapping kolom (verified 2026-06-03):
+// [0]=No [1]=Provinsi [2]=Kab [3]=Kec [4]=KUA
+// [5]=Nomor Daftar [6]=Tanggal Daftar
+// [7]=Nama Suami [8]=Nama Istri
+// [9]=NIK Suami [10]=NIK Istri
+// [11]=Alamat Suami [12]=Alamat Istri
+// [13]=Kontak Suami [14]=Email Suami [15]=Kontak Istri [16]=Email Istri
+// [17]=Jenis Wali [18]=Nama Wali [19]=Pekerjaan Wali [20]=Alamat Wali
+// [21]=Hari Akad [22]=Tanggal Akad [23]=Jam Akad [24]=Nikah Di
+// [25]=Penghulu [26]=Nomor Akta [27]=...
+
 function scrapeCurrentPage() {
   const rows = document.querySelectorAll('.dx-data-row');
   const data = [];
   rows.forEach(row => {
     const cells = row.querySelectorAll('td');
-    if (cells.length >= 11) {
-      const noDaftar = cells[2]?.innerText?.trim();
-      if (noDaftar && noDaftar.startsWith('ND')) {
-        data.push({
-          no_daftar: noDaftar,
-          created_at: cells[3]?.innerText?.trim(),
-          nama_suami: cells[5]?.innerText?.trim(),
-          nama_istri: cells[7]?.innerText?.trim(),
-          tgl_akad: cells[8]?.innerText?.trim(),
-          jam_akad: cells[9]?.innerText?.trim(),
-          lokasi_akad: cells[10]?.innerText?.trim(),
-          nikah_di: cells[10]?.innerText?.includes('KUA') || cells[10]?.innerText?.includes('KANTOR') ? 1 : 2,
-        });
-      }
-    }
+    if (cells.length < 25) return;
+    const no_daftar = cells[5]?.innerText?.trim();
+    if (!no_daftar || !no_daftar.startsWith('ND')) return;
+    const nikahDiText = cells[24]?.innerText?.trim() || '';
+    data.push({
+      no_daftar,
+      created_at:  cells[6]?.innerText?.trim(),   // Tanggal Daftar DD-MM-YYYY
+      nama_suami:  cells[7]?.innerText?.trim(),
+      nama_istri:  cells[8]?.innerText?.trim(),
+      tgl_akad:    cells[22]?.innerText?.trim(),  // Tanggal Akad DD-MM-YYYY
+      jam_akad:    cells[23]?.innerText?.trim(),  // "10:00 AM"
+      lokasi_akad: cells[11]?.innerText?.trim(),  // Alamat Suami sebagai lokasi
+      nikah_di:    (nikahDiText.includes('LUAR') || nikahDiText.includes('BEDOL')) ? 2 : 1,
+      no_akta:     cells[26]?.innerText?.trim() || null,
+    });
   });
-  return data;
+  const pageInfo = document.querySelector('.dx-pages')?.innerText || '';
+  return { data, pageInfo, total: rows.length };
 }
-
-// Cek info pagination
-const pageInfo = document.querySelector('.dx-page-sizes')?.parentElement?.innerText || '';
-JSON.stringify({ data: scrapeCurrentPage(), pageInfo });
+JSON.stringify(scrapeCurrentPage());
 ```
 
-- Catat hasil scraping
-- Cek apakah ada tombol "Next" atau halaman berikutnya (cek `pageInfo`)
-- Jika ada halaman berikutnya: klik tombol next page, tunggu load, ulangi scraping
-- Kumpulkan semua data dari semua halaman
+e. Jika ada halaman berikutnya (`pageInfo` menunjukkan "Page 1 of N"):
+   - Klik tombol next page (▶ atau angka halaman berikutnya)
+   - Tunggu load, ulangi scraping
+f. Kumpulkan semua data dari bulan ini
 
-### 8. POST ke API lokal
-Setelah semua data terkumpul, kirim ke API:
+g. Untuk pindah ke bulan berikutnya:
+   - Klik field **Bulan**, ganti ke bulan berikutnya
+   - Ulangi dari langkah b
 
+### 7. Kirim data ke database
+
+**Opsi A — jika dev server aktif (localhost:3000):**
 ```bash
 curl -s -X POST http://localhost:3000/api/simkah/sync \
   -H "Content-Type: application/json" \
-  -d '{"mode":"daftar","records":[...DATA...]}'
+  -d '{"mode":"daftar","records":[...SEMUA_DATA...]}'
 ```
 
-Ganti `[...DATA...]` dengan array JSON hasil scraping.
+**Opsi B — jika server tidak aktif, insert langsung via Supabase CLI:**
+```bash
+SUPABASE_ACCESS_TOKEN=$(grep SUPABASE_ACCESS_TOKEN /Users/Jaliel/Dev/mas-kua/.env | cut -d= -f2)
+# Jalankan SQL INSERT dengan data yang sudah di-parse dari scraping
+# Format tanggal: DD-MM-YYYY → YYYY-MM-DD (balik urutan)
+# nikah_di: LUAR/BEDOL → 'Luar Kantor', lainnya → 'Kantor'
+supabase db query --linked --workdir /Users/Jaliel/Dev/mas-kua "
+INSERT INTO public.weddings (no_pendaftaran, registration_date, wedding_date, wedding_time, groom_name, bride_name, location, status)
+VALUES (...) ON CONFLICT (no_pendaftaran) DO NOTHING
+RETURNING no_pendaftaran, groom_name, wedding_date;
+"
+```
 
-### 9. Tampilkan hasil
-Cetak ringkasan: berapa inserted, skipped, dan jika ada error.
+### 8. Tampilkan hasil
+Cetak ringkasan: total inserted, skipped (sudah ada), dan error jika ada.
 
 ## Catatan Penting
-- SIMKAH pakai SPA (Single Page App) — URL dashboard adalah UUID, bukan path readable
-- DevExtreme DataGrid: selector `.dx-data-row` untuk baris data
-- Pagination info ada di elemen dengan class `.dx-page-sizes`
-- Jika sesi expired (redirect ke login), ulangi dari langkah 4
-- Field `nikah_di`: 1 = Kantor KUA, 2 = Luar Kantor
-- Format tanggal SIMKAH: `DD-MM-YYYY` — API sudah handle konversi
+- **Sumber**: Laporan → Laporan Pendaftaran Nikah (filter per tahun/bulan)
+- **DevExtreme DataGrid**: selector `.dx-data-row` untuk baris, `.dx-pages` untuk info pagination
+- **Kolom index di-verify 2026-06-03** — jika ada perubahan layout, re-check dengan JS
+- **`nikah_di`**: parse dari teks "LUAR KUA / BEDOL" → 2, selain itu → 1
+- **Format tanggal**: DD-MM-YYYY → API sudah handle konversi ke YYYY-MM-DD
+- **Sesi expired**: jika redirect ke login, ulangi dari langkah 4
+- **Bulan yang perlu di-sync**: minimal bulan ini + 3 bulan ke depan untuk data mendatang

@@ -143,6 +143,7 @@ const navItems = [
   { to: '/admin/weddings/dokumentasi', icon: 'lucide:camera', label: 'Dokumentasi Akad', exact: false },
   { to: '/admin/surat', icon: 'lucide:file-pen', label: 'Surat Menyurat', exact: false },
   { to: '/admin/harikerja', icon: 'lucide:calendar-clock', label: '10 Hari Kerja', exact: true },
+  { to: '/admin/simkah', icon: 'lucide:refresh-cw', label: 'Sync SIMKAH', exact: true },
 ]
 
 supabase.auth.onAuthStateChange((event) => {

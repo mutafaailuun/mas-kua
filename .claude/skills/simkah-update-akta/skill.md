@@ -97,22 +97,41 @@ Dari data yang sudah terkumpul, pisahkan:
 { "no_pendaftaran": "ND...", "penghulu_hadir": "Drs. ...", "no_akta_nikah": "..." }
 ```
 
-### 8. POST ke API lokal — mode akta
+### 8. Update database
+
+**Opsi A — jika dev server aktif (localhost:3000):**
 ```bash
+# Mode akta
 curl -s -X POST http://localhost:3000/api/simkah/sync \
   -H "Content-Type: application/json" \
   -d '{"mode":"akta","records":[...AKTA_RECORDS...]}'
-```
 
-### 9. POST ke API lokal — mode penghulu
-```bash
+# Mode penghulu
 curl -s -X POST http://localhost:3000/api/simkah/sync \
   -H "Content-Type: application/json" \
   -d '{"mode":"penghulu","records":[...PENGHULU_RECORDS...]}'
 ```
 
-### 10. Tampilkan hasil
-Cetak ringkasan kedua request: updated akta, updated penghulu, skipped, error.
+**Opsi B — jika server tidak aktif, update langsung via Supabase CLI (LEBIH EFISIEN):**
+```bash
+SUPABASE_ACCESS_TOKEN=$(grep SUPABASE_ACCESS_TOKEN /Users/Jaliel/Dev/mas-kua/.env | cut -d= -f2) \
+supabase db query --linked --workdir /Users/Jaliel/Dev/mas-kua "
+UPDATE public.weddings AS w
+SET
+  no_akta        = v.no_akta,
+  officiant_name = v.penghulu
+FROM (VALUES
+  ('ND...', '3216131...', 'Nama Penghulu'),
+  ('ND...', '3216131...', 'Nama Penghulu')
+) AS v(no_pendaftaran, no_akta, penghulu)
+WHERE w.no_pendaftaran = v.no_pendaftaran
+RETURNING w.no_pendaftaran, w.no_akta, w.officiant_name;
+"
+```
+> ⚠️ Escape tanda kutip tunggal dalam nama dengan `''` (dua kutip), contoh: `'Drs. MA''MUN NAWAWI'`
+
+### 9. Tampilkan hasil
+Cetak ringkasan: total updated (akta + penghulu), berapa yang tidak ditemukan di DB (no match).
 
 ## Catatan Penting
 - **Laporan Excel hanya menampilkan nikah yang sudah selesai** (sudah akad) — cocok untuk update akta

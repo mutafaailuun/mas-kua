@@ -42,7 +42,7 @@ const props = defineProps<{
   registrationDate: string
 }>()
 
-const { tambahHariKerja, kurangHariKerja, hitungHariKerja, formatTanggal } = useHariKerja()
+const { kurangHariKerja, hitungHariKerja, formatTanggal } = useHariKerja()
 
 const loading = ref(false)
 const batasPendaftaranStr = ref('')
@@ -69,26 +69,30 @@ const statusClass = computed(() =>
   validasiOk.value ? 'text-green-700' : 'text-red-600'
 )
 
+let latestCallId = 0
+
 watch(
-  () => props.weddingDate,
-  async (val) => {
-    if (!val) { batasPendaftaranStr.value = ''; return }
+  [() => props.weddingDate, () => props.registrationDate],
+  async ([weddingDate, registrationDate]) => {
+    const callId = ++latestCallId
+    if (!weddingDate) {
+      batasPendaftaranStr.value = ''
+      hariKerjaHitung.value = 0
+      return
+    }
     loading.value = true
-    const batas = await kurangHariKerja(val, 10)
+    const batas = await kurangHariKerja(weddingDate, 10)
+    if (callId !== latestCallId) return
     batasPendaftaranStr.value = batas ? formatTanggal(batas) : '-'
-    if (props.registrationDate) {
-      hariKerjaHitung.value = await hitungHariKerja(props.registrationDate, val)
+    if (registrationDate) {
+      const count = await hitungHariKerja(registrationDate, weddingDate)
+      if (callId !== latestCallId) return
+      hariKerjaHitung.value = count
+    } else {
+      hariKerjaHitung.value = 0
     }
     loading.value = false
   },
   { immediate: true }
-)
-
-watch(
-  () => props.registrationDate,
-  async (val) => {
-    if (!val || !props.weddingDate) { hariKerjaHitung.value = 0; return }
-    hariKerjaHitung.value = await hitungHariKerja(val, props.weddingDate)
-  }
 )
 </script>

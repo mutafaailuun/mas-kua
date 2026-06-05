@@ -49,6 +49,23 @@
             </div>
           </div>
 
+          <!-- Nama Tujuan Undangan -->
+          <div class="pt-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Tujuan Undangan</label>
+            <div class="space-y-2">
+              <div>
+                <label class="block text-xs text-gray-500 mb-0.5">Catin Pria</label>
+                <input v-model="form.nama_catin_pria" type="text" placeholder="Nama Calon Suami"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 uppercase" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-0.5">Catin Wanita</label>
+                <input v-model="form.nama_catin_wanita" type="text" placeholder="Nama Calon Isteri"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 uppercase" />
+              </div>
+            </div>
+          </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Kepala / Penanda Tangan</label>
             <select v-model="form.kepala" @change="autoNip"
@@ -258,6 +275,8 @@ const form = reactive({
   kepala: "Drs. H. Ma'mun Nawawi",
   nip: '196705051998031001',
   jumlah_baris: 15,
+  nama_catin_pria: '',
+  nama_catin_wanita: '',
 })
 
 const pasangan = reactive<Array<{ nama_suami: string; nama_istri: string; tanggal_nikah: string; alamat: string }>>([])
@@ -332,6 +351,9 @@ const openPrintWindow = (html: string, landscape = false) => {
 const printUndangan = () => {
   const html = undanganPrintRef.value?.innerHTML
   if (!html) return
+  console.log(`[Cetak Undangan BIMWIN] ${nomorSurat.value}`)
+  console.log(`  Catin Pria  : ${form.nama_catin_pria || '(kosong)'}`)
+  console.log(`  Catin Wanita: ${form.nama_catin_wanita || '(kosong)'}`)
   openPrintWindow(html, false)
 }
 

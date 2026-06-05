@@ -45,8 +45,8 @@
     <div style="margin-bottom: 14px; line-height: 1.9;">
       <div>Kepada Yth.</div>
       <div>Saudara/i Calon Pengantin:</div>
-      <div style="margin-left: 0.5em;">1. _______________________________</div>
-      <div style="margin-left: 0.5em;">2. _______________________________</div>
+      <div style="margin-left: 0.5em;">1. {{ form.nama_catin_pria || '_______________________________' }}</div>
+      <div style="margin-left: 0.5em;">2. {{ form.nama_catin_wanita || '_______________________________' }}</div>
       <div>di Tempat</div>
     </div>
 
@@ -119,6 +119,8 @@ const props = defineProps<{
     nip: string
     jam_bimwin: string
     tanggal_bimwin_raw: string
+    nama_catin_pria: string
+    nama_catin_wanita: string
   }
   nomorSurat: string
   tanggalSuratFormatted: string

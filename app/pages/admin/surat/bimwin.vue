@@ -56,12 +56,12 @@
               <div>
                 <label class="block text-xs text-gray-500 mb-0.5">Catin Pria</label>
                 <input v-model="form.nama_catin_pria" type="text" placeholder="Nama Calon Suami"
-                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 uppercase" />
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400" />
               </div>
               <div>
                 <label class="block text-xs text-gray-500 mb-0.5">Catin Wanita</label>
                 <input v-model="form.nama_catin_wanita" type="text" placeholder="Nama Calon Isteri"
-                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 uppercase" />
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400" />
               </div>
             </div>
           </div>

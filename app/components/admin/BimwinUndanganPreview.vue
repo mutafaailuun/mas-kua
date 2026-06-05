@@ -45,8 +45,8 @@
     <div style="margin-bottom: 14px; line-height: 1.9;">
       <div>Kepada Yth.</div>
       <div>Saudara/i Calon Pengantin:</div>
-      <div style="margin-left: 0.5em;">1. {{ form.nama_catin_pria || '_______________________________' }}</div>
-      <div style="margin-left: 0.5em;">2. {{ form.nama_catin_wanita || '_______________________________' }}</div>
+      <div style="margin-left: 0.5em;">1. <strong>{{ form.nama_catin_pria || '_______________________________' }}</strong></div>
+      <div style="margin-left: 0.5em;">2. <strong>{{ form.nama_catin_wanita || '_______________________________' }}</strong></div>
       <div>di Tempat</div>
     </div>
 

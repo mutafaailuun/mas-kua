@@ -1,4 +1,12 @@
 <script setup>
+useSeoMeta({
+  title: 'FAQ — Pertanyaan Seputar Nikah | KUA Pebayuran Bekasi',
+  description: 'Kumpulan pertanyaan yang sering diajukan seputar pendaftaran nikah, persyaratan, dan prosedur di KUA Kecamatan Pebayuran, Bekasi.',
+  ogTitle: 'FAQ Nikah | KUA Pebayuran Bekasi',
+  ogDescription: 'Pertanyaan yang sering diajukan seputar pendaftaran nikah dan prosedur di KUA Kecamatan Pebayuran, Bekasi.',
+  ogType: 'website',
+  ogUrl: 'https://kuapebayuran.com/faq',
+})
 import { Icon } from "@iconify/vue";
 import AccordionItem from "../components/AccordionItem.vue";
 import { faqs } from "../data/faqs.js";

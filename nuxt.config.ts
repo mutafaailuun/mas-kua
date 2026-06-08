@@ -44,8 +44,22 @@ export default defineNuxtConfig({
     },
   },
   css: ["/assets/style.css", "/assets/font.css"],
-  modules: ["@nuxt/icon",    "@nuxtjs/supabase"
-  ],
+  modules: ["@nuxt/icon", "@nuxtjs/supabase", "@nuxtjs/sitemap"],
+
+  site: {
+    url: 'https://kuapebayuran.com',
+    name: 'KUA Pebayuran Bekasi',
+  },
+
+  sitemap: {
+    strictNuxtContentPaths: false,
+    urls: [
+      { loc: '/', priority: 1.0, changefreq: 'weekly' },
+      { loc: '/jadwal', priority: 0.8, changefreq: 'weekly' },
+      { loc: '/faq', priority: 0.7, changefreq: 'monthly' },
+      { loc: '/articles', priority: 0.9, changefreq: 'daily' },
+    ],
+  },
   supabase: {
     redirect: false,
     url: process.env.SUPABASE_URL,

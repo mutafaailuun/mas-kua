@@ -61,6 +61,18 @@
 </template>
 
 <script setup>
+useSeoMeta({
+  title: 'KUA Pebayuran Bekasi — Kantor Urusan Agama Kecamatan Pebayuran',
+  description: 'Kantor Urusan Agama (KUA) Kecamatan Pebayuran, Bekasi. Layanan pendaftaran nikah, jadwal akad, bimbingan perkawinan, dan informasi seputar pernikahan.',
+  ogTitle: 'KUA Pebayuran Bekasi',
+  ogDescription: 'Layanan pendaftaran nikah, jadwal akad, bimbingan perkawinan, dan informasi seputar pernikahan di KUA Kecamatan Pebayuran, Bekasi.',
+  ogImage: '/logo-kua.png',
+  ogType: 'website',
+  ogUrl: 'https://kuapebayuran.com',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'KUA Pebayuran Bekasi',
+  twitterDescription: 'Layanan pendaftaran nikah, jadwal akad, dan informasi pernikahan di KUA Kecamatan Pebayuran, Bekasi.',
+})
 import { services } from "~/data/services.js";
 import { faqs } from "~/data/faqs.js";
 import HeroSection from "~/components/HeroSection.vue";

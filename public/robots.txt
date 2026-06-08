@@ -1,2 +1,5 @@
-User-Agent: *
-Disallow:
+User-agent: *
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://kuapebayuran.com/sitemap.xml

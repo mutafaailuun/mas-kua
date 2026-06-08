@@ -8,13 +8,6 @@
       </div>
       <div class="mt-4 sm:mt-0 flex gap-2">
         <button
-          @click="openKantorModal"
-          class="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-        >
-          <Icon name="lucide:building-2" class="w-4 h-4" />
-          Export Nikah Kantor
-        </button>
-        <button
           @click="openBulkModal"
           class="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
         >
@@ -343,81 +336,6 @@
       </Transition>
     </Teleport>
 
-    <!-- ── KANTOR EXPORT MODAL ── -->
-    <Teleport to="body">
-      <div
-        v-if="showKantorModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-        @click.self="showKantorModal = false"
-      >
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-xl max-h-[80vh] flex flex-col">
-          <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
-            <div>
-              <h3 class="font-semibold text-gray-900">Export Nikah Kantor</h3>
-              <p class="text-xs text-gray-400 mt-0.5">Hanya menampilkan peristiwa nikah yang dilaksanakan di kantor</p>
-            </div>
-            <button @click="showKantorModal = false" class="text-gray-400 hover:text-gray-600">
-              <Icon name="lucide:x" class="w-5 h-5" />
-            </button>
-          </div>
-          <div class="px-5 py-4 border-b border-gray-100 shrink-0">
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Bulan</label>
-                <select v-model="kantorMonth" class="block w-full px-3 py-2 text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                  <option v-for="(name, idx) in BULAN_INDO" :key="idx" :value="idx + 1">{{ name }}</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">Tahun</label>
-                <select v-model="kantorYear" class="block w-full px-3 py-2 text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                  <option v-for="y in availableYears" :key="y" :value="y">{{ y }}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="flex-1 overflow-y-auto px-5 py-3">
-            <div v-if="kantorWeddings.length === 0" class="py-8 text-center text-sm text-gray-400">
-              Tidak ada nikah kantor untuk bulan ini.
-            </div>
-            <div v-else>
-              <label class="flex items-center gap-2 py-2 border-b border-gray-100 mb-2 cursor-pointer">
-                <input type="checkbox"
-                  :checked="kantorSelected.length === kantorWeddings.length"
-                  :indeterminate="kantorSelected.length > 0 && kantorSelected.length < kantorWeddings.length"
-                  @change="toggleSelectAllKantor"
-                  class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                <span class="text-sm font-medium text-gray-700">Pilih Semua ({{ kantorWeddings.length }} peristiwa)</span>
-              </label>
-              <label v-for="w in kantorWeddings" :key="w.id"
-                class="flex items-center gap-2 py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded px-1">
-                <input type="checkbox" :value="w.id" v-model="kantorSelected"
-                  class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                <div class="flex-1 min-w-0">
-                  <div class="text-sm font-medium text-gray-800 truncate">{{ w.groom_name }}</div>
-                  <div class="text-xs text-gray-500 truncate">{{ w.bride_name }} · {{ formatDate(w.wedding_date) }}</div>
-                </div>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 shrink-0">Kantor</span>
-              </label>
-            </div>
-          </div>
-          <div class="px-5 py-4 border-t border-gray-100 flex items-center justify-between shrink-0">
-            <span class="text-sm text-gray-500">{{ kantorSelected.length }} dipilih</span>
-            <div class="flex gap-2">
-              <button @click="showKantorModal = false" class="px-4 py-2 text-sm rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50">
-                Batal
-              </button>
-              <button @click="executeKantorExport" :disabled="kantorSelected.length === 0 || kantorExporting"
-                class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
-                <Icon :name="kantorExporting ? 'lucide:loader-2' : 'lucide:printer'" class="w-4 h-4" :class="{'animate-spin': kantorExporting}" />
-                {{ kantorExporting ? 'Menyiapkan...' : 'Export PDF' }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Teleport>
-
     <!-- ── BULK EXPORT MODAL ── -->
     <Teleport to="body">
       <div
@@ -487,6 +405,11 @@
                 <Icon :name="bulkJpgExporting ? 'lucide:loader-2' : 'lucide:archive'" class="w-4 h-4" :class="{'animate-spin': bulkJpgExporting}" />
                 {{ bulkJpgExporting ? `Mengekspor ${bulkJpgProgress}/${bulkSelected.length}...` : 'Export JPG (ZIP)' }}
               </button>
+              <button @click="executeBulkKantorExport" :disabled="bulkKantorSelected.length === 0 || bulkKantorExporting"
+                class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50">
+                <Icon :name="bulkKantorExporting ? 'lucide:loader-2' : 'lucide:building-2'" class="w-4 h-4" :class="{'animate-spin': bulkKantorExporting}" />
+                {{ bulkKantorExporting ? 'Menyiapkan...' : `Export Kantor (${bulkKantorSelected.length})` }}
+              </button>
               <button @click="executeBulkExport" :disabled="bulkSelected.length === 0 || bulkExporting"
                 class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50">
                 <Icon :name="bulkExporting ? 'lucide:loader-2' : 'lucide:printer'" class="w-4 h-4" :class="{'animate-spin': bulkExporting}" />
@@ -554,13 +477,8 @@ const bulkSelected = ref<string[]>([])
 const bulkExporting = ref(false)
 const bulkJpgExporting = ref(false)
 const bulkJpgProgress = ref(0)
+const bulkKantorExporting = ref(false)
 
-// Kantor export modal
-const showKantorModal = ref(false)
-const kantorMonth = ref(new Date().getMonth() + 1)
-const kantorYear = ref(new Date().getFullYear())
-const kantorSelected = ref<string[]>([])
-const kantorExporting = ref(false)
 
 // ── Lifecycle ────────────────────────────────────────────────────
 onMounted(() => {
@@ -652,16 +570,10 @@ const bulkWeddings = computed(() =>
 
 watch([bulkMonth, bulkYear], () => { bulkSelected.value = [] })
 
-const kantorWeddings = computed(() =>
-  weddings.value
-    .filter(w => {
-      const d = new Date(w.wedding_date + 'T00:00:00')
-      return d.getMonth() + 1 === kantorMonth.value && d.getFullYear() === kantorYear.value && w.status === 'Kantor'
-    })
-    .sort((a, b) => a.wedding_date.localeCompare(b.wedding_date))
+const bulkKantorSelected = computed(() =>
+  bulkWeddings.value.filter(w => bulkSelected.value.includes(w.id) && w.status === 'Kantor')
 )
 
-watch([kantorMonth, kantorYear], () => { kantorSelected.value = [] })
 
 // ── Helpers ──────────────────────────────────────────────────────
 const clearFilters = () => {
@@ -877,40 +789,6 @@ const exportPdf = async (wedding: any) => {
   openPrintWindow([{ wedding, photos }])
 }
 
-// ── Kantor Export ────────────────────────────────────────────────
-const openKantorModal = () => {
-  kantorMonth.value = new Date().getMonth() + 1
-  kantorYear.value = new Date().getFullYear()
-  kantorSelected.value = []
-  showKantorModal.value = true
-}
-
-const toggleSelectAllKantor = () => {
-  kantorSelected.value = kantorSelected.value.length === kantorWeddings.value.length
-    ? []
-    : kantorWeddings.value.map(w => w.id)
-}
-
-const executeKantorExport = async () => {
-  kantorExporting.value = true
-  try {
-    const selected = kantorWeddings.value.filter(w => kantorSelected.value.includes(w.id))
-    const pages = await Promise.all(
-      selected.map(async wedding => {
-        const photos = await fetchPhotosForWedding(wedding.id).catch(() => [])
-        return { wedding, photos }
-      })
-    )
-    openPrintWindow(pages)
-    showKantorModal.value = false
-  } catch (e) {
-    console.error('Kantor export error:', e)
-    alert('Gagal membuat PDF.')
-  } finally {
-    kantorExporting.value = false
-  }
-}
-
 // ── Bulk Export ──────────────────────────────────────────────────
 const openBulkModal = () => {
   bulkMonth.value = new Date().getMonth() + 1
@@ -942,6 +820,26 @@ const executeBulkExport = async () => {
     alert('Gagal membuat PDF.')
   } finally {
     bulkExporting.value = false
+  }
+}
+
+// ── Bulk Kantor Export ───────────────────────────────────────────
+const executeBulkKantorExport = async () => {
+  bulkKantorExporting.value = true
+  try {
+    const pages = await Promise.all(
+      bulkKantorSelected.value.map(async wedding => {
+        const photos = await fetchPhotosForWedding(wedding.id).catch(() => [])
+        return { wedding, photos }
+      })
+    )
+    openPrintWindow(pages)
+    showBulkModal.value = false
+  } catch (e) {
+    console.error('Bulk kantor export error:', e)
+    alert('Gagal membuat PDF.')
+  } finally {
+    bulkKantorExporting.value = false
   }
 }
 

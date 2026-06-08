@@ -482,6 +482,11 @@
               <button @click="showBulkModal = false" class="px-4 py-2 text-sm rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50">
                 Batal
               </button>
+              <button @click="executeBulkJpgExport" :disabled="bulkSelected.length === 0 || bulkJpgExporting"
+                class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-amber-500 text-white hover:bg-amber-600 disabled:opacity-50">
+                <Icon :name="bulkJpgExporting ? 'lucide:loader-2' : 'lucide:archive'" class="w-4 h-4" :class="{'animate-spin': bulkJpgExporting}" />
+                {{ bulkJpgExporting ? `Mengekspor ${bulkJpgProgress}/${bulkSelected.length}...` : 'Export JPG (ZIP)' }}
+              </button>
               <button @click="executeBulkExport" :disabled="bulkSelected.length === 0 || bulkExporting"
                 class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-md bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50">
                 <Icon :name="bulkExporting ? 'lucide:loader-2' : 'lucide:printer'" class="w-4 h-4" :class="{'animate-spin': bulkExporting}" />
@@ -547,6 +552,8 @@ const bulkMonth = ref(new Date().getMonth() + 1)
 const bulkYear = ref(new Date().getFullYear())
 const bulkSelected = ref<string[]>([])
 const bulkExporting = ref(false)
+const bulkJpgExporting = ref(false)
+const bulkJpgProgress = ref(0)
 
 // Kantor export modal
 const showKantorModal = ref(false)
@@ -935,6 +942,68 @@ const executeBulkExport = async () => {
     alert('Gagal membuat PDF.')
   } finally {
     bulkExporting.value = false
+  }
+}
+
+// ── Bulk Export JPG ZIP ──────────────────────────────────────────
+const executeBulkJpgExport = async () => {
+  bulkJpgExporting.value = true
+  bulkJpgProgress.value = 0
+  try {
+    const selected = bulkWeddings.value.filter(w => bulkSelected.value.includes(w.id))
+    const [{ default: html2canvas }, { default: JSZip }, { createApp, defineComponent, h }] = await Promise.all([
+      import('html2canvas'),
+      import('jszip'),
+      import('vue'),
+    ])
+
+    const zip = new JSZip()
+
+    for (const wedding of selected) {
+      const photos = await fetchPhotosForWedding(wedding.id).catch(() => [])
+
+      const container = document.createElement('div')
+      container.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;'
+      document.body.appendChild(container)
+
+      const app = createApp(defineComponent({
+        setup() { return () => h(AdminDokumentasiAkadPreview, { wedding, photos }) }
+      }))
+      app.mount(container)
+      await new Promise(r => setTimeout(r, 800))
+
+      try {
+        const canvas = await html2canvas(container.firstElementChild as HTMLElement, {
+          useCORS: true, scale: 2, backgroundColor: '#ffffff', logging: false,
+        })
+        const blob = await new Promise<Blob>(resolve =>
+          canvas.toBlob(b => resolve(b!), 'image/jpeg', 0.92)
+        )
+        const filename = `Dokumentasi_${wedding.groom_name}_${wedding.bride_name}.jpg`.replace(/\s+/g, '_')
+        zip.file(filename, blob)
+      } finally {
+        app.unmount()
+        document.body.removeChild(container)
+      }
+
+      bulkJpgProgress.value++
+    }
+
+    const bulanLabel = BULAN_INDO[bulkMonth.value - 1]
+    const zipBlob = await zip.generateAsync({ type: 'blob' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(zipBlob)
+    link.download = `Dokumentasi_${bulanLabel}_${bulkYear.value}.zip`
+    link.click()
+    URL.revokeObjectURL(link.href)
+
+    showBulkModal.value = false
+  } catch (e) {
+    console.error('Bulk JPG export error:', e)
+    alert('Gagal membuat ZIP. Silakan coba lagi.')
+  } finally {
+    bulkJpgExporting.value = false
+    bulkJpgProgress.value = 0
   }
 }
 

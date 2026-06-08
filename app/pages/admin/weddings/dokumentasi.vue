@@ -829,6 +829,17 @@ const closePreview = () => {
   previewPhotos.value = []
 }
 
+// ── Export filename helper ───────────────────────────────────────
+const exportFilename = (wedding: any) => {
+  const d = new Date(wedding.wedding_date + 'T00:00:00')
+  const dd = String(d.getDate()).padStart(2, '0')
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const yyyy = d.getFullYear()
+  const groom = wedding.groom_name.toUpperCase().replace(/\s+/g, '_')
+  const bride = wedding.bride_name.toUpperCase().replace(/\s+/g, '_')
+  return `${dd}${mm}${yyyy}_${groom}_${bride}.jpg`
+}
+
 // ── Export JPG ───────────────────────────────────────────────────
 const exportJpg = async (wedding: any) => {
   exportingId.value = wedding.id
@@ -855,7 +866,7 @@ const exportJpg = async (wedding: any) => {
       useCORS: true, scale: 2, backgroundColor: '#ffffff', logging: false,
     })
     const link = document.createElement('a')
-    link.download = `Dokumentasi_${wedding.groom_name}_${wedding.bride_name}.jpg`.replace(/\s+/g, '_')
+    link.download = exportFilename(wedding)
     link.href = canvas.toDataURL('image/jpeg', 0.92)
     link.click()
   } catch (err) {
@@ -979,7 +990,7 @@ const executeBulkJpgExport = async () => {
         const blob = await new Promise<Blob>(resolve =>
           canvas.toBlob(b => resolve(b!), 'image/jpeg', 0.92)
         )
-        const filename = `Dokumentasi_${wedding.groom_name}_${wedding.bride_name}.jpg`.replace(/\s+/g, '_')
+        const filename = exportFilename(wedding)
         zip.file(filename, blob)
       } finally {
         app.unmount()

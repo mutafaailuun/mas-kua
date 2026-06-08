@@ -19,7 +19,7 @@
           class="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700"
         >
           <Icon name="lucide:file-down" class="w-4 h-4" />
-          Export PDF Bulanan
+          Export Data
         </button>
       </div>
     </div>

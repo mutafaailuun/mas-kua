@@ -198,10 +198,9 @@
                 >
                   <Icon
                     :name="uploadingId === wedding.id ? 'lucide:loader-2' : 'lucide:image'"
-                    class="w-3 h-3"
+                    class="w-3.5 h-3.5"
                     :class="{ 'animate-spin': uploadingId === wedding.id }"
                   />
-                  {{ uploadingId === wedding.id ? 'Mengupload...' : (photoCounts[wedding.id] ?? 0) > 0 ? 'Ada' : 'Belum' }}
                 </span>
               </td>
 

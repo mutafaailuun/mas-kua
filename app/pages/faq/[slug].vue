@@ -48,6 +48,6 @@ const faq = computed(() => {
 });
 
 useHead({
-  title: faq.value ? `${faq.value.question} | FAQ KUA` : "FAQ | MasKua",
+  title: faq.value ? `${faq.value.question} | FAQ KUA` : "FAQ | KUA Pebayuran Bekasi",
 });
 </script>

@@ -10,10 +10,11 @@ const currentYear = new Date().getFullYear();
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         <div class="space-y-4">
           <div class="flex items-center gap-3">
-            <img src="/logo.png" alt="Logo KUA" class="h-12 w-auto" />
+            <img src="/logo-kemenag.png" alt="Logo Kemenag" class="h-12 w-auto" />
             <div>
-              <p class="text-2xl font-bold">MAS KUA</p>
-              <p class="text-sm text-gray-400">KUA Pebayuran, Kab. Bekasi</p>
+              <p class="text-sm font-semibold text-gray-300 tracking-wide uppercase">Kantor Urusan Agama</p>
+              <p class="text-xl font-bold">Pebayuran</p>
+              <p class="text-xs text-gray-400">Kabupaten Bekasi</p>
             </div>
           </div>
           <p class="text-gray-400">

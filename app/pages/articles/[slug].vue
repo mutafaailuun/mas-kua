@@ -85,7 +85,7 @@ onMounted(async () => {
     // Set meta tags for SEO and Social Media once data is loaded
     if (data) {
       useHead({
-        title: `${data.title} | MasKua`,
+        title: `${data.title} | KUA Pebayuran Bekasi`,
         meta: [
           { name: 'description', content: data.content?.replace(/<[^>]+>/g, '').substring(0, 160) || data.title },
           { property: 'og:title', content: data.title },

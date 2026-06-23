@@ -17,7 +17,7 @@ const onButtonClick = (sectionId) => {
         Hadir Lebih Dekat dengan Fitur Terbaru Kami
       </h3>
       <p class="text-lg text-gray-600 mb-16 max-w-3xl mx-auto">
-        Berkomitmen memberikan transparansi dan kemudahan informasi, MAS KUA menghadirkan inovasi digital untuk menjawab kebutuhan Anda akan kecepatan akses jadwal pernikahan dan wawasan keluarga.
+        Berkomitmen memberikan transparansi dan kemudahan informasi, KUA Pebayuran menghadirkan inovasi digital untuk menjawab kebutuhan Anda akan kecepatan akses jadwal pernikahan dan wawasan keluarga.
       </p>
 
       <div class="grid md:grid-cols-2 gap-8 text-left">

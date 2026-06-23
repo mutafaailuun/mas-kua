@@ -102,7 +102,7 @@ const changePage = (page: number) => {
 
 // Meta tags
 useHead({
-  title: 'Artikel | MasKua',
+  title: 'Artikel | KUA Pebayuran Bekasi',
   meta: [
     { name: 'description', content: 'Kumpulan artikel seputar persiapan pernikahan dan rumah tangga.' }
   ]

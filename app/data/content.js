@@ -98,7 +98,7 @@ export const faqs = ref([
   {
     question: "Apakah bisa mendaftar nikah secara online?",
     answer:
-      "Saat ini pendaftaran nikah masih harus dilakukan secara langsung di KUA. Namun, Anda bisa mendapatkan informasi lengkap dan mengunduh formulir melalui platform MAS KUA ini.",
+      "Saat ini pendaftaran nikah masih harus dilakukan secara langsung di KUA. Namun, Anda bisa mendapatkan informasi lengkap dan mengunduh formulir melalui website KUA Pebayuran ini.",
   },
   {
     question:

@@ -12,7 +12,7 @@ import { Icon } from "@iconify/vue";
         Masih Ada Pertanyaan Lain?
       </h2>
       <p class="text-green-100 max-w-2xl mx-auto mb-8">
-        Jangan ragu untuk menghubungi kami. Tim MAS KUA siap membantu Anda
+        Jangan ragu untuk menghubungi kami. Tim KUA Pebayuran siap membantu Anda
         mendapatkan informasi yang akurat pada jam kerja.
       </p>
       <a

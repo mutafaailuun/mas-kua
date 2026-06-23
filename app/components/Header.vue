@@ -29,8 +29,11 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
       <div class="flex justify-between items-center py-4">
         <a href="/">
           <div class="flex items-center gap-3">
-            <img src="/logo.png" alt="Logo KUA" class="h-12 w-auto" />
-            <h2 class="text-2xl font-bold text-green-700">MAS KUA</h2>
+            <img src="/logo-kemenag.png" alt="Logo Kemenag" class="h-12 w-auto" />
+            <div class="leading-tight">
+              <div class="text-xs font-semibold text-gray-500 tracking-wide uppercase">Kantor Urusan Agama</div>
+              <div class="text-lg font-bold text-emerald-800 tracking-wide">PEBAYURAN</div>
+            </div>
           </div>
         </a>
 

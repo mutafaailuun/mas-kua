@@ -35,6 +35,6 @@ const service = computed(() => {
 })
 
 useHead({
-  title: service.value ? `${service.value.title} | Layanan KUA` : 'Layanan | MasKua'
+  title: service.value ? `${service.value.title} | Layanan KUA` : 'Layanan | KUA Pebayuran Bekasi'
 })
 </script>

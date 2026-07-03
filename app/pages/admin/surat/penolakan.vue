@@ -7,7 +7,13 @@
         <Icon name="lucide:arrow-left" class="w-4 h-4 mr-1" />
         Kembali ke Surat Menyurat
       </NuxtLink>
-      <h2 class="mt-3 text-2xl font-bold text-gray-900">Formulir Penolakan Kehendak Nikah Rujuk</h2>
+      <h2 class="mt-3 text-2xl font-bold text-gray-900 flex items-center gap-2">
+        Formulir Penolakan Kehendak Nikah Rujuk
+        <span v-if="editId" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-sky-100 text-sky-700">
+          <Icon name="lucide:pencil" class="w-3 h-3 mr-1" />
+          Mode Edit
+        </span>
+      </h2>
       <p class="mt-1 text-sm text-gray-500">Model N7 — Isi form di bawah ini, preview akan muncul secara otomatis.</p>
 
       <!-- Nomor surat terdahulu -->
@@ -252,15 +258,32 @@ const previewForm = computed(() => ({
 }))
 
 const supabase = useSupabaseClient()
+const route = useRoute()
 const printTargetRef = ref<HTMLElement | null>(null)
 
 const lastSurat = ref<{ nomor_surat: string; perihal: string; tanggal_surat: string | null } | null>(null)
 const lastSuratLoading = ref(true)
 
+// ── Edit mode ──
+const editId = ref<string | null>(null)
+
 const formatTanggalShort = (raw: string) =>
   new Date(raw + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
 
 onMounted(async () => {
+  const editParam = route.query.edit as string | undefined
+  if (editParam) {
+    const { data, error } = await supabase
+      .from('surat_keluar')
+      .select('*')
+      .eq('id', editParam)
+      .single() as { data: { id: string; form_data: Record<string, any> | null } | null; error: any }
+    if (!error && data) {
+      editId.value = data.id
+      Object.assign(form, data.form_data ?? {})
+    }
+  }
+
   try {
     const { data } = await supabase
       .from('surat_keluar')
@@ -279,13 +302,18 @@ onMounted(async () => {
 const saveSuratKeluar = async () => {
   if (!form.nomor_urut) return
   const pihak = [form.nama_catin, form.nama_pasangan].filter(Boolean).join(' / ')
-  await supabase.from('surat_keluar').upsert({
+  const payload = {
     nomor_surat: nomorSurat.value,
     tanggal_surat: form.tanggal_raw || null,
     jenis_surat: 'penolakan_nikah',
     perihal: pihak ? `Penolakan Nikah/Rujuk a.n. ${pihak}` : 'Penolakan Kehendak Nikah/Rujuk',
     form_data: toRaw(form),
-  }, { onConflict: 'nomor_surat' })
+  }
+  if (editId.value) {
+    await supabase.from('surat_keluar').update(payload).eq('id', editId.value)
+  } else {
+    await supabase.from('surat_keluar').upsert(payload, { onConflict: 'nomor_surat' })
+  }
 }
 
 const printSurat = async () => {

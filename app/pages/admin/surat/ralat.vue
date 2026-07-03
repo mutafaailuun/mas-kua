@@ -9,7 +9,13 @@
         <Icon name="lucide:arrow-left" class="w-4 h-4 mr-1" />
         Kembali ke Surat Menyurat
       </NuxtLink>
-      <h2 class="mt-3 text-2xl font-bold text-gray-900">Surat Keterangan Ralat</h2>
+      <h2 class="mt-3 text-2xl font-bold text-gray-900 flex items-center gap-2">
+        Surat Keterangan Ralat
+        <span v-if="editId" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-sky-100 text-sky-700">
+          <Icon name="lucide:pencil" class="w-3 h-3 mr-1" />
+          Mode Edit
+        </span>
+      </h2>
       <p class="mt-1 text-sm text-gray-500">Isi form di bawah ini, preview akan muncul secara otomatis.</p>
 
       <!-- Versi toggle -->
@@ -412,6 +418,7 @@ const tanggalFormatted = computed(() => {
 })
 
 const supabase = useSupabaseClient()
+const route = useRoute()
 const printTargetRef = ref<HTMLElement | null>(null)
 const saving = ref(false)
 
@@ -419,10 +426,37 @@ const saving = ref(false)
 const lastSurat = ref<{ nomor_surat: string; perihal: string; tanggal_surat: string | null } | null>(null)
 const lastSuratLoading = ref(true)
 
+// ── Edit mode ──
+const editId = ref<string | null>(null)
+
 const formatTanggalShort = (raw: string) =>
   new Date(raw + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
 
 onMounted(async () => {
+  const editParam = route.query.edit as string | undefined
+  if (editParam) {
+    const { data, error } = await supabase
+      .from('surat_keluar')
+      .select('*')
+      .eq('id', editParam)
+      .single() as { data: { id: string; form_data: Record<string, any> | null } | null; error: any }
+    if (!error && data) {
+      editId.value = data.id
+      const fd = data.form_data ?? {}
+      Object.assign(form, fd)
+      formKelurahan.kelurahan = fd.kelurahan ?? ''
+      formKelurahan.nomor_kel = fd.nomor_kel ?? ''
+      versi.value = fd.versi === 'lama' ? 'lama' : 'baru'
+      if (Array.isArray(fd.koreksi) && fd.koreksi.length > 0) {
+        if (versi.value === 'lama') {
+          koreksiLama.splice(0, koreksiLama.length, ...fd.koreksi)
+        } else {
+          koreksi.splice(0, koreksi.length, ...fd.koreksi)
+        }
+      }
+    }
+  }
+
   try {
     const { data } = await supabase
       .from('surat_keluar')
@@ -453,7 +487,7 @@ const saveSuratKeluar = async () => {
     const koreksiData = versi.value === 'baru'
       ? koreksi.map(k => ({ ...toRaw(k) }))
       : koreksiLama.map(k => ({ ...toRaw(k) }))
-    await supabase.from('surat_keluar').upsert({
+    const payload = {
       nomor_surat: nomorSurat.value,
       tanggal_surat: form.tanggal_raw || null,
       jenis_surat: 'ralat',
@@ -465,7 +499,12 @@ const saveSuratKeluar = async () => {
         versi: versi.value,
         koreksi: koreksiData,
       },
-    }, { onConflict: 'nomor_surat' })
+    }
+    if (editId.value) {
+      await supabase.from('surat_keluar').update(payload).eq('id', editId.value)
+    } else {
+      await supabase.from('surat_keluar').upsert(payload, { onConflict: 'nomor_surat' })
+    }
   } catch (e) {
     console.error('Gagal menyimpan log surat:', e)
   } finally {

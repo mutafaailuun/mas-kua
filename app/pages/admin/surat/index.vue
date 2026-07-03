@@ -370,6 +370,7 @@ const JENIS_LABELS: Record<string, string> = {
   buku_nikah_palsu: 'Buku Palsu',
   ralat: 'Ralat',
   penolakan_nikah: 'Penolakan N7',
+  bimwin: 'BIMWIN',
   umum: 'Umum',
   rekomendasi: 'Rekomendasi',
   keterangan: 'Keterangan',
@@ -382,6 +383,7 @@ const jenisColor = (jenis: string) => {
   if (isKeteranganType(jenis)) return 'bg-emerald-50 text-emerald-700'
   if (jenis === 'ralat') return 'bg-amber-50 text-amber-700'
   if (jenis === 'penolakan_nikah') return 'bg-red-50 text-red-700'
+  if (jenis === 'bimwin') return 'bg-teal-50 text-teal-700'
   if (jenis === 'rekomendasi') return 'bg-blue-50 text-blue-700'
   return 'bg-gray-100 text-gray-600'
 }
@@ -496,6 +498,20 @@ const fetchSurat = async () => {
   }
 }
 
+// ── Jenis surat yang punya form builder khusus (edit lengkap) ─────
+const EDIT_ROUTE_MAP: Record<string, string> = {
+  ralat: '/admin/surat/ralat',
+  penolakan_nikah: '/admin/surat/penolakan',
+  tercatat: '/admin/surat/umum',
+  tercatat_terlambat: '/admin/surat/umum',
+  tercatat_kepolisian: '/admin/surat/umum',
+  tidak_tercatat: '/admin/surat/umum',
+  tidak_tercatat_isbat: '/admin/surat/umum',
+  tidak_tercatat_bpjs: '/admin/surat/umum',
+  tidak_tercatat_jht: '/admin/surat/umum',
+  buku_nikah_palsu: '/admin/surat/umum',
+}
+
 // ── Form helpers ──────────────────────────────────────────────────
 const resetForm = () => {
   editId.value = null
@@ -507,6 +523,10 @@ const resetForm = () => {
 }
 
 const openForm = (surat?: SuratKeluar) => {
+  if (surat && EDIT_ROUTE_MAP[surat.jenis_surat]) {
+    navigateTo(`${EDIT_ROUTE_MAP[surat.jenis_surat]}?edit=${surat.id}`)
+    return
+  }
   resetForm()
   if (surat) {
     editId.value = surat.id

@@ -167,9 +167,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(surat, i) in suratList" :key="surat.id"
+            <tr v-for="(surat, i) in paginatedSurat" :key="surat.id"
               class="border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors">
-              <td class="px-4 py-3 text-gray-400 tabular-nums">{{ i + 1 }}</td>
+              <td class="px-4 py-3 text-gray-400 tabular-nums">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td class="px-4 py-3 font-mono text-xs text-gray-700">{{ surat.nomor_surat }}</td>
               <td class="px-4 py-3 text-gray-600 whitespace-nowrap">
                 {{ surat.tanggal_surat ? formatTanggal(surat.tanggal_surat) : '—' }}
@@ -204,6 +204,26 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Pagination -->
+        <div v-if="!loading && suratList.length > pageSize"
+          class="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+          <p class="text-xs text-gray-500">
+            Menampilkan {{ (currentPage - 1) * pageSize + 1 }}–{{ Math.min(currentPage * pageSize, suratList.length) }}
+            dari {{ suratList.length }} surat
+          </p>
+          <div class="flex items-center gap-1">
+            <button @click="currentPage--" :disabled="currentPage === 1"
+              class="p-1.5 rounded text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-500">
+              <Icon name="lucide:chevron-left" class="w-4 h-4" />
+            </button>
+            <span class="text-xs text-gray-600 px-2 tabular-nums">Halaman {{ currentPage }} / {{ totalPages }}</span>
+            <button @click="currentPage++" :disabled="currentPage === totalPages"
+              class="p-1.5 rounded text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-500">
+              <Icon name="lucide:chevron-right" class="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -332,6 +352,18 @@ interface SuratKeluar {
 // ── State ─────────────────────────────────────────────────────────
 const suratList = ref<SuratKeluar[]>([])
 const loading = ref(true)
+
+// Pagination
+const pageSize = 10
+const currentPage = ref(1)
+const totalPages = computed(() => Math.max(1, Math.ceil(suratList.value.length / pageSize)))
+const paginatedSurat = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  return suratList.value.slice(start, start + pageSize)
+})
+watch(totalPages, (tp) => {
+  if (currentPage.value > tp) currentPage.value = tp
+})
 
 // Form modal
 const showForm = ref(false)
@@ -491,6 +523,7 @@ const fetchSurat = async () => {
       .order('created_at', { ascending: false })
     if (error) throw error
     suratList.value = (data as SuratKeluar[]) ?? []
+    currentPage.value = 1
   } catch (e) {
     console.error('Gagal memuat surat keluar:', e)
   } finally {

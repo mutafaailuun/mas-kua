@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SIMKAH - Lampiran Dokumentasi Akad (R2 + Native)
 // @namespace    https://kua-pebayuran.id/
-// @version      2.0.0
+// @version      2.1.0
 // @description  Generate Lampiran HD, Upload Native SIMKAH, R2+DB Supabase, dan Floating Bulk Download ZIP
 // @author       KUA Pebayuran
 // @match        https://simkah4.kemenag.go.id/*
@@ -236,7 +236,8 @@
 
 			if (suksesDownload === 0) {
 				throw new Error(
-					"Gagal mengunduh semua foto. " + (firstError || "Server mungkin sedang gangguan."),
+					"Gagal mengunduh semua foto. " +
+						(firstError || "Server mungkin sedang gangguan."),
 				);
 			}
 
@@ -311,8 +312,35 @@
 	}
 
 	// ── Modal ─────────────────────────────────────────────────────────────────
-	function showModal(data, tr) {
+	async function showModal(data, tr) {
 		document.getElementById("vm-overlay")?.remove();
+
+		// Fetch officiant_name dari database berdasarkan no_pendaftaran
+		const dbPenghulu = await fetchOfficiantFromDB(data.noPendaftaran);
+
+		const penghuluOptions = [
+			{ value: "", label: "-- Pilih Penghulu --", disabled: true },
+			{ value: "DRS. H. MA'MUN NAWAWI", label: "DRS. H. MA'MUN NAWAWI" },
+			{ value: "NUNU HUSNUL HITAM, SHI.", label: "NUNU HUSNUL HITAM, SHI." },
+			{ value: "JALALUDIN, S.H.", label: "JALALUDIN, S.H." },
+		];
+
+		// Tentukan opsi terpilih dari database (case-insensitive)
+		const selectedValue = dbPenghulu
+			? penghuluOptions.find(
+					(opt) =>
+						opt.value.toUpperCase() === dbPenghulu.toUpperCase(),
+				)?.value ?? ""
+			: "";
+
+		const optionsHTML = penghuluOptions
+			.map(
+				(opt) =>
+					`<option value="${esc(opt.value)}"${opt.disabled ? " disabled" : ""}${opt.value === selectedValue && !opt.disabled ? " selected" : ""}>
+						${esc(opt.label)}
+					</option>`,
+			)
+			.join("");
 
 		const overlay = document.createElement("div");
 		overlay.id = "vm-overlay";
@@ -349,10 +377,7 @@
                 <div class="vm-field">
                     <label>PENGHULU <span style="color:red">*</span></label>
                     <select id="vm-penghulu" class="vm-editable">
-                        <option value="" disabled selected>-- Pilih Penghulu --</option>
-                        <option value="DRS. H. MA'MUN NAWAWI">DRS. H. MA'MUN NAWAWI</option>
-                        <option value="NUNU HUSNUL HITAM, SHI.">NUNU HUSNUL HITAM, SHI.</option>
-                        <option value="JALALUDIN, S.H.">JALALUDIN, S.H.</option>
+                        ${optionsHTML}
                     </select>
                 </div>
                 <div class="vm-field">
@@ -563,6 +588,29 @@
 	}
 
 	// ── API/Fetch Helpers ─────────────────────────────────────────────────────
+	function fetchOfficiantFromDB(noPendaftaran) {
+		if (!noPendaftaran) return Promise.resolve(null);
+		const url = `${SUPABASE_URL}/rest/v1/weddings?no_pendaftaran=eq.${encodeURIComponent(noPendaftaran)}&select=officiant_name`;
+		return new Promise((resolve) => {
+			GM_xmlhttpRequest({
+				method: "GET",
+				url,
+				headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+				onload(res) {
+					try {
+						const arr = JSON.parse(res.responseText);
+						resolve(Array.isArray(arr) && arr.length > 0 ? arr[0].officiant_name : null);
+					} catch {
+						resolve(null);
+					}
+				},
+				onerror() {
+					resolve(null);
+				},
+			});
+		});
+	}
+
 	function fetchDokumentasi(bulan, tahun, kantorOnly) {
 		let url = `${SUPABASE_URL}/rest/v1/dokumentasi_akad?tanggal_akad=like.*-${bulan}-${tahun}&foto_url=not.is.null&select=nama_suami,foto_url`;
 		if (kantorOnly) url += `&nikah_kantor=eq.true`;

@@ -317,7 +317,7 @@
 
 		// Fetch officiant_name dari database berdasarkan no_pendaftaran
 		const dbPenghulu = await fetchOfficiantFromDB(data.noPendaftaran);
-		const penghuluDisplay = dbPenghulu || "BELUM DITENTUKAN";
+		const penghuluDisplay = dbPenghulu ? dbPenghulu.toUpperCase() : "BELUM DITENTUKAN";
 
 		const overlay = document.createElement("div");
 		overlay.id = "vm-overlay";

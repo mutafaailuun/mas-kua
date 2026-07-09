@@ -4,7 +4,7 @@ const onButtonClick = (sectionId) => emit("scrollToSection", sectionId);
 </script>
 
 <template>
-  <section class="relative min-h-screen flex flex-col justify-center overflow-hidden bg-emerald-950 raleway">
+  <section class="relative min-h-svh flex flex-col justify-center overflow-hidden bg-emerald-950 raleway">
     <!-- Background pattern -->
     <div class="absolute inset-0 opacity-[0.04]">
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -88,12 +88,12 @@ const onButtonClick = (sectionId) => emit("scrollToSection", sectionId);
             <div class="text-white/40 text-xs mt-0.5">Per Tahun</div>
           </div>
           <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-4 py-5 text-center">
-            <div class="text-3xl font-extrabold text-white mb-1">14</div>
+            <div class="text-3xl font-extrabold text-white mb-1">13</div>
             <div class="text-emerald-300 text-sm font-medium">Desa Wilayah</div>
             <div class="text-white/40 text-xs mt-0.5">Kec. Pebayuran</div>
           </div>
           <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-4 py-5 text-center">
-            <div class="text-3xl font-extrabold text-white mb-1">0 Jam</div>
+            <div class="text-3xl font-extrabold text-white mb-1">0 Rupiah</div>
             <div class="text-emerald-300 text-sm font-medium">Biaya Nikah</div>
             <div class="text-white/40 text-xs mt-0.5">Di Kantor KUA</div>
           </div>

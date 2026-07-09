@@ -149,7 +149,7 @@ Mengingatkan kembali bahwa jadwal akad nikah Anda akan dilaksanakan *BESOK*:
 *Hal-hal yang perlu dipersiapkan:*
 ✅ Membawa KTP Asli kedua mempelai
 💍 Menyiapkan Mahar (Mas Kawin) di lokasi
-👥 Memastikan Saksi Nikah sudah hadir tepat waktu
+👥 Memastikan Saksi Nikah sudah hadir tepat waktu dan *membawa KTP Asli*
 💪 Tetap menjaga kesehatan dan kondisi fisik agar tetap fit
 
 Semoga prosesi akad nikah esok berjalan khidmat, lancar, dan penuh berkah. Sampai jumpa di lokasi! 🤍

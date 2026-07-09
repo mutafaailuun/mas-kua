@@ -177,14 +177,16 @@
 
               <!-- Penghulu -->
               <td class="px-2 py-1.5">
-                <input
+                <select
                   :value="wedding.officiant_name ?? ''"
-                  @blur="e => saveEdit(wedding, 'officiant_name', (e.target as HTMLInputElement).value)"
-                  @keydown.enter.prevent="(e) => (e.target as HTMLInputElement).blur()"
-                  @keydown.escape.prevent="(e) => (e.target as HTMLInputElement).blur()"
-                  placeholder="—"
-                  class="w-32 px-2 py-1 text-sm text-gray-700 rounded border border-transparent hover:border-gray-300 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400 bg-transparent focus:bg-white transition-colors placeholder-gray-300"
-                />
+                  @change="e => saveEdit(wedding, 'officiant_name', (e.target as HTMLSelectElement).value)"
+                  class="px-2 py-1 text-xs font-medium rounded border border-transparent hover:border-gray-300 focus:outline-none focus:ring-1 focus:border-emerald-400 focus:ring-emerald-400 transition-colors cursor-pointer bg-transparent focus:bg-white"
+                >
+                  <option value="">-- Penghulu --</option>
+                  <option value="Drs. H. Ma'mun Nawawi">Drs. H. Ma'mun Nawawi</option>
+                  <option value="Nunu Husnul Hitam, SH.I">Nunu Husnul Hitam, SH.I</option>
+                  <option value="Jalaludin, S.H">Jalaludin, S.H</option>
+                </select>
               </td>
 
               <td class="px-4 py-3 text-center">

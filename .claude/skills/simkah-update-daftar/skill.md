@@ -153,26 +153,87 @@ Cetak ringkasan:
 - Inserted (baru), Skipped (sudah ada)
 - Error jika ada
 
-## Mapping Kolom Laporan Pendaftaran Nikah (verified 2026-06-03)
+## Mapping Kolom Laporan Pendaftaran Nikah (verified 2026-06-12)
 | Index | Nama Kolom |
 |-------|-----------|
 | [5]  | Nomor Daftar (`no_daftar`) |
-| [6]  | Tanggal Daftar (`created_at`) — DD-MM-YYYY |
+| [6]  | Tanggal Daftar — **DD-MM-YYYY** (perlu konversi ke YYYY-MM-DD) |
 | [7]  | Nama Suami |
 | [8]  | Nama Istri |
-| [9]  | NIK Suami |
-| [10] | NIK Istri |
-| [11] | Alamat Suami (dipakai sebagai `lokasi_akad`) |
-| [22] | Tanggal Akad — DD-MM-YYYY |
-| [23] | Jam Akad — "HH:MM AM/PM" |
-| [24] | Nikah Di — "LUAR KUA / BEDOL" atau "KUA/KANTOR" |
-| [25] | Penghulu |
-| [26] | Nomor Akta Nikah |
+| [11] | Alamat Suami (dipakai sebagai `location`) |
+| [22] | Tanggal Akad — **DD-MM-YYYY** |
+| [23] | Jam Akad — **"HH:MM AM/PM"** (perlu konversi ke HH:MM:SS) |
+| [24] | Nikah Di — "LUAR KUA / BEDOL" → `'Luar Kantor'`, lainnya → `'Kantor'` |
+
+> ⚠️ Header tabel menggunakan merged cells sehingga index di header tidak sama dengan index di data row. Gunakan index data row di atas, bukan dari `headers.indexOf()`.
 
 ## Catatan Penting
-- **Filter 7 hari** diterapkan di JavaScript setelah data di-load (bukan di filter SIMKAH)
-- **Laporan filter per bulan** — jika hari ini tgl 1-7, load juga bulan sebelumnya
+- **Laporan Pendaftaran Nikah filter berdasarkan bulan DAFTAR** (bukan bulan akad)
+- **Laporan Excel filter berdasarkan bulan AKAD** — ini yang dipakai untuk update akta
+- **Filter 7 hari tidak relevan** jika tujuan adalah sync semua akad bulan ini — lebih tepat: cek selisih DB vs SIMKAH dengan `NOT IN` query
 - **IB...** (Isbat Nikah) otomatis dilewati karena filter `startsWith('ND')`
-- **`nikah_di`**: "LUAR KUA / BEDOL" → 2 (Luar Kantor), lainnya → 1 (Kantor)
-- **Format tanggal SIMKAH**: DD-MM-YYYY — konversi manual ke YYYY-MM-DD saat insert
+- **Format tanggal**: Tanggal Daftar dan Tanggal Akad di Laporan Pendaftaran adalah **DD-MM-YYYY** — konversi ke `YYYY-MM-DD` sebelum insert
+- **Format jam**: `"10:00 AM"` → `"10:00:00"`, `"07:00 AM"` → `"07:00:00"` — gunakan regex AM/PM
+- **`nikah_di`**: nilai di DB adalah string `'Luar Kantor'` atau `'Kantor'` (bukan integer 1/2)
 - **Sesi expired**: jika redirect ke login, ulangi dari langkah 4
+- **Tab browser bisa freeze** setelah operasi berat — jika timeout, buat tab baru dan login ulang
+
+## Temuan Sesi (verified 2026-06-12/15)
+
+### Strategi sync yang lebih efisien
+Daripada filter 7 hari (yang bisa miss record lama), gunakan pendekatan:
+1. Query DB: `SELECT no_pendaftaran FROM weddings WHERE no_pendaftaran LIKE '%3216131MMYYYY%'` untuk tahu record bulan apa yang sudah ada
+2. Scrape Laporan Pendaftaran bulan ini di SIMKAH (set 50/page agar muat 1 halaman)
+3. Bandingkan: `window._daftarSimkah.filter(r => !dbSet.has(r.no_pendaftaran))`
+4. INSERT hanya yang belum ada (`ON CONFLICT DO NOTHING`)
+
+### Strategi alternatif via Laporan Excel
+1. Scrape semua no_daftar dari Laporan Excel bulan ini (akad bulan ini)
+2. Cek mana yang belum ada di DB via `NOT IN` query
+3. Untuk yang belum ada → cari di Laporan Pendaftaran (sesuai bulan registrasinya)
+4. INSERT yang ditemukan, skip yang tidak ditemukan (mungkin duplikat akta)
+
+### Navigasi & scraping Laporan Pendaftaran
+- Setelah klik menu, langsung klik **Lihat Data** — filter KUA sudah auto-terisi KUA PEBAYURAN dan bulan/tahun berjalan
+- Set **50/page** sebelum scrape: `document.querySelector('.dx-page-size[aria-label="50"]')?.click()` atau cari `.dx-page-size` dengan `innerText === '50'`
+- Tunggu 2 detik setelah set 50/page sebelum scrape — data reload
+
+### Deteksi sesi expired
+- Cek `location.href` — jika mengandung `/admin/authentication`, sesi expired
+- Cek `document.title` — jika "Sign In", sesi expired
+- Langsung login ulang: isi field + klik MASUK + tutup popup + expand Laporan + klik submenu
+
+### Script konversi tanggal & waktu (JavaScript)
+```javascript
+function convertDate(str) {
+  if (!str) return null;
+  if (str.includes('-')) {
+    const parts = str.split('-');
+    if (parts[0].length === 4) return str; // sudah YYYY-MM-DD
+    return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+  }
+  return str;
+}
+function convertTime(str) {
+  if (!str) return '00:00:00';
+  const m = str.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (!m) return str.includes(':') ? str + ':00' : '00:00:00';
+  let h = parseInt(m[1]); const min = m[2]; const p = m[3].toUpperCase();
+  if (p==='PM' && h!==12) h+=12; if (p==='AM' && h===12) h=0;
+  return `${String(h).padStart(2,'0')}:${min}:00`;
+}
+```
+
+### Laporan Pendaftaran vs Laporan Excel
+- **Laporan Pendaftaran Juni** hanya tampilkan yang **daftar di Juni** (bukan akad di Juni)
+- Record yang daftar di April/Mei tapi akad di Juni → ada di Laporan Excel tapi tidak di Laporan Pendaftaran Juni
+- Untuk cari record seperti ini: switch bulan ke bulan registrasinya di Laporan Pendaftaran
+
+### INSERT ke DB
+```sql
+INSERT INTO public.weddings
+  (no_pendaftaran, registration_date, wedding_date, wedding_time, groom_name, bride_name, location, status)
+VALUES (...)
+ON CONFLICT (no_pendaftaran) DO NOTHING
+RETURNING no_pendaftaran, groom_name, wedding_date;
+```

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SIMKAH - Lampiran Dokumentasi Akad (R2 + Native)
 // @namespace    https://kua-pebayuran.id/
-// @version      2.1.0
+// @version      2.2.0
 // @description  Generate Lampiran HD, Upload Native SIMKAH, R2+DB Supabase, dan Floating Bulk Download ZIP
 // @author       KUA Pebayuran
 // @match        https://simkah4.kemenag.go.id/*
@@ -317,32 +317,7 @@
 
 		// Fetch officiant_name dari database berdasarkan no_pendaftaran
 		const dbPenghulu = await fetchOfficiantFromDB(data.noPendaftaran);
-
-		const penghuluOptions = [
-			{ value: "", label: "-- Pilih Penghulu --", disabled: true },
-			{ value: "DRS. H. MA'MUN NAWAWI", label: "DRS. H. MA'MUN NAWAWI" },
-			{ value: "NUNU HUSNUL HITAM, SHI.", label: "NUNU HUSNUL HITAM, SHI." },
-			{ value: "JALALUDIN, S.H.", label: "JALALUDIN, S.H." },
-		];
-
-		// Normalisasi: strip spasi, titik, koma lalu uppercase
-		const normalize = (s) => s.replace(/[\s.,]+/g, "").toUpperCase();
-
-		// Tentukan opsi terpilih dari database
-		const selectedValue = dbPenghulu
-			? penghuluOptions.find(
-					(opt) => normalize(opt.value) === normalize(dbPenghulu),
-				)?.value ?? ""
-			: "";
-
-		const optionsHTML = penghuluOptions
-			.map(
-				(opt) =>
-					`<option value="${esc(opt.value)}"${opt.disabled ? " disabled" : ""}${opt.value === selectedValue && !opt.disabled ? " selected" : ""}>
-						${esc(opt.label)}
-					</option>`,
-			)
-			.join("");
+		const penghuluDisplay = dbPenghulu || "BELUM DITENTUKAN";
 
 		const overlay = document.createElement("div");
 		overlay.id = "vm-overlay";
@@ -378,9 +353,7 @@
 
                 <div class="vm-field">
                     <label>PENGHULU <span style="color:red">*</span></label>
-                    <select id="vm-penghulu" class="vm-editable">
-                        ${optionsHTML}
-                    </select>
+                    <input type="text" id="vm-penghulu" value="${esc(penghuluDisplay)}" readonly>
                 </div>
                 <div class="vm-field">
                     <label>FOTO AKAD <span style="color:red">*</span> <span style="font-weight:400;color:#888">(kualitas HD)</span></label>
@@ -417,7 +390,7 @@
 			handleGenerate(overlay, data, tr);
 
 		document.body.appendChild(overlay);
-		overlay.querySelector("#vm-penghulu").focus();
+		overlay.querySelector("#vm-foto").focus();
 	}
 
 	// ── Generate & Upload Alur Ganda (DB/R2 + SIMKAH NATIVE) ───────────────────
@@ -428,7 +401,7 @@
 		const genBtn = overlay.querySelector("#vm-btn-generate");
 
 		statusEl.className = "vm-status-err";
-		if (!penghulu) return (statusEl.textContent = "⚠ Penghulu harus dipilih.");
+		if (!penghulu || penghulu === "BELUM DITENTUKAN") return (statusEl.textContent = "⚠ Penghulu belum ditentukan di database.");
 		if (!fotoInput.files.length)
 			return (statusEl.textContent = "⚠ Foto belum dipilih.");
 
@@ -536,7 +509,7 @@
 		const dlBtn = overlay.querySelector("#vm-btn-download");
 
 		statusEl.className = "vm-status-err";
-		if (!penghulu) return (statusEl.textContent = "⚠ Penghulu harus dipilih.");
+		if (!penghulu || penghulu === "BELUM DITENTUKAN") return (statusEl.textContent = "⚠ Penghulu belum ditentukan di database.");
 		if (!fotoInput.files.length)
 			return (statusEl.textContent = "⚠ Foto belum dipilih.");
 

@@ -325,11 +325,13 @@
 			{ value: "JALALUDIN, S.H.", label: "JALALUDIN, S.H." },
 		];
 
-		// Tentukan opsi terpilih dari database (case-insensitive)
+		// Normalisasi: strip spasi, titik, koma lalu uppercase
+		const normalize = (s) => s.replace(/[\s.,]+/g, "").toUpperCase();
+
+		// Tentukan opsi terpilih dari database
 		const selectedValue = dbPenghulu
 			? penghuluOptions.find(
-					(opt) =>
-						opt.value.toUpperCase() === dbPenghulu.toUpperCase(),
+					(opt) => normalize(opt.value) === normalize(dbPenghulu),
 				)?.value ?? ""
 			: "";
 

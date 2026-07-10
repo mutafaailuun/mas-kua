@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- ══ HALAMAN 1: COVER ══ -->
-		<!-- Nama: suami jika pemohon=suami/keduanya, istri jika pemohon=istri -->
+		<!-- Nama: suami jika pemohon=suami, istri jika pemohon=istri -->
 		<div
 			class="surat-paper text-black bg-white"
 			style="
@@ -165,7 +165,7 @@
 			</div>
 
 			<!-- Data Pemohon Suami -->
-			<template v-if="form.pemohon === 'keduanya' || form.pemohon === 'suami'">
+			<template v-if="form.pemohon === 'suami'">
 				<table
 					style="
 						width: 100%;
@@ -207,7 +207,7 @@
 			</template>
 
 			<!-- Data Pemohon Istri -->
-			<template v-if="form.pemohon === 'keduanya' || form.pemohon === 'istri'">
+			<template v-if="form.pemohon === 'istri'">
 				<table
 					style="
 						width: 100%;
@@ -290,47 +290,8 @@
 					<div>{{ form.lokasi || "Bekasi" }}, {{ tanggalFormatted }}</div>
 					<div style="margin-top: 2px">Pemohon,</div>
 
-					<!-- Keduanya: dua tanda tangan berdampingan -->
-					<template v-if="form.pemohon === 'keduanya'">
-						<div
-							style="
-								display: flex;
-								gap: 60px;
-								justify-content: center;
-								margin-top: 4px;
-							"
-						>
-							<div style="text-align: center">
-								<div style="font-size: 12px">Suami</div>
-								<div style="height: 64px"></div>
-								<div
-									style="
-										font-weight: bold;
-										text-decoration: underline;
-										text-transform: uppercase;
-									"
-								>
-									{{ form.nama_suami || "__________" }}
-								</div>
-							</div>
-							<div style="text-align: center">
-								<div style="font-size: 12px">Istri</div>
-								<div style="height: 64px"></div>
-								<div
-									style="
-										font-weight: bold;
-										text-decoration: underline;
-										text-transform: uppercase;
-									"
-								>
-									{{ form.nama_istri || "__________" }}
-								</div>
-							</div>
-						</div>
-					</template>
-
-					<!-- Suami saja -->
-					<template v-else-if="form.pemohon === 'suami'">
+					<!-- Suami -->
+					<template v-if="form.pemohon === 'suami'">
 						<div style="text-align: center">
 							<div style="font-size: 12px">Suami</div>
 							<div style="height: 64px"></div>
@@ -347,7 +308,7 @@
 						</div>
 					</template>
 
-					<!-- Istri saja -->
+					<!-- Istri -->
 					<template v-else-if="form.pemohon === 'istri'">
 						<div style="text-align: center">
 							<div style="font-size: 12px">Istri</div>
@@ -373,7 +334,7 @@
 <script setup lang="ts">
 defineProps<{
 	form: {
-		pemohon: "keduanya" | "suami" | "istri";
+		pemohon: "suami" | "istri";
 		nama_suami: string;
 		nama_istri: string;
 		ttl_suami: string;

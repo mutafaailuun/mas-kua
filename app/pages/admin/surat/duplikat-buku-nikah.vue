@@ -26,9 +26,8 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Pemohon</label>
             <select v-model="form.pemohon"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm">
-              <option value="keduanya">Suami & Istri</option>
-              <option value="suami">Suami saja</option>
-              <option value="istri">Istri saja</option>
+              <option value="suami">Suami</option>
+              <option value="istri">Istri</option>
             </select>
           </div>
 
@@ -52,9 +51,9 @@
           </div>
         </div>
 
-        <!-- Data Suami -->
+        <!-- Data Pemohon -->
         <div class="bg-white rounded-xl border border-blue-100 shadow-sm p-5 space-y-4">
-          <h3 class="text-sm font-semibold text-blue-700 uppercase tracking-wide">Data Suami</h3>
+          <h3 class="text-sm font-semibold text-blue-700 uppercase tracking-wide">Data Pemohon</h3>
 
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Suami</label>
@@ -62,7 +61,7 @@
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
           </div>
 
-          <template v-if="form.pemohon === 'keduanya' || form.pemohon === 'suami'">
+          <template v-if="form.pemohon === 'suami'">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Porporasi</label>
               <input v-model="form.nomor_porporasi_suami" type="text" placeholder="115439597"
@@ -89,9 +88,9 @@
           </template>
         </div>
 
-        <!-- Data Istri -->
+        <!-- Data Pemohon -->
         <div class="bg-white rounded-xl border border-pink-100 shadow-sm p-5 space-y-4">
-          <h3 class="text-sm font-semibold text-pink-700 uppercase tracking-wide">Data Istri</h3>
+          <h3 class="text-sm font-semibold text-pink-700 uppercase tracking-wide">Data Pemohon</h3>
 
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Istri</label>
@@ -99,7 +98,7 @@
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm uppercase" />
           </div>
 
-          <template v-if="form.pemohon === 'keduanya' || form.pemohon === 'istri'">
+          <template v-if="form.pemohon === 'istri'">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Porporasi</label>
               <input v-model="form.nomor_porporasi_istri" type="text" placeholder="115439597"
@@ -180,7 +179,7 @@ definePageMeta({
 })
 
 const form = reactive({
-  pemohon: 'keduanya' as 'keduanya' | 'suami' | 'istri',
+  pemohon: 'suami' as 'suami' | 'istri',
   nama_suami: '',
   nama_istri: '',
   ttl_suami: '',

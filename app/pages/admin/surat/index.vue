@@ -76,7 +76,7 @@
           </div>
         </div>
         <p class="text-sm text-gray-600 leading-relaxed">
-          Cover dan surat permohonan penggantian buku nikah yang hilang atau rusak, untuk satu atau dua pemohon (suami dan/atau istri).
+          Cover dan surat permohonan penggantian buku nikah yang hilang atau rusak, untuk satu pemohon (suami atau istri).
         </p>
         <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
           Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />

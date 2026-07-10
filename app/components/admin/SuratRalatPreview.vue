@@ -326,13 +326,13 @@ const seharusnyaHeader = computed(() => {
 // Dasar keterangan text
 const dasarKeterangan = computed(() => {
 	if (hasKelurahanName.value && hasKelurahanNumber.value) {
-		return `berdasarkan surat keterangan dari Kelurahan ${props.form.kelurahan} Nomor: ${props.form.nomor_kel}`;
+		return `berdasarkan surat keterangan dari Kelurahan/Desa ${props.form.kelurahan} Nomor: ${props.form.nomor_kel}`;
 	}
 	if (hasKelurahanName.value) {
-		return `berdasarkan surat keterangan dari Kelurahan ${props.form.kelurahan}`;
+		return `berdasarkan surat keterangan dari Kelurahan/Desa ${props.form.kelurahan}`;
 	}
 	if (hasKelurahanNumber.value) {
-		return `berdasarkan surat keterangan kelurahan Nomor: ${props.form.nomor_kel}`;
+		return `berdasarkan surat keterangan Kelurahan/Desa Nomor: ${props.form.nomor_kel}`;
 	}
 	return "berdasarkan dokumen pendukung yang dilampirkan oleh pemohon";
 });

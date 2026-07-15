@@ -350,12 +350,12 @@
 								>
 									<option value="">-- Penghulu --</option>
 									<option value="Drs. H. Ma'mun Nawawi">
-										Drs. H. Ma'mun Nawawi
+										DRS. H. MA'MUN NAWAWI
 									</option>
 									<option value="Nunu Husnul Hitam, S.HI">
-										Nunu Husnul Hitam, SH.I
+										NUNU HUSNUL HITAM, S.HI
 									</option>
-									<option value="Jalaludin, S.H">Jalaludin, S.H</option>
+									<option value="Jalaludin, S.H">JALALUDIN, S.H</option>
 								</select>
 							</td>
 

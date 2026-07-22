@@ -5,121 +5,34 @@
       <p class="mt-1 text-sm text-gray-500">Pilih template surat, isi form, lalu cetak atau unduh hasilnya.</p>
     </div>
 
-    <!-- Template Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-      <NuxtLink to="/admin/surat/ralat"
-        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors">
-            <Icon name="lucide:file-edit" class="w-7 h-7" />
+    <!-- Template List -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-10 overflow-hidden">
+      <div class="px-5 py-3 border-b border-gray-100 bg-gray-50">
+        <h3 class="text-sm font-semibold text-gray-700">Pilih Jenis Surat</h3>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <NuxtLink v-for="t in templates" :key="t.to" :to="t.to"
+          class="flex items-center gap-4 px-5 py-4 hover:bg-emerald-50/60 transition-colors group">
+          <div class="p-2.5 rounded-lg shrink-0" :class="t.bgColor">
+            <Icon :name="t.icon" class="w-5 h-5" :class="t.iconColor" />
           </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Surat Keterangan Ralat</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Koreksi data dalam buku nikah</p>
+          <div class="flex-1 min-w-0">
+            <h4 class="font-semibold text-sm text-gray-900 group-hover:text-emerald-700 transition-colors">{{ t.title }}</h4>
+            <p class="text-xs text-gray-500 mt-0.5">{{ t.subtitle }}</p>
           </div>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          Menerangkan perbedaan antara data yang tertulis dalam kutipan Akta Nikah dengan data yang sebenarnya.
-        </p>
-        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
-          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </NuxtLink>
-
-      <NuxtLink to="/admin/surat/umum"
-        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 transition-colors">
-            <Icon name="lucide:file-text" class="w-7 h-7" />
+          <div class="relative group/info shrink-0">
+            <button type="button" @click.prevent
+              class="p-1.5 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-help">
+              <Icon name="lucide:info" class="w-4 h-4" />
+            </button>
+            <div class="absolute right-0 top-full mt-1.5 z-20 w-64 p-3 bg-gray-900 text-white text-xs leading-relaxed rounded-lg shadow-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all pointer-events-none">
+              {{ t.description }}
+              <div class="absolute -top-1 right-3 w-2 h-2 bg-gray-900 rotate-45"></div>
+            </div>
           </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Surat Keterangan Tercatat/Tidak Tercatat</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Berbagai surat keterangan (Kepolisian, BPJS, dsb.)</p>
-          </div>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          Template surat keterangan umum untuk berbagai keperluan seperti laporan kehilangan, pendaftaran BPJS, atau keterangan status pernikahan.
-        </p>
-        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
-          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </NuxtLink>
-
-      <NuxtLink to="/admin/surat/penolakan"
-        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-red-50 text-red-500 group-hover:bg-red-100 transition-colors">
-            <Icon name="lucide:x-circle" class="w-7 h-7" />
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Penolakan Kehendak Nikah Rujuk</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Formulir Model N7</p>
-          </div>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          Pemberitahuan kekurangan syarat atau penolakan kehendak nikah/rujuk kepada calon pengantin atau wali.
-        </p>
-        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
-          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </NuxtLink>
-
-      <NuxtLink to="/admin/surat/duplikat-buku-nikah"
-        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-violet-50 text-violet-600 group-hover:bg-violet-100 transition-colors">
-            <Icon name="lucide:copy" class="w-7 h-7" />
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Duplikat Buku Nikah</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Surat permohonan duplikat akta nikah</p>
-          </div>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          Cover dan surat permohonan penggantian buku nikah yang hilang atau rusak, untuk satu pemohon (suami atau istri).
-        </p>
-        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
-          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </NuxtLink>
-
-      <NuxtLink to="/admin/surat/keabsahan-buku-nikah"
-        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-sky-50 text-sky-600 group-hover:bg-sky-100 transition-colors">
-            <Icon name="lucide:shield-check" class="w-7 h-7" />
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Keabsahan Buku Nikah</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Surat permohonan keterangan keabsahan akta nikah</p>
-          </div>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          Surat permohonan untuk meminta keterangan tentang keabsahan Kutipan Akta Nikah yang dialamatkan ke KUA tertentu.
-        </p>
-        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
-          Buat Surat <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </NuxtLink>
-
-      <NuxtLink to="/admin/surat/bimwin"
-        class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-6 flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="p-3 rounded-lg bg-teal-50 text-teal-600 group-hover:bg-teal-100 transition-colors">
-            <Icon name="lucide:book-open" class="w-7 h-7" />
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">Bimbingan Perkawinan</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Undangan, daftar hadir & tanda terima sertifikat</p>
-          </div>
-        </div>
-        <p class="text-sm text-gray-600 leading-relaxed">
-          Undangan BIMWIN per pasangan, daftar hadir, dan tanda terima sertifikat &amp; buku bimbingan perkawinan mandiri (landscape).
-        </p>
-        <div class="mt-auto flex items-center text-sm font-medium text-emerald-600 group-hover:text-emerald-700">
-          Buka <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-        </div>
-      </NuxtLink>
+          <Icon name="lucide:chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all shrink-0" />
+        </NuxtLink>
+      </div>
     </div>
 
     <!-- ── Log Surat Keluar ── -->
@@ -200,8 +113,8 @@
                     <Icon name="lucide:trash-2" class="w-3.5 h-3.5" />
                   </button>
                 </div>
-              </td>
-            </tr>
+                </td>
+              </tr>
           </tbody>
         </table>
 
@@ -269,6 +182,7 @@
                     <option value="buku_nikah_palsu">Buku Nikah Palsu</option>
                     <option value="ralat">Ralat Akta Nikah</option>
                     <option value="penolakan_nikah">Penolakan Kehendak Nikah/Rujuk (N7)</option>
+                    <option value="rekomendasi_wali">Rekomendasi Wali Nikah</option>
                   </optgroup>
                   <optgroup label="Surat Lainnya">
                     <option value="umum">Umum</option>
@@ -323,6 +237,12 @@
           :koreksi="reprintKoreksi"
           :tanggal-formatted="reprintTanggal"
         />
+        <AdminSuratRekomWaliPreview
+          v-else-if="reprintSurat.jenis_surat === 'rekomendasi_wali'"
+          :form="reprintFormData"
+          :nomor-surat="reprintSurat.nomor_surat"
+          :tanggal-formatted="reprintTanggal"
+        />
       </template>
     </div>
   </div>
@@ -332,10 +252,77 @@
 import { nextTick } from 'vue'
 import AdminSuratKeteranganPreview from '~/components/admin/SuratKeteranganPreview.vue'
 import AdminSuratRalatPreview from '~/components/admin/SuratRalatPreview.vue'
+import AdminSuratRekomWaliPreview from '~/components/admin/SuratRekomWaliPreview.vue'
 
 definePageMeta({ layout: 'admin', middleware: 'admin' })
 
 const supabase = useSupabaseClient()
+
+const templates = [
+  {
+    to: '/admin/surat/ralat',
+    icon: 'lucide:file-edit',
+    bgColor: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+    title: 'Surat Keterangan Ralat',
+    subtitle: 'Koreksi data dalam buku nikah',
+    description: 'Menerangkan perbedaan antara data yang tertulis dalam kutipan Akta Nikah dengan data yang sebenarnya.',
+  },
+  {
+    to: '/admin/surat/umum',
+    icon: 'lucide:file-text',
+    bgColor: 'bg-emerald-50',
+    iconColor: 'text-emerald-600',
+    title: 'Surat Keterangan Tercatat / Tidak Tercatat',
+    subtitle: 'Berbagai surat keterangan (Kepolisian, BPJS, dsb.)',
+    description: 'Template surat keterangan umum: nikah tercatat, tidak tercatat, isbat, BPJS, JHT, kepolisian, dan buku nikah palsu.',
+  },
+  {
+    to: '/admin/surat/penolakan',
+    icon: 'lucide:x-circle',
+    bgColor: 'bg-red-50',
+    iconColor: 'text-red-500',
+    title: 'Penolakan Kehendak Nikah Rujuk (N7)',
+    subtitle: 'Formulir Model N7',
+    description: 'Pemberitahuan kekurangan syarat atau penolakan kehendak nikah/rujuk kepada calon pengantin atau wali.',
+  },
+  {
+    to: '/admin/surat/duplikat-buku-nikah',
+    icon: 'lucide:copy',
+    bgColor: 'bg-violet-50',
+    iconColor: 'text-violet-600',
+    title: 'Duplikat Buku Nikah',
+    subtitle: 'Surat permohonan duplikat akta nikah',
+    description: 'Cover dan surat permohonan penggantian buku nikah yang hilang atau rusak, untuk satu pemohon (suami atau istri).',
+  },
+  {
+    to: '/admin/surat/keabsahan-buku-nikah',
+    icon: 'lucide:shield-check',
+    bgColor: 'bg-sky-50',
+    iconColor: 'text-sky-600',
+    title: 'Keabsahan Buku Nikah',
+    subtitle: 'Surat permohonan keterangan keabsahan akta nikah',
+    description: 'Surat permohonan untuk meminta keterangan tentang keabsahan Kutipan Akta Nikah yang dialamatkan ke KUA tertentu.',
+  },
+  {
+    to: '/admin/surat/bimwin',
+    icon: 'lucide:book-open',
+    bgColor: 'bg-teal-50',
+    iconColor: 'text-teal-600',
+    title: 'Bimbingan Perkawinan (BIMWIN)',
+    subtitle: 'Undangan, daftar hadir & tanda terima sertifikat',
+    description: 'Undangan BIMWIN per pasangan, daftar hadir, dan tanda terima sertifikat & buku bimbingan perkawinan mandiri (landscape).',
+  },
+  {
+    to: '/admin/surat/rekom-wali',
+    icon: 'lucide:users',
+    bgColor: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+    title: 'Rekomendasi Wali Nikah',
+    subtitle: 'Surat rekomendasi wali nikah antar KUA',
+    description: 'Surat rekomendasi wali nikah yang ditujukan ke KUA di luar kecamatan. Data wali, data calon pengantin, dan surat keterangan desa.',
+  },
+]
 
 // ── Types ─────────────────────────────────────────────────────────
 interface SuratKeluar {
@@ -405,6 +392,7 @@ const JENIS_LABELS: Record<string, string> = {
   bimwin: 'BIMWIN',
   umum: 'Umum',
   rekomendasi: 'Rekomendasi',
+  rekomendasi_wali: 'Rekom. Wali',
   keterangan: 'Keterangan',
   lainnya: 'Lainnya',
 }
@@ -417,6 +405,7 @@ const jenisColor = (jenis: string) => {
   if (jenis === 'penolakan_nikah') return 'bg-red-50 text-red-700'
   if (jenis === 'bimwin') return 'bg-teal-50 text-teal-700'
   if (jenis === 'rekomendasi') return 'bg-blue-50 text-blue-700'
+  if (jenis === 'rekomendasi_wali') return 'bg-indigo-50 text-indigo-700'
   return 'bg-gray-100 text-gray-600'
 }
 
@@ -483,17 +472,21 @@ const printFromLog = async (surat: SuratKeluar) => {
     return
   }
 
+  const isF4 = reprintSurat.value?.jenis_surat === 'rekomendasi_wali'
+  const pageSize = isF4 ? '210mm 330mm' : 'A4 portrait'
+  const minHeight = isF4 ? '1247px' : '1123px'
+
   printWindow.document.write(`
     <!doctype html>
     <html lang="id">
       <head>
         <meta charset="UTF-8">
-        <title>${surat.perihal}</title>
+        <title>${reprintSurat.value?.perihal ?? 'Surat'}</title>
         <style>
-          @page { size: A4 portrait; margin: 0; }
+          @page { size: ${pageSize}; margin: 0; }
           html, body { margin: 0; padding: 0; background: #fff; }
           body { font-family: "Times New Roman", Times, serif; }
-          .surat-paper { width: 794px !important; min-height: 1123px !important; margin: 0 auto; box-sizing: border-box; }
+          .surat-paper { width: 794px !important; min-height: ${minHeight} !important; margin: 0 auto; box-sizing: border-box; }
         </style>
       </head>
       <body>${printContent}</body>
@@ -535,6 +528,7 @@ const fetchSurat = async () => {
 const EDIT_ROUTE_MAP: Record<string, string> = {
   ralat: '/admin/surat/ralat',
   penolakan_nikah: '/admin/surat/penolakan',
+  rekomendasi_wali: '/admin/surat/rekom-wali',
   tercatat: '/admin/surat/umum',
   tercatat_terlambat: '/admin/surat/umum',
   tercatat_kepolisian: '/admin/surat/umum',

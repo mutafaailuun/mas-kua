@@ -107,7 +107,6 @@ Deno.serve(async (req) => {
   });
 
   if (error) {
-    // Unique violation → data sudah masuk duluan (race condition)
     if (error.code === "23505") {
       return new Response(JSON.stringify({ ok: true, duplicate: true }), {
         headers: { ...CORS, "Content-Type": "application/json" },

@@ -96,11 +96,20 @@ export default defineEventHandler(async (event) => {
 
   // ── MODE: penghulu — update officiant_name dari Laporan Excel ────────
   if (mode === 'penghulu') {
+    const syncedIds: string[] = []
     for (const r of records) {
       const no_pendaftaran = r.no_pendaftaran
       const officiant_name = r.penghulu_hadir
       const no_akta = r.no_akta_nikah ?? null
       if (!no_pendaftaran || !officiant_name) { results.skipped++; continue }
+
+      const { data: existing } = await supabase
+        .from('weddings')
+        .select('id')
+        .eq('no_pendaftaran', no_pendaftaran)
+        .maybeSingle()
+
+      if (!existing) { results.skipped++; continue }
 
       const update: Record<string, any> = { officiant_name }
       if (no_akta) update.no_akta = no_akta
@@ -108,10 +117,29 @@ export default defineEventHandler(async (event) => {
       const { error } = await supabase
         .from('weddings')
         .update(update)
-        .eq('no_pendaftaran', no_pendaftaran)
+        .eq('id', existing.id)
 
       if (error) results.errors.push(`${no_pendaftaran}: ${error.message}`)
-      else results.updated++
+      else {
+        results.updated++
+        syncedIds.push(existing.id)
+      }
+    }
+
+    // Trigger GCal sync untuk penghulu yang baru di-update
+    if (syncedIds.length > 0) {
+      const edgeFnUrl = `${supabaseUrl}/functions/v1/gcal-sync`
+      fetch(edgeFnUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseKey}`,
+        },
+        body: JSON.stringify({
+          ids: syncedIds.join(','),
+          calendar_id: 'kangjaliel1998@gmail.com',
+        }),
+      }).catch(() => { /* fire-and-forget */ })
     }
   }
 

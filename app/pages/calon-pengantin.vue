@@ -107,6 +107,29 @@ const handleSubmit = async () => {
 
     if (dbError) throw dbError
 
+    // Sinkronkan nomor HP dan email ke data jadwal akad yang cocok
+    const { data: matchingWeddings } = await supabase
+      .from('weddings')
+      .select('id')
+      .ilike('groom_name', form.groom_name.trim())
+      .ilike('bride_name', form.bride_name.trim())
+      .limit(1)
+
+    if (matchingWeddings && matchingWeddings.length > 0) {
+      const weddingId = matchingWeddings[0].id
+      const { error: updateError } = await supabase
+        .from('weddings')
+        .update({
+          phone_number: form.phone_number.trim(),
+          email: form.email.trim() || null,
+        })
+        .eq('id', weddingId)
+
+      if (updateError) {
+        console.error('Error updating wedding contact:', updateError)
+      }
+    }
+
     submitted.value = true
   } catch (err) {
     console.error('Error saving inquiry:', err)
@@ -152,7 +175,7 @@ const resetForm = () => {
         </div>
         <h2 class="text-lg font-semibold text-emerald-800">Data Berhasil Tersimpan</h2>
         <p class="mt-2 text-emerald-700">
-          Terima kasih telah mengisi formulir. Data sudah tersimpan di database KUA.
+          Terima kasih telah mengisi formulir. Data sudah tersimpan di database KUA. Nomor HP juga akan tersinkron dengan jadwal akad jika nama pasangan ditemukan.
         </p>
         <button
           type="button"

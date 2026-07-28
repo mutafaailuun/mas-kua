@@ -799,6 +799,10 @@ export type Database = {
           officiant_name: string | null
           status: string
           notes: string | null
+          phone_number: string | null
+          email: string | null
+          registration_date: string | null
+          no_akta: string | null
         }
         Insert: {
           id?: string
@@ -810,6 +814,10 @@ export type Database = {
           officiant_name?: string | null
           status?: string
           notes?: string | null
+          phone_number?: string | null
+          email?: string | null
+          registration_date?: string | null
+          no_akta?: string | null
         }
         Update: {
           id?: string
@@ -821,6 +829,10 @@ export type Database = {
           officiant_name?: string | null
           status?: string
           notes?: string | null
+          phone_number?: string | null
+          email?: string | null
+          registration_date?: string | null
+          no_akta?: string | null
         }
         Relationships: []
       }

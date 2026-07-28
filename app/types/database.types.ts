@@ -749,6 +749,45 @@ export type Database = {
         }
         Relationships: []
       }
+      wedding_inquiries: {
+        Row: {
+          id: string
+          groom_name: string
+          bride_name: string
+          phone_number: string
+          email: string | null
+          source: string | null
+          is_contacted: boolean | null
+          notes: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          groom_name: string
+          bride_name: string
+          phone_number: string
+          email?: string | null
+          source?: string | null
+          is_contacted?: boolean | null
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          groom_name?: string
+          bride_name?: string
+          phone_number?: string
+          email?: string | null
+          source?: string | null
+          is_contacted?: boolean | null
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       weddings: {
         Row: {
           id: string

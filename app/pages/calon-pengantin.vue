@@ -9,6 +9,7 @@ useSeoMeta({
 })
 
 const { sendMessage } = useWhatsApp()
+const supabase = useSupabaseClient()
 
 const form = reactive({
   groom_name: '',
@@ -19,11 +20,25 @@ const form = reactive({
 
 const submitting = ref(false)
 const submitted = ref(false)
+const error = ref('')
 
 const handleSubmit = async () => {
   submitting.value = true
+  error.value = ''
 
   try {
+    const { error: dbError } = await supabase
+      .from('wedding_inquiries')
+      .insert({
+        groom_name: form.groom_name.trim(),
+        bride_name: form.bride_name.trim(),
+        phone_number: form.phone_number.trim(),
+        email: form.email.trim() || null,
+        source: 'website',
+      })
+
+    if (dbError) throw dbError
+
     const message = [
       'Assalamualaikum Wr. Wb.',
       '',
@@ -38,6 +53,9 @@ const handleSubmit = async () => {
 
     sendMessage(message)
     submitted.value = true
+  } catch (err) {
+    console.error('Error saving inquiry:', err)
+    error.value = 'Gagal menyimpan data. Silakan coba lagi atau hubungi KUA secara langsung.'
   } finally {
     submitting.value = false
   }
@@ -48,6 +66,7 @@ const resetForm = () => {
   form.bride_name = ''
   form.phone_number = ''
   form.email = ''
+  error.value = ''
   submitted.value = false
 }
 </script>
@@ -162,6 +181,11 @@ const resetForm = () => {
             placeholder="contoh@email.com"
             class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           />
+        </div>
+
+        <!-- Error -->
+        <div v-if="error" class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {{ error }}
         </div>
 
         <!-- Actions -->

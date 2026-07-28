@@ -66,16 +66,38 @@ const fetchNames = async () => {
   }
 }
 
-const selectGroom = (name) => {
+const selectGroom = async (name) => {
   form.groom_name = name
   showGroomSuggestions.value = false
   groomInputRef.value?.blur()
+
+  // Cari pasangan wanita yang cocok
+  const { data } = await supabase
+    .from('weddings')
+    .select('bride_name')
+    .ilike('groom_name', name)
+    .limit(1)
+
+  if (data && data.length > 0 && data[0].bride_name) {
+    form.bride_name = data[0].bride_name
+  }
 }
 
-const selectBride = (name) => {
+const selectBride = async (name) => {
   form.bride_name = name
   showBrideSuggestions.value = false
   brideInputRef.value?.blur()
+
+  // Cari pasangan pria yang cocok
+  const { data } = await supabase
+    .from('weddings')
+    .select('groom_name')
+    .ilike('bride_name', name)
+    .limit(1)
+
+  if (data && data.length > 0 && data[0].groom_name) {
+    form.groom_name = data[0].groom_name
+  }
 }
 
 const handleBlur = (field) => {

@@ -8,8 +8,14 @@ useSeoMeta({
   ogUrl: 'https://kuapebayuran.com/calon-pengantin',
 })
 
-const { sendMessage } = useWhatsApp()
 const supabase = useSupabaseClient()
+
+const phoneNumber = '6287785587322'
+const sendMessage = (message = '') => {
+  const encodedMessage = encodeURIComponent(message)
+  const url = `https://wa.me/${phoneNumber}${message ? `?text=${encodedMessage}` : ''}`
+  window.open(url, '_blank')
+}
 
 const form = reactive({
   groom_name: '',

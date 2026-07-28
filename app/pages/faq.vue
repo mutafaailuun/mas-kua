@@ -7,10 +7,8 @@ useSeoMeta({
   ogType: 'website',
   ogUrl: 'https://kuapebayuran.com/faq',
 })
-import { Icon } from "@iconify/vue";
 import AccordionItem from "../components/AccordionItem.vue";
 import { faqs } from "../data/faqs.js";
-import { slugify } from "~/utils/slugify";
 </script>
 
 <template>
@@ -25,19 +23,10 @@ import { slugify } from "~/utils/slugify";
         </p>
       </div>
       <div class="max-w-3xl mx-auto space-y-4">
-        <div v-for="(faq, index) in faqs" :key="index" class="space-y-2">
+        <div v-for="(faq, index) in faqs" :key="index">
           <AccordionItem :title="faq.question" :is-html="true">
             {{ faq.answer }}
           </AccordionItem>
-          <div class="text-right">
-            <NuxtLink
-              :to="`/faq/${slugify(faq.question)}`"
-              class="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700"
-            >
-              Baca selengkapnya
-              <Icon name="lucide:arrow-right" class="w-4 h-4 ml-1" />
-            </NuxtLink>
-          </div>
         </div>
       </div>
     </div>

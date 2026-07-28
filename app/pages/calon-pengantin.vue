@@ -10,13 +10,6 @@ useSeoMeta({
 
 const supabase = useSupabaseClient()
 
-const phoneNumber = '6287785587322'
-const sendMessage = (message = '') => {
-  const encodedMessage = encodeURIComponent(message)
-  const url = `https://wa.me/${phoneNumber}${message ? `?text=${encodedMessage}` : ''}`
-  window.open(url, '_blank')
-}
-
 const form = reactive({
   groom_name: '',
   bride_name: '',
@@ -114,19 +107,6 @@ const handleSubmit = async () => {
 
     if (dbError) throw dbError
 
-    const message = [
-      'Assalamualaikum Wr. Wb.',
-      '',
-      'Saya ingin mengirimkan data calon pengantin:',
-      `*Nama Calon Pengantin Pria:* ${form.groom_name}`,
-      `*Nama Calon Pengantin Wanita:* ${form.bride_name}`,
-      `*Nomor Telepon:* ${form.phone_number}`,
-      ...(form.email ? [`*Email:* ${form.email}`] : []),
-      '',
-      'Mohon informasi lebih lanjut mengenai pendaftaran nikah. Terima kasih.',
-    ].join('\n')
-
-    sendMessage(message)
     submitted.value = true
   } catch (err) {
     console.error('Error saving inquiry:', err)
@@ -170,9 +150,9 @@ const resetForm = () => {
         <div class="mx-auto w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
           <Icon name="lucide:check" class="w-6 h-6 text-emerald-600" />
         </div>
-        <h2 class="text-lg font-semibold text-emerald-800">Data Berhasil Dikirim</h2>
+        <h2 class="text-lg font-semibold text-emerald-800">Data Berhasil Tersimpan</h2>
         <p class="mt-2 text-emerald-700">
-          Terima kasih telah mengisi formulir. Silakan lanjutkan konfirmasi melalui WhatsApp yang telah terbuka.
+          Terima kasih telah mengisi formulir. Data sudah tersimpan di database KUA.
         </p>
         <button
           type="button"
@@ -339,8 +319,8 @@ const resetForm = () => {
             class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Icon v-if="submitting" name="lucide:loader-2" class="w-5 h-5 mr-2 animate-spin" />
-            <Icon v-else name="lucide:send" class="w-5 h-5 mr-2" />
-            {{ submitting ? 'Mengirim...' : 'Kirim via WhatsApp' }}
+            <Icon v-else name="lucide:save" class="w-5 h-5 mr-2" />
+            {{ submitting ? 'Menyimpan...' : 'Simpan Data' }}
           </button>
         </div>
 

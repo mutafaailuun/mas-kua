@@ -22,20 +22,20 @@ CREATE POLICY "Allow anonymous insert on wedding_inquiries"
   TO anon, authenticated
   WITH CHECK (true);
 
--- Hanya admin yang bisa membaca data
-CREATE POLICY "Allow admin read on wedding_inquiries"
+-- Semua user yang login bisa membaca data (sesuai middleware admin)
+CREATE POLICY "Allow authenticated read on wedding_inquiries"
   ON public.wedding_inquiries
   FOR SELECT
   TO authenticated
-  USING (public.is_admin());
+  USING (true);
 
--- Hanya admin yang bisa update/menghapus
-CREATE POLICY "Allow admin update on wedding_inquiries"
+-- Semua user yang login bisa update/menghapus
+CREATE POLICY "Allow authenticated update on wedding_inquiries"
   ON public.wedding_inquiries
   FOR UPDATE
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (true)
+  WITH CHECK (true);
 
 -- Trigger untuk update updated_at otomatis
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()

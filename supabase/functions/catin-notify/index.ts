@@ -25,6 +25,14 @@ function normalisePhone(raw: string): string {
   return "62" + digits;
 }
 
+/** Format 62xxx to local 0xxx for display */
+function formatPhoneLocal(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.startsWith("62")) return "0" + digits.slice(2);
+  if (!digits.startsWith("0")) return "0" + digits;
+  return digits;
+}
+
 async function sendWa(token: string, target: string, message: string) {
   const res = await fetch("https://api.fonnte.com/send", {
     method: "POST",
@@ -188,7 +196,7 @@ Sumber: ${source || "website"}
 
 👤 *Calon Suami:* ${groom_name}
 👰 *Calon Istri:* ${bride_name}
-📱 *No. HP:* ${phone_number}
+📱 *No. HP:* ${formatPhoneLocal(phone_number)}
 📧 *Email:* ${email || "-"}
 
 Silakan verifikasi dan tindak lanjuti.`;

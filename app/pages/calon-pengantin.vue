@@ -22,6 +22,75 @@ const submitting = ref(false)
 const submitted = ref(false)
 const error = ref('')
 
+// Autocomplete data
+const groomNames = ref([])
+const brideNames = ref([])
+const loadingNames = ref(false)
+
+// Autocomplete visibility
+const showGroomSuggestions = ref(false)
+const showBrideSuggestions = ref(false)
+const groomInputRef = ref(null)
+const brideInputRef = ref(null)
+
+const filteredGroomNames = computed(() => {
+  const query = form.groom_name.trim().toLowerCase()
+  if (!query) return groomNames.value.slice(0, 20)
+  return groomNames.value
+    .filter((name) => name.toLowerCase().includes(query))
+    .slice(0, 20)
+})
+
+const filteredBrideNames = computed(() => {
+  const query = form.bride_name.trim().toLowerCase()
+  if (!query) return brideNames.value.slice(0, 20)
+  return brideNames.value
+    .filter((name) => name.toLowerCase().includes(query))
+    .slice(0, 20)
+})
+
+const fetchNames = async () => {
+  loadingNames.value = true
+  try {
+    // Ambil nama unik dari tabel weddings
+    const [{ data: grooms }, { data: brides }] = await Promise.all([
+      supabase.from('weddings').select('groom_name').not('groom_name', 'is', null),
+      supabase.from('weddings').select('bride_name').not('bride_name', 'is', null),
+    ])
+
+    groomNames.value = [...new Set((grooms || []).map((w) => w.groom_name).filter(Boolean).sort())]
+    brideNames.value = [...new Set((brides || []).map((w) => w.bride_name).filter(Boolean).sort())]
+  } catch (err) {
+    console.error('Error fetching names:', err)
+  } finally {
+    loadingNames.value = false
+  }
+}
+
+const selectGroom = (name) => {
+  form.groom_name = name
+  showGroomSuggestions.value = false
+  groomInputRef.value?.blur()
+}
+
+const selectBride = (name) => {
+  form.bride_name = name
+  showBrideSuggestions.value = false
+  brideInputRef.value?.blur()
+}
+
+const handleBlur = (field) => {
+  // Delay agar klik suggestion tidak langsung menutup dropdown
+  setTimeout(() => {
+    if (field === 'groom') showGroomSuggestions.value = false
+    if (field === 'bride') showBrideSuggestions.value = false
+  }, 150)
+}
+
+onMounted(() => {
+  fetchNames()
+})
+
 const handleSubmit = async () => {
   submitting.value = true
   error.value = ''
@@ -116,33 +185,101 @@ const resetForm = () => {
       >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Nama Calon Pengantin Pria -->
-          <div>
+          <div class="relative">
             <label for="groom_name" class="block text-sm font-medium text-gray-700 mb-1">
               Nama Calon Pengantin Pria <span class="text-red-500">*</span>
             </label>
-            <input
-              id="groom_name"
-              v-model="form.groom_name"
-              type="text"
-              required
-              placeholder="Contoh: Ahmad Fauzi"
-              class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-            />
+            <div class="relative">
+              <input
+                id="groom_name"
+                ref="groomInputRef"
+                v-model="form.groom_name"
+                type="text"
+                required
+                placeholder="Contoh: Ahmad Fauzi"
+                autocomplete="off"
+                class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+                @focus="showGroomSuggestions = true"
+                @blur="handleBlur('groom')"
+              />
+              <div v-if="loadingNames" class="absolute right-3 top-1/2 -translate-y-1/2">
+                <Icon name="lucide:loader-2" class="w-4 h-4 text-gray-400 animate-spin" />
+              </div>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <ul
+                v-if="showGroomSuggestions && filteredGroomNames.length"
+                class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+              >
+                <li
+                  v-for="name in filteredGroomNames"
+                  :key="name"
+                  @mousedown.prevent="selectGroom(name)"
+                  class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-emerald-50 text-gray-900"
+                >
+                  {{ name }}
+                </li>
+              </ul>
+            </transition>
+            <p class="mt-1 text-xs text-gray-500">
+              Ketik atau pilih dari data yang sudah ada.
+            </p>
           </div>
 
           <!-- Nama Calon Pengantin Wanita -->
-          <div>
+          <div class="relative">
             <label for="bride_name" class="block text-sm font-medium text-gray-700 mb-1">
               Nama Calon Pengantin Wanita <span class="text-red-500">*</span>
             </label>
-            <input
-              id="bride_name"
-              v-model="form.bride_name"
-              type="text"
-              required
-              placeholder="Contoh: Siti Aminah"
-              class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
-            />
+            <div class="relative">
+              <input
+                id="bride_name"
+                ref="brideInputRef"
+                v-model="form.bride_name"
+                type="text"
+                required
+                placeholder="Contoh: Siti Aminah"
+                autocomplete="off"
+                class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
+                @focus="showBrideSuggestions = true"
+                @blur="handleBlur('bride')"
+              />
+              <div v-if="loadingNames" class="absolute right-3 top-1/2 -translate-y-1/2">
+                <Icon name="lucide:loader-2" class="w-4 h-4 text-gray-400 animate-spin" />
+              </div>
+            </div>
+            <transition
+              enter-active-class="transition ease-out duration-100"
+              enter-from-class="transform opacity-0 scale-95"
+              enter-to-class="transform opacity-100 scale-100"
+              leave-active-class="transition ease-in duration-75"
+              leave-from-class="transform opacity-100 scale-100"
+              leave-to-class="transform opacity-0 scale-95"
+            >
+              <ul
+                v-if="showBrideSuggestions && filteredBrideNames.length"
+                class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+              >
+                <li
+                  v-for="name in filteredBrideNames"
+                  :key="name"
+                  @mousedown.prevent="selectBride(name)"
+                  class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-emerald-50 text-gray-900"
+                >
+                  {{ name }}
+                </li>
+              </ul>
+            </transition>
+            <p class="mt-1 text-xs text-gray-500">
+              Ketik atau pilih dari data yang sudah ada.
+            </p>
           </div>
         </div>
 

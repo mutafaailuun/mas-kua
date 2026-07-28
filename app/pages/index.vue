@@ -8,7 +8,7 @@
       <ServicesSection :services="services" />
       
       <!-- LATEST ARTICLES -->
-      <section class="py-20 bg-white">
+      <section v-if="false" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-sm font-bold tracking-wide text-emerald-600 uppercase">Artikel Terbaru</h2>
@@ -34,7 +34,7 @@
       </section>
 
       <!-- POPULAR ARTICLES -->
-      <section class="py-20 bg-emerald-900 text-white">
+      <section v-if="false" class="py-20 bg-emerald-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>

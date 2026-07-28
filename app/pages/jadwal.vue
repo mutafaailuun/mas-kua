@@ -183,13 +183,6 @@
                   >
                     {{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'LUAR KANTOR' : 'KANTOR' }}
                   </span>
-                  <button
-                    @click="openDetail(w)"
-                    class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
-                  >
-                    <Icon icon="lucide:eye" class="w-3.5 h-3.5" />
-                    Lihat Data
-                  </button>
                 </div>
               </div>
             </div>
@@ -263,104 +256,10 @@
               >
                 {{ w.status.toLowerCase().startsWith('luar') || w.status.toLowerCase() === 'bedol' ? 'Luar Kantor' : 'Kantor' }}
               </span>
-              <button
-                @click="openDetail(w)"
-                class="ml-2 inline-flex items-center gap-1 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
-              >
-                <Icon icon="lucide:eye" class="w-3.5 h-3.5" />
-                Lihat Data
-              </button>
             </div>
           </template>
         </div>
       </div>
-
-      <!-- Detail Dialog -->
-      <Dialog v-model:open="dialogOpen">
-        <DialogContent class="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle class="flex items-center gap-2">
-              <Icon icon="lucide:file-text" class="w-5 h-5 text-emerald-600" />
-              Detail Jadwal Akad Nikah
-            </DialogTitle>
-            <DialogDescription>
-              Informasi lengkap calon pengantin dan jadwal akad.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div v-if="selectedWedding" class="space-y-6 mt-2">
-            <!-- Pasangan -->
-            <div class="bg-emerald-50 rounded-xl p-4">
-              <p class="text-xs text-emerald-600 font-medium uppercase tracking-wide mb-1">Calon Pengantin</p>
-              <p class="text-lg font-bold text-gray-900">
-                {{ selectedWedding.groom_name }}
-                <span class="text-emerald-600 mx-1">&</span>
-                {{ selectedWedding.bride_name }}
-              </p>
-            </div>
-
-            <!-- Grid Data -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="space-y-1">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Tanggal Akad</p>
-                <p class="text-sm font-medium text-gray-900">{{ formatFullDate(selectedWedding.wedding_date) }}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Jam Akad</p>
-                <p class="text-sm font-medium text-gray-900">{{ selectedWedding.wedding_time.substring(0, 5) }} WIB</p>
-              </div>
-              <div class="space-y-1 md:col-span-2">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Lokasi / Tempat Akad</p>
-                <p class="text-sm font-medium text-gray-900">{{ selectedWedding.location || '-' }}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Nama Penghulu</p>
-                <p class="text-sm font-medium text-gray-900">{{ selectedWedding.officiant_name || '-' }}</p>
-              </div>
-              <div class="space-y-1">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Status Lokasi</p>
-                <span
-                  class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                  :class="selectedWedding.status.toLowerCase().startsWith('luar') || selectedWedding.status.toLowerCase() === 'bedol' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'"
-                >
-                  {{ selectedWedding.status.toLowerCase().startsWith('luar') || selectedWedding.status.toLowerCase() === 'bedol' ? 'Luar Kantor' : 'Kantor' }}
-                </span>
-              </div>
-              <div v-if="selectedWedding.registration_date" class="space-y-1">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Tanggal Pendaftaran</p>
-                <p class="text-sm font-medium text-gray-900">{{ formatFullDate(selectedWedding.registration_date) }}</p>
-              </div>
-              <div v-if="selectedWedding.no_akta" class="space-y-1">
-                <p class="text-xs text-gray-500 uppercase tracking-wide">Nomor Akta Nikah</p>
-                <p class="text-sm font-medium text-gray-900">{{ selectedWedding.no_akta }}</p>
-              </div>
-            </div>
-
-            <!-- Kontak -->
-            <div class="border-t border-gray-100 pt-4">
-              <p class="text-xs text-gray-500 uppercase tracking-wide mb-3">Kontak Catin</p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-1">
-                  <p class="text-xs text-gray-400">Nomor HP / WhatsApp</p>
-                  <p class="text-sm font-medium text-gray-900">
-                    {{ selectedWedding.phone_number ? '+62 ' + selectedWedding.phone_number : '-' }}
-                  </p>
-                </div>
-                <div class="space-y-1">
-                  <p class="text-xs text-gray-400">Email</p>
-                  <p class="text-sm font-medium text-gray-900">{{ selectedWedding.email || '-' }}</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Keterangan -->
-            <div v-if="selectedWedding.notes" class="border-t border-gray-100 pt-4">
-              <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Keterangan Tambahan</p>
-              <p class="text-sm text-gray-700 whitespace-pre-line">{{ selectedWedding.notes }}</p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   </div>
 </template>
@@ -368,24 +267,8 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { Tables } from "~/types/database.types";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "~/components/ui/dialog";
 
 type Wedding = Tables<"weddings">;
-
-const selectedWedding = ref<Wedding | null>(null);
-const dialogOpen = ref(false);
-
-const openDetail = (w: Wedding) => {
-  selectedWedding.value = w;
-  dialogOpen.value = true;
-};
 
 useHead({
   title: "Jadwal Akad Nikah | KUA Kecamatan Pebayuran",

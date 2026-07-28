@@ -48,10 +48,11 @@ Deno.serve(async (req) => {
   const url = new URL(req.url);
   let type = url.searchParams.get("type") ?? "";
   let weddingId = url.searchParams.get("wedding_id") ?? "";
+  let body: any = {};
 
   if (req.method === "POST") {
     try {
-      const body = await req.json();
+      body = await req.json();
       type = type || body.type;
       weddingId = weddingId || body.wedding_id;
     } catch { /* ignore */ }

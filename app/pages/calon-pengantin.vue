@@ -152,6 +152,23 @@ const handleSubmit = async () => {
       }
     }
 
+    // Kirim notifikasi ke admin
+    try {
+      await $fetch('/api/notify/catin', {
+        method: 'POST',
+        body: {
+          type: 'admin-inquiry',
+          groom_name: form.groom_name.trim(),
+          bride_name: form.bride_name.trim(),
+          phone_number: form.phone_number.trim(),
+          email: form.email.trim() || null,
+          source: 'website',
+        },
+      })
+    } catch (notifyErr) {
+      console.error('Error sending admin notification:', notifyErr)
+    }
+
     submitted.value = true
   } catch (err) {
     console.error('Error saving inquiry:', err)

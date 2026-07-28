@@ -171,5 +171,33 @@ Salam hangat,
     });
   }
 
-  return new Response(JSON.stringify({ error: `Unknown type: ${type}. Use 'konfirmasi' or 'pengingat-h1'` }), { status: 400 });
+  // ── Notifikasi Admin saat ada pengisian formulir ───────────────
+  if (type === "admin-inquiry") {
+    const adminPhone = "6285733121232"; // 085733121232
+    const { groom_name, bride_name, phone_number, email, source } = body || {};
+
+    if (!groom_name || !bride_name || !phone_number) {
+      return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
+    }
+
+    const message =
+`📋 *Formulir Calon Pengantin Baru*
+
+Sumber: ${source || "website"}
+
+👤 *Calon Suami:* ${groom_name}
+👰 *Calon Istri:* ${bride_name}
+📱 *No. HP:* ${phone_number}
+📧 *Email:* ${email || "-"}
+
+Silakan verifikasi dan tindak lanjuti.`;
+
+    const phone = normalisePhone(adminPhone);
+    const result = await sendWa(fonnteToken, phone, message);
+    return new Response(JSON.stringify({ type: "admin-inquiry", phone, result }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  return new Response(JSON.stringify({ error: `Unknown type: ${type}. Use 'konfirmasi', 'pengingat-h1', or 'admin-inquiry'` }), { status: 400 });
 });

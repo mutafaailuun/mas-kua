@@ -20,7 +20,7 @@ const onButtonClick = (sectionId) => emit("scrollToSection", sectionId);
     <!-- Gradient overlay kiri -->
     <div class="absolute inset-0 bg-gradient-to-br from-emerald-900/60 via-transparent to-emerald-800/40 pointer-events-none"></div>
 
-    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-24 pt-32">
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-24 pt-40 sm:pt-32">
       <div class="max-w-4xl mx-auto text-center">
 
         <!-- Badge instansi -->

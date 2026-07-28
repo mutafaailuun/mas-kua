@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
         message += `📅 Hari/Tgl: ${now.toLocaleDateString('id-ID', dateOptions)}\n\n`;
         if (todayWeddings && todayWeddings.length > 0) {
           todayWeddings.forEach((w, i) => {
-            message += `${i + 1}. ⏰ Jam: ${w.wedding_time.substring(0, 5)} WIB\n   👤 Catin: ${w.groom_name} & ${w.bride_name}\n   📍 Lokasi: ${w.location}\n   👳‍♂️ Penghulu: ${w.officiant_name}\n   📝 Status: ${w.status}\n\n`;
+            message += `${i + 1}. ⏰ Jam: ${w.wedding_time.substring(0, 5)} WIB\n   👤 Catin: ${w.groom_name} & ${w.bride_name}\n   📍 Lokasi: ${w.location}\n   👳‍♂️ Penghulu: ${(w.officiant_name ?? '').toUpperCase() || '-'}\n   📝 Status: ${w.status}\n\n`;
           });
         } else { message += "_Tidak ada jadwal hari ini._\n\n"; }
 
@@ -88,7 +88,7 @@ Deno.serve(async (req) => {
         message += `📅 Hari/Tgl: ${tomorrow.toLocaleDateString('id-ID', dateOptions)}\n\n`;
         if (tomorrowWeddings && tomorrowWeddings.length > 0) {
           tomorrowWeddings.forEach((w, i) => {
-            message += `${i + 1}. ⏰ Jam: ${w.wedding_time.substring(0, 5)} WIB\n   👤 Pasangan: ${w.groom_name} & ${w.bride_name}\n   📍 Alamat: ${w.location}\n   👳‍♂️ Petugas: ${w.officiant_name}\n${w.notes ? `   📌 Keterangan: ${w.notes}\n` : ""}\n`;
+            message += `${i + 1}. ⏰ Jam: ${w.wedding_time.substring(0, 5)} WIB\n   👤 Pasangan: ${w.groom_name} & ${w.bride_name}\n   📍 Alamat: ${w.location}\n   👳‍♂️ Petugas: ${(w.officiant_name ?? '').toUpperCase() || '-'}\n${w.notes ? `   📌 Keterangan: ${w.notes}\n` : ""}\n`;
           });
         } else { message += "_Tidak ada jadwal besok._\n\n"; }
 

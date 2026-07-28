@@ -6,7 +6,7 @@
     </div>
 
     <!-- Template List -->
-    <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-10 overflow-hidden">
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-10">
       <div class="px-5 py-3 border-b border-gray-100 bg-gray-50">
         <h3 class="text-sm font-semibold text-gray-700">Pilih Jenis Surat</h3>
       </div>
@@ -25,7 +25,7 @@
               class="p-1.5 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-help">
               <Icon name="lucide:info" class="w-4 h-4" />
             </button>
-            <div class="absolute right-0 top-full mt-1.5 z-20 w-64 p-3 bg-gray-900 text-white text-xs leading-relaxed rounded-lg shadow-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all pointer-events-none">
+            <div class="absolute right-0 top-full mt-1.5 z-50 w-64 p-3 bg-gray-900 text-white text-xs leading-relaxed rounded-lg shadow-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all pointer-events-none">
               {{ t.description }}
               <div class="absolute -top-1 right-3 w-2 h-2 bg-gray-900 rotate-45"></div>
             </div>

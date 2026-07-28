@@ -159,7 +159,7 @@
 
     <!-- ══ TANDA TANGAN ══ -->
     <div style="display: flex; justify-content: flex-end;">
-      <div style="text-align: center; min-width: 240px;">
+      <div style="text-align: left; min-width: 240px;">
         <div>Kepala KUA Kec. Pebayuran</div>
         <div style="height: 72px;"></div>
         <div style="font-weight: bold; text-decoration: underline; letter-spacing: 0.3px; text-transform: uppercase;">

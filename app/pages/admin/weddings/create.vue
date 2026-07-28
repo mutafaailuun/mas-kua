@@ -102,9 +102,9 @@
             class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             <option value="">-- Pilih Penghulu --</option>
-            <option value="Drs. H. Ma'mun Nawawi">Drs. H. Ma'mun Nawawi</option>
-            <option value="Nunu Husnul Hitam, SH.I">Nunu Husnul Hitam, SH.I</option>
-            <option value="Jalaludin, S.H">Jalaludin, S.H</option>
+            <option value="DRS. H. MA'MUN NAWAWI">DRS. H. MA'MUN NAWAWI</option>
+            <option value="NUNU HUSNUL HITAM, SH.I">NUNU HUSNUL HITAM, SH.I</option>
+            <option value="JALALUDIN, S.H">JALALUDIN, S.H</option>
           </select>
         </div>
 
@@ -224,9 +224,13 @@ const doSave = async () => {
   showConflictDialog.value = false
   submitting.value = true
   try {
+    const payload = {
+      ...form,
+      officiant_name: form.officiant_name ? form.officiant_name.toUpperCase() : null,
+    }
     const { error } = await supabase
       .from('weddings')
-      .insert([form])
+      .insert([payload])
 
     if (error) throw error
     router.push('/admin/weddings')

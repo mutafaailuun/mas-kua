@@ -286,13 +286,13 @@
 
 			<!-- Tanda Tangan -->
 			<div style="display: flex; justify-content: flex-end">
-				<div style="text-align: center">
+				<div style="text-align: left">
 					<div>{{ form.lokasi || "Bekasi" }}, {{ tanggalFormatted }}</div>
 					<div style="margin-top: 2px">Pemohon,</div>
 
 					<!-- Suami -->
 					<template v-if="form.pemohon === 'suami'">
-						<div style="text-align: center">
+						<div style="text-align: left">
 							<div style="font-size: 12px">Suami</div>
 							<div style="height: 64px"></div>
 							<div
@@ -310,7 +310,7 @@
 
 					<!-- Istri -->
 					<template v-else-if="form.pemohon === 'istri'">
-						<div style="text-align: center">
+						<div style="text-align: left">
 							<div style="font-size: 12px">Istri</div>
 							<div style="height: 64px"></div>
 							<div

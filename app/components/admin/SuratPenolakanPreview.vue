@@ -98,7 +98,7 @@
 
     <!-- ══ TANDA TANGAN ══ -->
     <div style="display: flex; justify-content: flex-end;">
-      <div style="text-align: center; min-width: 240px;">
+      <div style="text-align: left; min-width: 240px;">
         <div>Wassalam,</div>
         <div>Kepala KUA/Penghulu/PPN LN</div>
         <div style="height: 64px;"></div>

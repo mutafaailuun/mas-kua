@@ -105,9 +105,9 @@
             class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm"
           >
             <option value="">-- Pilih Penghulu --</option>
-            <option value="Drs. H. Ma'mun Nawawi">Drs. H. Ma'mun Nawawi</option>
-            <option value="Nunu Husnul Hitam, SH.I">Nunu Husnul Hitam, SH.I</option>
-            <option value="Jalaludin, S.H">Jalaludin, S.H</option>
+            <option value="DRS. H. MA'MUN NAWAWI">DRS. H. MA'MUN NAWAWI</option>
+            <option value="NUNU HUSNUL HITAM, SH.I">NUNU HUSNUL HITAM, SH.I</option>
+            <option value="JALALUDIN, S.H">JALALUDIN, S.H</option>
           </select>
         </div>
 
@@ -285,6 +285,20 @@ const kirimKonfirmasi = async () => {
   }
 }
 
+// Auto-sync ke Google Calendar ketika penghulu JALALUDIN diubah
+const syncGCalForOfficiant = (officiantName: string | null) => {
+  if (!officiantName || !officiantName.toUpperCase().includes('JALALUDIN')) return
+  $fetch('/api/gcal/sync', {
+    method: 'POST',
+    body: {
+      wedding_ids: [route.params.id],
+      calendar_id: 'kangjaliel1998@gmail.com',
+    },
+  }).catch((err) => {
+    console.error('GCal sync error:', err)
+  })
+}
+
 const fetchWedding = async () => {
   loading.value = true
   try {
@@ -328,7 +342,7 @@ const doUpdate = async () => {
       registration_date: form.registration_date || null,
       phone_number: form.phone_number || null,
       email: form.email || null,
-      officiant_name: form.officiant_name || null,
+      officiant_name: form.officiant_name ? form.officiant_name.toUpperCase() : null,
       notes: form.notes || null,
     }
     const { error } = await supabase
@@ -337,6 +351,7 @@ const doUpdate = async () => {
       .eq('id', route.params.id)
 
     if (error) throw error
+    syncGCalForOfficiant(payload.officiant_name)
     router.push('/admin/weddings')
   } catch (error) {
     console.error('Error updating wedding:', error)

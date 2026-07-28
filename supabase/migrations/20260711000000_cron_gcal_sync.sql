@@ -1,6 +1,12 @@
 -- Cron job: sync jadwal Penghulu JALALUDIN ke Google Calendar
 -- Berjalan setiap hari jam 17:00 UTC = 00:00 WIB
 -- pg_cron dan pg_net sudah dikelola Supabase di level platform.
+--
+-- PENTING: Pastikan secret vault dengan name = 'service_role_key' sudah dibuat
+-- sebelum cron job ini dijalankan. Jika tidak, header Authorization akan kosong
+-- dan edge function akan mengembalikan 401 UNAUTHORIZED_NO_AUTH_HEADER.
+-- Contoh pembuatan secret:
+--   SELECT vault.create_secret('<SERVICE_ROLE_KEY>', 'service_role_key');
 
 SELECT cron.unschedule('gcal-sync-jalaludin') WHERE EXISTS (
   SELECT 1 FROM cron.job WHERE jobname = 'gcal-sync-jalaludin'

@@ -152,7 +152,7 @@
 
 		<!-- Tanda Tangan -->
 		<div style="display: flex; justify-content: flex-end">
-			<div style="text-align: center; min-width: 200px">
+			<div style="text-align: left; min-width: 200px">
 				<div>{{ form.lokasi || "Bekasi" }}, {{ tanggalFormatted }}</div>
 				<div style="margin-top: 2px">Pemohon</div>
 				<div style="height: 72px"></div>

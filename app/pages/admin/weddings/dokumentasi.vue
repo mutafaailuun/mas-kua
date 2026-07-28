@@ -348,14 +348,14 @@
 									"
 									class="px-2 py-1 text-xs font-medium rounded border border-transparent hover:border-gray-300 focus:outline-none focus:ring-1 focus:border-emerald-400 focus:ring-emerald-400 transition-colors cursor-pointer bg-transparent focus:bg-white"
 								>
-									<option value="">-- Penghulu --</option>
-									<option value="Drs. H. Ma'mun Nawawi">
-										DRS. H. MA'MUN NAWAWI
-									</option>
-									<option value="Nunu Husnul Hitam, S.HI">
-										NUNU HUSNUL HITAM, S.HI
-									</option>
-									<option value="Jalaludin, S.H">JALALUDIN, S.H</option>
+								<option value="">-- Penghulu --</option>
+								<option value="DRS. H. MA'MUN NAWAWI">
+									DRS. H. MA'MUN NAWAWI
+								</option>
+								<option value="NUNU HUSNUL HITAM, S.HI">
+									NUNU HUSNUL HITAM, S.HI
+								</option>
+								<option value="JALALUDIN, S.H">JALALUDIN, S.H</option>
 								</select>
 							</td>
 
@@ -1156,6 +1156,20 @@ const formatTanggalUpper = (raw: string) => {
 	return `${dd}-${mm}-${d.getFullYear()}`;
 };
 
+// Auto-sync ke Google Calendar ketika penghulu JALALUDIN diubah
+const syncGCalForOfficiant = (officiantName: string | null, weddingId: string) => {
+	if (!officiantName || !officiantName.toUpperCase().includes("JALALUDIN")) return;
+	$fetch("/api/gcal/sync", {
+		method: "POST",
+		body: {
+			wedding_ids: [weddingId],
+			calendar_id: "kangjaliel1998@gmail.com",
+		},
+	}).catch((err) => {
+		console.error("GCal sync error:", err);
+	});
+};
+
 // ── Dropdown menu ────────────────────────────────────────────────
 const toggleMenu = (id: string, event?: MouseEvent) => {
 	if (openMenuId.value === id) {
@@ -1195,7 +1209,8 @@ const REQUIRED_FIELDS: WeddingField[] = [
 ];
 
 const saveEdit = async (wedding: any, field: WeddingField, value: string) => {
-	const trimmed = value.trim();
+	let trimmed = value.trim();
+	if (field === 'officiant_name') trimmed = trimmed.toUpperCase();
 	const current = wedding[field] ?? "";
 
 	// Don't save if unchanged
@@ -1217,6 +1232,8 @@ const saveEdit = async (wedding: any, field: WeddingField, value: string) => {
 	if (error) {
 		console.error(`Save ${field} error:`, error);
 		if (idx !== -1) weddings.value[idx][field] = wedding[field];
+	} else if (field === "officiant_name") {
+		syncGCalForOfficiant(newVal as string, wedding.id);
 	}
 };
 

@@ -94,7 +94,7 @@
 
     <!-- Tanda tangan -->
     <div style="display: flex; justify-content: flex-end;">
-      <div style="text-align: center; min-width: 200px;">
+      <div style="text-align: left; min-width: 200px;">
         <div>Kepala,</div>
         <div style="height: 75px;"></div>
         <div style="font-weight: bold; text-decoration: underline; text-transform: uppercase;">{{ form.kepala }}</div>

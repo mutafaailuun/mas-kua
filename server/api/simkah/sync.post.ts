@@ -99,7 +99,7 @@ export default defineEventHandler(async (event) => {
     const syncedIds: string[] = []
     for (const r of records) {
       const no_pendaftaran = r.no_pendaftaran
-      const officiant_name = r.penghulu_hadir
+      const officiant_name = (r.penghulu_hadir ?? '').toUpperCase()
       const no_akta = r.no_akta_nikah ?? null
       if (!no_pendaftaran || !officiant_name) { results.skipped++; continue }
 

@@ -41,7 +41,7 @@
     </table>
 
     <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
-      <div style="text-align: center; min-width: 200px;">
+      <div style="text-align: left; min-width: 200px;">
         <div>{{ form.lokasi || 'Pebayuran' }}, {{ tanggalBimwinFormatted }}</div>
         <div>Kepala KUA Kec. Pebayuran</div>
         <div style="height: 65px;"></div>

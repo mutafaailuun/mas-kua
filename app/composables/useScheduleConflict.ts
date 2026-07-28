@@ -12,7 +12,7 @@ export const useScheduleConflict = () => {
     let query = supabase
       .from('weddings')
       .select('id, groom_name, bride_name, wedding_date, wedding_time, location')
-      .eq('officiant_name', officiantName)
+      .ilike('officiant_name', officiantName)
       .eq('wedding_date', weddingDate)
       .eq('wedding_time', weddingTime)
 

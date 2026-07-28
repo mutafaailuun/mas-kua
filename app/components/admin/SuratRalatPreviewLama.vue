@@ -69,7 +69,7 @@
 
     <!-- ══ TANDA TANGAN ══ -->
     <div style="display: flex; justify-content: flex-end;">
-      <div style="text-align: center; min-width: 240px;">
+      <div style="text-align: left; min-width: 240px;">
         <div>{{ form.lokasi || 'Bekasi' }}, {{ tanggalFormatted }}</div>
         <div style="margin-top: 2px;">Kepala,</div>
         <div style="height: 64px;"></div>

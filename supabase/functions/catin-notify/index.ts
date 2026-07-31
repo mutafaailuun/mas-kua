@@ -104,7 +104,9 @@ Berikut ringkasan data pendaftaran Anda:
 📍 *Lokasi:* ${lokasi}
 
 *Langkah Selanjutnya:*
-Petugas kami akan melakukan verifikasi berkas. Pastikan nomor ini tetap aktif karena kami akan menghubungi Anda kembali untuk jadwal Pemeriksaan Nikah (Simkah) di kantor KUA.
+1. Batas pengiriman berkas nikah adalah *15 hari kerja* setelah tanggal pendaftaran.
+2. Anda *wajib mengikuti Bimbingan Perkawinan* (Binwin). Untuk jadwal pelaksanaannya akan kami informasikan nanti melalui WhatsApp ini.
+3. Petugas kami akan melakukan verifikasi berkas. Pastikan nomor ini tetap aktif karena kami akan menghubungi Anda kembali untuk jadwal Pemeriksaan Nikah (Simkah) di kantor KUA.
 
 Terima kasih dan semoga lancar hingga hari H! 🤍
 

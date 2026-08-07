@@ -180,6 +180,7 @@
                     <option value="tidak_tercatat_bpjs">Tidak Tercatat – BPJS</option>
                     <option value="tidak_tercatat_jht">Tidak Tercatat – Klaim JHT</option>
                     <option value="buku_nikah_palsu">Buku Nikah Palsu</option>
+                    <option value="buku_nikah_palsu_lama">Buku Nikah Palsu (Versi Lama)</option>
                     <option value="ralat">Ralat Akta Nikah</option>
                     <option value="penolakan_nikah">Penolakan Kehendak Nikah/Rujuk (N7)</option>
                     <option value="rekomendasi_wali">Rekomendasi Wali Nikah</option>
@@ -373,7 +374,7 @@ const printing = ref<string | null>(null)
 const KETERANGAN_TYPES = new Set([
   'tercatat', 'tercatat_terlambat', 'tercatat_kepolisian',
   'tidak_tercatat', 'tidak_tercatat_isbat', 'tidak_tercatat_bpjs',
-  'tidak_tercatat_jht', 'buku_nikah_palsu',
+  'tidak_tercatat_jht', 'buku_nikah_palsu', 'buku_nikah_palsu_lama',
 ])
 
 const isKeteranganType = (jenis: string) => KETERANGAN_TYPES.has(jenis)
@@ -387,6 +388,7 @@ const JENIS_LABELS: Record<string, string> = {
   tidak_tercatat_bpjs: 'BPJS',
   tidak_tercatat_jht: 'JHT BPJS',
   buku_nikah_palsu: 'Buku Palsu',
+  buku_nikah_palsu_lama: 'Buku Palsu (Lama)',
   ralat: 'Ralat',
   penolakan_nikah: 'Penolakan N7',
   bimwin: 'BIMWIN',
@@ -537,6 +539,7 @@ const EDIT_ROUTE_MAP: Record<string, string> = {
   tidak_tercatat_bpjs: '/admin/surat/umum',
   tidak_tercatat_jht: '/admin/surat/umum',
   buku_nikah_palsu: '/admin/surat/umum',
+  buku_nikah_palsu_lama: '/admin/surat/umum',
 }
 
 // ── Form helpers ──────────────────────────────────────────────────

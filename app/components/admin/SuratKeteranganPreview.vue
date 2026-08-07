@@ -66,6 +66,14 @@
 				margin-bottom: 14px;
 			"
 		>
+		<template v-if="jenis === 'buku_nikah_palsu_lama'">
+			<div style="text-indent: 0">
+				Yang bertanda tangan dibawah ini Kepala Kantor Urusan Agama Kecamatan
+				Pebayuran Kabupaten Bekasi, Provinsi Jawa Barat, dengan ini menerangkan
+				bahwa :
+			</div>
+		</template>
+		<template v-else>
 			Yang bertanda tangan di bawah ini, Kepala Kantor Urusan Agama Kecamatan
 			Pebayuran Kabupaten Bekasi,
 			{{
@@ -73,10 +81,11 @@
 					? "menerangkan:"
 					: "dengan ini menerangkan bahwa:"
 			}}
+		</template>
 		</div>
 
-		<!-- ══ TABEL DATA PASANGAN (format standar) ══ -->
-		<template v-if="jenis !== 'tercatat_kepolisian'">
+	<!-- ══ TABEL DATA PASANGAN (format standar) ══ -->
+	<template v-if="jenis !== 'tercatat_kepolisian' && jenis !== 'buku_nikah_palsu_lama'">
 			<table
 				style="
 					width: 100%;
@@ -413,6 +422,53 @@
 			</div>
 		</template>
 
+		<!-- buku_nikah_palsu_lama -->
+		<template v-if="jenis === 'buku_nikah_palsu_lama'">
+			<div
+				style="
+					text-align: justify;
+					line-height: 1.8;
+					margin-bottom: 14px;
+				"
+			>
+				<div style="display: flex; text-indent: 0">
+					<span style="min-width: 2.5em">1.</span>
+					<span style="flex: 1">
+						Kutipan Akta Nikah (NA) Nomor :
+						<strong>{{ form.nomor_akta || "______" }}</strong>, Seri
+						<strong>{{ form.seri || "______" }}</strong> dengan Nomor
+						Porporasi
+						<strong>{{ form.nomor_perforasi || "______" }}</strong
+						>, tanggal pernikahan
+						<strong>{{
+							form.tanggal_nikah
+								? formatTanggalNikah(form.tanggal_nikah)
+								: "_______________"
+						}}</strong
+						>, an.
+						<strong style="text-transform: uppercase">{{
+							form.nama_suami || "______"
+						}}</strong>
+						dengan
+						<strong style="text-transform: uppercase">{{
+							form.nama_istri || "______"
+						}}</strong>, bahwa kutipan Akta Nikah tersebut tidak tercatat
+						pada buku Register (Model N) KUA Kec. Pebayuran Kabupaten Bekasi
+						Provinsi Jawa Barat.
+					</span>
+				</div>
+				<div style="display: flex; text-indent: 0; margin-top: 8px">
+					<span style="min-width: 2.5em">2.</span>
+					<span style="flex: 1">
+						Bahwa Pejabat pencatat Nikah pada Tahun
+						<strong>{{ form.tahun_ppn || "______" }}</strong> adalah
+						<strong>{{ form.nama_ppn_asli || "______" }}</strong> bukan
+						<strong>{{ form.nama_ppn_palsu || "______" }}</strong>.
+					</span>
+				</div>
+			</div>
+		</template>
+
 		<!-- tercatat_kepolisian -->
 		<div
 			v-if="jenis === 'tercatat_kepolisian'"
@@ -445,14 +501,19 @@
 				margin-bottom: 36px;
 			"
 		>
-			<template v-if="jenis === 'tercatat_kepolisian'">
-				Demikian keterangan ini dibuat, agar dapat dipergunakan sebagaimana
-				mestinya.
-			</template>
-			<template v-else>
-				Demikian surat keterangan ini dibuat dengan sebenar-benarnya, untuk
-				dapat dipergunakan sebagaimana mestinya.
-			</template>
+		<template v-if="jenis === 'tercatat_kepolisian'">
+			Demikian keterangan ini dibuat, agar dapat dipergunakan sebagaimana
+			mestinya.
+		</template>
+		<template v-else-if="jenis === 'buku_nikah_palsu_lama'">
+			<div style="text-indent: 0">
+				Demikianlah Surat keterangan ini dibuat agar menjadi maklum hendaknya.
+			</div>
+		</template>
+		<template v-else>
+			Demikian surat keterangan ini dibuat dengan sebenar-benarnya, untuk
+			dapat dipergunakan sebagaimana mestinya.
+		</template>
 		</div>
 
 		<!-- ══ TANDA TANGAN ══ -->

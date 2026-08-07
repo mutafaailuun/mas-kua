@@ -54,6 +54,7 @@
               <option value="tidak_tercatat_bpjs">Tidak Tercatat – Keperluan BPJS</option>
               <option value="tidak_tercatat_jht">Tidak Tercatat – Keperluan Klaim JHT</option>
               <option value="buku_nikah_palsu">Buku Nikah Palsu / Tidak Terdaftar</option>
+              <option value="buku_nikah_palsu_lama">Buku Nikah Palsu / Tidak Terdaftar (Versi Lama)</option>
             </select>
           </div>
 
@@ -227,7 +228,7 @@
         </div>
 
         <!-- Data Buku Nikah Palsu -->
-        <div v-if="form.jenis === 'buku_nikah_palsu'"
+        <div v-if="form.jenis === 'buku_nikah_palsu' || form.jenis === 'buku_nikah_palsu_lama'"
           class="bg-white rounded-xl border border-amber-200 shadow-sm p-5 space-y-4">
           <h3 class="text-sm font-semibold text-amber-700 uppercase tracking-wide">Data Buku Nikah</h3>
 
@@ -235,6 +236,19 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Akta Nikah (tertulis di buku nikah)</label>
             <input v-model="form.nomor_akta" type="text" placeholder="0412/2005"
               class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+          </div>
+
+          <div v-if="form.jenis === 'buku_nikah_palsu_lama'" class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Seri</label>
+              <input v-model="form.seri" type="text" placeholder="DD"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">No. Porporasi</label>
+              <input v-model="form.nomor_perforasi" type="text" placeholder="0476950"
+                class="block w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" />
+            </div>
           </div>
 
           <div>
@@ -379,6 +393,7 @@ const perihalSurat = computed(() => {
     tidak_tercatat_bpjs: 'Surat Keterangan Tidak Tercatat (BPJS)',
     tidak_tercatat_jht: 'Surat Keterangan Tidak Tercatat (Klaim JHT)',
     buku_nikah_palsu: 'Surat Keterangan Buku Nikah',
+    buku_nikah_palsu_lama: 'Surat Keterangan Buku Nikah (Versi Lama)',
   }
   const label = jenisLabel[form.jenis] ?? 'Surat Keterangan'
   return namaPihak ? `${label} a.n. ${namaPihak}` : label

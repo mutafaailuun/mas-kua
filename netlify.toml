@@ -4,3 +4,16 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# Redirect domain lama ke domain utama
+[[redirects]]
+  from = "https://kuapebayuran.web.id/*"
+  to = "https://kuapebayuran.id/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://kuapebayuran.web.id/*"
+  to = "https://kuapebayuran.id/:splat"
+  status = 301
+  force = true

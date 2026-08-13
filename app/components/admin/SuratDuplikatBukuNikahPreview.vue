@@ -11,7 +11,7 @@
 				padding: 0;
 				box-sizing: border-box;
 				page-break-after: always;
-				font-family: Tahoma, sans-serif;
+				font-family: 'Times New Roman', Times, serif;
 			"
 		>
 			<!-- Double border frame -->
@@ -87,7 +87,7 @@
 				<div style="text-align: center">
 					<div
 						style="
-							font-size: 18px;
+							font-size: 14px;
 							font-weight: bold;
 							text-transform: uppercase;
 						"
@@ -100,7 +100,7 @@
 					</div>
 					<div
 						style="
-							font-size: 14px;
+							font-size: 13px;
 							font-weight: bold;
 							text-decoration: underline;
 							margin-top: 5px;
@@ -293,7 +293,7 @@
 					<!-- Suami -->
 					<template v-if="form.pemohon === 'suami'">
 						<div style="text-align: left">
-							<div style="font-size: 12px">Suami</div>
+							<div style="font-size: 13px">Suami</div>
 							<div style="height: 64px"></div>
 							<div
 								style="
@@ -311,7 +311,7 @@
 					<!-- Istri -->
 					<template v-else-if="form.pemohon === 'istri'">
 						<div style="text-align: left">
-							<div style="font-size: 12px">Istri</div>
+							<div style="font-size: 13px">Istri</div>
 							<div style="height: 64px"></div>
 							<div
 								style="

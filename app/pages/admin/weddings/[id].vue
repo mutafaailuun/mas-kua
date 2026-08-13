@@ -130,6 +130,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">
             No. HP Catin
             <span class="ml-1 text-xs font-normal text-gray-400">(Opsional, untuk notif WA)</span>
+            <span v-if="phoneFromInquiry" class="ml-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">dari inquiry</span>
           </label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm select-none">+62</span>
@@ -251,6 +252,7 @@ const form = reactive({
 
 const sendingWa = ref(false)
 const waResult = ref<{ ok: boolean; message: string } | null>(null)
+const phoneFromInquiry = ref(false)
 
 // Auto-save field kontak langsung ke database tanpa perlu klik Update
 const savingContact = ref(false)
@@ -323,6 +325,23 @@ const fetchWedding = async () => {
         phone_number: data.phone_number || '',
         email: data.email || '',
       })
+
+      // Fallback: jika phone_number kosong, coba ambil dari wedding_inquiries
+      if (!data.phone_number) {
+        const { data: inquiries, error: inquiryErr } = await supabase
+          .from('wedding_inquiries')
+          .select('phone_number')
+          .ilike('groom_name', data.groom_name)
+          .ilike('bride_name', data.bride_name)
+          .not('phone_number', 'is', null)
+          .order('created_at', { ascending: false })
+          .limit(1)
+
+        if (!inquiryErr && inquiries && inquiries.length > 0) {
+          form.phone_number = inquiries[0].phone_number
+          phoneFromInquiry.value = true
+        }
+      }
     }
   } catch (error) {
     console.error('Error fetching wedding:', error)

@@ -10,10 +10,10 @@ function toDateStr(date: Date): string {
 async function fetchHariLiburTahun(year: number): Promise<Set<string>> {
   if (holidayCache.has(year)) return holidayCache.get(year)!
   try {
-    const data = await $fetch<{ date: string; name: string; is_national_holiday: boolean }[]>(
-      `https://libur.deno.dev/api?year=${year}`
+    const data = await $fetch<{ date: string; localName: string; name: string }[]>(
+      `https://date.nager.at/api/v3/publicholidays/${year}/ID`
     )
-    // Masukkan semua tanggal: libur nasional DAN cuti bersama
+    // Masukkan semua tanggal libur nasional (Nager.Date)
     const set = new Set(
       data
         .filter(h => {

@@ -146,13 +146,29 @@
           </div>
 
           <div class="rounded-xl border border-gray-200 shadow-lg bg-gray-100 p-4 space-y-3">
-            <!-- Cover preview -->
-            <p class="text-xs text-gray-400 text-center">Halaman 1 – Cover</p>
+            <div class="flex items-center justify-between">
+              <button
+                @click="prevPage"
+                :disabled="previewPage === 1"
+                class="inline-flex items-center p-1.5 rounded-lg text-gray-600 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                <Icon name="lucide:chevron-left" class="w-5 h-5" />
+              </button>
+              <p class="text-xs text-gray-500 font-medium">Halaman {{ previewPage }} – {{ previewPage === 1 ? 'Cover' : 'Surat Permohonan' }}</p>
+              <button
+                @click="nextPage"
+                :disabled="previewPage === 2"
+                class="inline-flex items-center p-1.5 rounded-lg text-gray-600 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                <Icon name="lucide:chevron-right" class="w-5 h-5" />
+              </button>
+            </div>
             <div style="width: 492px; height: 696px; overflow: hidden; margin: 0 auto;">
               <div style="width: 794px; transform: scale(0.62); transform-origin: top left;">
                 <AdminSuratDuplikatBukuNikahPreview
                   :form="form"
                   :tanggal-formatted="tanggalFormatted"
+                  :page="previewPage"
                 />
               </div>
             </div>
@@ -202,6 +218,15 @@ const tanggalFormatted = computed(() => {
 })
 
 const printTargetRef = ref<HTMLElement | null>(null)
+const previewPage = ref<1 | 2>(1)
+
+const nextPage = () => {
+  if (previewPage.value < 2) previewPage.value = 2
+}
+
+const prevPage = () => {
+  if (previewPage.value > 1) previewPage.value = 1
+}
 
 const printSurat = () => {
   const printContent = printTargetRef.value?.innerHTML

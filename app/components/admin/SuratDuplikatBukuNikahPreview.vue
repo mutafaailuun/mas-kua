@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<!-- ══ HALAMAN 1: COVER ══ -->
+		<template v-if="showPage1">
 		<!-- Nama: suami jika pemohon=suami, istri jika pemohon=istri -->
 		<div
 			class="surat-paper text-black bg-white"
@@ -133,8 +134,10 @@
 				</div>
 			</div>
 		</div>
+		</template>
 
 		<!-- ══ HALAMAN 2: SURAT PERMOHONAN ══ -->
+		<template v-if="showPage2">
 		<div
 			class="surat-paper font-['Times_New_Roman',_Times,_serif] text-[13px] leading-relaxed text-black bg-white"
 			style="
@@ -328,11 +331,12 @@
 				</div>
 			</div>
 		</div>
+		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
 	form: {
 		pemohon: "suami" | "istri";
 		nama_suami: string;
@@ -350,5 +354,9 @@ defineProps<{
 		lokasi: string;
 	};
 	tanggalFormatted: string;
+	page?: 1 | 2;
 }>();
+
+const showPage1 = computed(() => props.page === undefined || props.page === 1);
+const showPage2 = computed(() => props.page === undefined || props.page === 2);
 </script>

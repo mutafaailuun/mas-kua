@@ -132,17 +132,39 @@ Hormat kami,
     const { data: weddings } = await supabase
       .from("weddings")
       .select("*")
-      .eq("wedding_date", tomorrowStr)
-      .not("phone_number", "is", null);
+      .eq("wedding_date", tomorrowStr);
 
     if (!weddings || weddings.length === 0) {
-      return new Response(JSON.stringify({ type: "pengingat-h1", sent: 0, reason: "No weddings with phone tomorrow" }), {
+      return new Response(JSON.stringify({ type: "pengingat-h1", sent: 0, reason: "No weddings tomorrow" }), {
         headers: { "Content-Type": "application/json" },
       });
     }
 
     const results = [];
     for (const w of weddings) {
+      let phoneNumber = w.phone_number;
+
+      // Fallback: jika phone_number di weddings kosong, coba ambil dari wedding_inquiries
+      if (!phoneNumber) {
+        const { data: inquiries } = await supabase
+          .from("wedding_inquiries")
+          .select("phone_number")
+          .ilike("groom_name", w.groom_name)
+          .ilike("bride_name", w.bride_name)
+          .not("phone_number", "is", null)
+          .order("created_at", { ascending: false })
+          .limit(1);
+
+        if (inquiries && inquiries.length > 0) {
+          phoneNumber = inquiries[0].phone_number;
+        }
+      }
+
+      if (!phoneNumber) {
+        results.push({ id: w.id, name: w.groom_name, skipped: true, reason: "No phone number found" });
+        continue;
+      }
+
       const namaCatin = w.groom_name;
       const hari = formatTanggal(w.wedding_date);
       const jam = formatJam(w.wedding_time);
@@ -158,7 +180,6 @@ Mengingatkan kembali bahwa jadwal akad nikah Anda akan dilaksanakan *BESOK*:
 📍 *Lokasi:* ${lokasi}
 
 *Hal-hal yang perlu dipersiapkan:*
-✅ Membawa KTP Asli kedua mempelai
 💍 Menyiapkan Mahar (Mas Kawin) di lokasi
 👥 Memastikan Saksi Nikah sudah hadir tepat waktu dan *membawa KTP Asli*
 💪 Tetap menjaga kesehatan dan kondisi fisik agar tetap fit
@@ -168,7 +189,7 @@ Semoga prosesi akad nikah esok berjalan khidmat, lancar, dan penuh berkah. Sampa
 Salam hangat,
 *KUA ${KUA_NAMA}*`;
 
-      const phone = normalisePhone(w.phone_number!);
+      const phone = normalisePhone(phoneNumber);
       try {
         const result = await sendWa(fonnteToken, phone, message);
         results.push({ id: w.id, name: w.groom_name, phone, result });

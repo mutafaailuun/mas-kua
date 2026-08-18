@@ -64,16 +64,18 @@ Deno.serve(async () => {
     );
   }
 
-  // Cek hari libur nasional via libur.deno.dev
+  // Cek hari libur nasional via Nager.Date API
+  const thn = nowWib.getUTCFullYear();
+  const hariIniStr = `${thn}-${String(nowWib.getUTCMonth() + 1).padStart(2, "0")}-${String(nowWib.getUTCDate()).padStart(2, "0")}`;
   try {
-    const liburRes = await fetch("https://libur.deno.dev/api/today");
+    const liburRes = await fetch(`https://date.nager.at/api/v3/publicholidays/${thn}/ID`);
     if (liburRes.ok) {
-      const liburData = await liburRes.json();
-      if (liburData.is_holiday) {
-        const namaLibur = liburData.holiday_list?.join(", ") ?? "Hari Libur";
-        console.log("Hari ini libur nasional, piket dilewati:", namaLibur);
+      const holidays: Array<{ date: string; localName: string }> = await liburRes.json();
+      const liburHariIni = holidays.find((h) => h.date === hariIniStr);
+      if (liburHariIni) {
+        console.log("Hari ini libur nasional, piket dilewati:", liburHariIni.localName);
         return new Response(
-          JSON.stringify({ skipped: true, reason: `Hari libur nasional: ${namaLibur}` }),
+          JSON.stringify({ skipped: true, reason: `Hari libur nasional: ${liburHariIni.localName}` }),
           { headers: { "Content-Type": "application/json" } },
         );
       }
@@ -86,7 +88,6 @@ Deno.serve(async () => {
 
   const tgl = nowWib.getUTCDate();
   const bln = BULAN_ID[nowWib.getUTCMonth()];
-  const thn = nowWib.getUTCFullYear();
 
   const namaPetugas = petugasList.map(p => p.nama).join(" & ");
 

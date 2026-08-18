@@ -131,7 +131,7 @@ const hk10Hari = ref('')
 onMounted(async () => {
   const today = new Date()
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-  const result = await tambahHariKerja(todayStr, 11)
+  const result = await tambahHariKerja(todayStr, 10)
   hk10Hari.value = result ? formatTanggal(result) : '-'
   loadingHK.value = false
 })

@@ -162,11 +162,8 @@
         >
           <span class="shrink-0 text-xs font-mono text-gray-400 pt-0.5 w-24">{{ formatTanggalPendek(libur.date) }}</span>
           <span class="text-gray-700">{{ libur.name }}</span>
-          <span
-            class="shrink-0 text-xs px-1.5 py-0.5 rounded-full"
-            :class="libur.is_national_holiday ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-700'"
-          >
-            {{ libur.is_national_holiday ? 'Libur' : 'Cuti' }}
+          <span class="shrink-0 text-xs px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">
+            Libur
           </span>
         </li>
       </ul>
@@ -212,7 +209,7 @@ interface HitungHasil {
 const hasilDaftar = ref<HitungHasil | null>(null)
 const hasilAkad = ref<HitungHasil | null>(null)
 const hasilValidasi = ref<{ ok: boolean; jumlah: number } | null>(null)
-const liburDipakai = ref<{ date: string; name: string; is_national_holiday: boolean }[]>([])
+const liburDipakai = ref<{ date: string; name: string }[]>([])
 
 function formatTanggalPendek(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00')
@@ -237,11 +234,11 @@ async function ambilLiburDiRange(from: string, to: string) {
   const years = new Set<number>()
   for (let y = start.getFullYear(); y <= end.getFullYear(); y++) years.add(y)
 
-  const allData: { date: string; name: string; is_national_holiday: boolean }[] = []
+  const allData: { date: string; localName: string; name: string }[] = []
   for (const y of years) {
     try {
-      const data = await $fetch<{ date: string; name: string; is_national_holiday: boolean }[]>(
-        `https://libur.deno.dev/api?year=${y}`
+      const data = await $fetch<{ date: string; localName: string; name: string }[]>(
+        `https://date.nager.at/api/v3/publicholidays/${y}/ID`
       )
       allData.push(...data)
     } catch {
@@ -255,7 +252,10 @@ async function ambilLiburDiRange(from: string, to: string) {
     if (d <= from || d > to) return false
     const day = new Date(d + 'T00:00:00').getDay()
     return day !== 0 && day !== 6
-  }).sort((a, b) => a.date.localeCompare(b.date))
+  }).map(h => ({
+    date: h.date,
+    name: h.localName || h.name,
+  })).sort((a, b) => a.date.localeCompare(b.date))
 }
 
 async function hitungDariDaftar() {

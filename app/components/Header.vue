@@ -41,6 +41,7 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
           class="hidden md:flex items-center gap-8 font-medium text-gray-600"
         >
           <a href="/profil" class="hover:text-green-600">Profil</a>
+          <a href="/jenis-layanan" class="hover:text-green-600">Jenis Layanan</a>
           <a href="/layanan" class="hover:text-green-600">Layanan</a>
           <a href="/jadwal" class="hover:text-green-600">Jadwal Nikah</a>
           <a href="/faq" class="hover:text-green-600">FAQ</a>
@@ -98,6 +99,11 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
           href="/profil"
           class="block py-2 px-4 text-gray-600 hover:bg-gray-100 rounded"
           >Profil</a
+        >
+        <a
+          href="/jenis-layanan"
+          class="block py-2 px-4 text-gray-600 hover:bg-gray-100 rounded"
+          >Jenis Layanan</a
         >
         <a
           href="/layanan"
